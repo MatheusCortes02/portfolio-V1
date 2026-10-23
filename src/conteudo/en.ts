@@ -1,0 +1,116 @@
+import type { Dicionario } from "./pt";
+
+export const en: Dicionario = {
+  carregando: { texto: "Printing the note" },
+  meta: {
+    titulo: "Matheus Cortes — Software engineer in training and cybersecurity student",
+    descricao: "Portfolio of Matheus Cortes: software engineer in training at UVV and offensive security student.",
+  },
+  nav: {
+    projetos: "Projects", sobre: "About", certificacoes: "Certifications", writeups: "Write-ups", atividade: "Activity", contato: "Contact",
+    inicio: "Home", menu: "Menu", fechar: "Close", idioma: "Language", virar: "Flip the note", topo: "Back to top",
+    pular: "Skip to content", principal: "Main navigation", rodape: "Footer navigation",
+  },
+  hero: {
+    sobretitulo: "Portfolio",
+    funcao: "Software engineer in training",
+    frase: "Between creation and the terminal.",
+    apresentacao: "I build systems and interfaces, and study offensive security to understand how they fail.",
+    verProjetos: "See projects", falarComigo: "Get in touch",
+    metadados: ["Vitória, ES, Brazil", "Software Engineering, UVV", "2nd semester"],
+    baixarCurriculo: "Download résumé", perfisRotulo: "Professional profiles",
+  },
+  numeros: { projetos: "projects", contribuicoes: "contributions in the last year", repositorios: "public repositories", trilhas: "security paths" },
+  registro: {
+    tituloCofre: "Vault entry record",
+    titulo: "Entry record", data: "Date", origem: "Origin", local: "Location", provedor: "Provider",
+    nota: "The lookup is made by the external service ipwho.is; this site stores nothing.",
+    registrar: "Log my entry", ipMascarado: "IP partially hidden",
+    consultando: "looking up…", naoIdentificada: "origin not identified", carimbo: "Entry recorded",
+  },
+  projetos: {
+    sobretitulo: "Case studies",
+    titulo: "Projects",
+    lead: "Personal, academic and agency client work: front-end, full systems, hardware and security. Each one opens as a case study with the challenge, what I did and the outcome.",
+    todos: "All",
+    categorias: { fullstack: "Full-stack", frontend: "Front-end", seguranca: "Security", hardware: "Hardware", jogos: "Games" },
+    abrir: "Open case study", desafio: "The challenge", solucao: "What I did", resultado: "The outcome", tecnologias: "Technologies",
+    fechar: "Close", anterior: "Previous project", proximo: "Next project", fotoAnterior: "Previous photo", fotoProxima: "Next photo", restrito: "Restricted access", semCaptura: "Written case study; no public screens.",
+    profissional: "Professional work", proprio: "Personal project",
+    nenhum: "No projects of this type.", verMais: "See more projects", verMenos: "See less",
+  },
+  sobre: {
+    sobretitulo: "Who I am",
+    titulo: "About me",
+    paragrafos: [
+      "I am 19 and in the second semester of Software Engineering at UVV. From May to October 2026, I worked part-time in web development at Morro Alto – Creative Office, maintaining websites, building landing pages and integrating automations with AI tools.",
+      "I have been around computers since I was a child, and my first contact with programming was at 11. Around the same time, I watched videos about hackers and about groups that made internet history with well-known intrusions; that is what fascinated me and made me want to pursue information security. Today I study networks, Linux and traffic analysis to understand how systems fail and how to protect them.",
+      "To every project I bring creativity in design, ethics in what I do and ambition in what I want to achieve.",
+    ],
+    fatos: {
+      formacao: "Education", formacaoValor: "Software Engineering · UVV · 2nd semester",
+      foco: "Focus", focoValor: "Web development · Cybersecurity",
+    },
+    oQueFaco: {
+      titulo: "What I do",
+      itens: [
+        { titulo: "Interfaces", texto: "From layout to the published page: React, Next.js and CSS with care for design, performance and accessibility." },
+        { titulo: "Systems", texto: "Full applications with authentication, databases and APIs, such as Solvered and the Morro Alto system." },
+        { titulo: "Security", texto: "I study offensive security: networks, Linux, traffic analysis and write-ups published with responsible disclosure." },
+      ],
+    },
+    trajetoria: {
+      titulo: "Path so far",
+      itens: [
+        { periodo: "2026 – present · 2nd semester", titulo: "Software Engineering", local: "Universidade Vila Velha (UVV)", texto: "Algorithms, data structures, networks and systems fundamentals." },
+        { periodo: "May 2026 – Oct 2026 · 6 months", titulo: "Web development", local: "Morro Alto – Creative Office · Part-time · Vila Velha, Espírito Santo, Brazil · On-site", texto: "Web development focused on website maintenance, building landing pages and integrating automations using AI tools." },
+        { periodo: "2026 · 2 months", titulo: "InovaWeek UVV", local: "Guerreiros de Realengo", texto: "Autonomous mini sumo robot: firmware, modelling and an assembly manual for the team." },
+      ],
+    },
+    tecnologias: {
+      titulo: "Technologies",
+      grupos: [
+        { nome: "Languages", itens: ["TypeScript", "JavaScript", "Python", "C++", "SQL", "HTML", "CSS"] },
+        { nome: "Front-end", itens: ["React", "Next.js", "Tailwind CSS"] },
+        { nome: "Back-end and data", itens: ["Node.js", "FastAPI", "PostgreSQL", "SQLite", "Drizzle ORM"] },
+        { nome: "Security", itens: ["Linux", "Windows", "TCP/IP networking", "OSI model", "DNS", "HTTP", "Traffic analysis", "Nmap", "Burp Suite", "TryHackMe"] },
+        { nome: "Tools", itens: ["Git", "GitHub", "Docker", "Playwright", "Vitest", "ESP32"] },
+      ],
+    },
+    cv: "Résumé",
+  },
+  certificacoes: {
+    sobretitulo: "Further education",
+    titulo: "Certifications",
+    lead: "Completed courses with a certificate, in security, artificial intelligence and everyday tools.",
+  },
+  writeups: {
+    sobretitulo: "Security",
+    titulo: "Write-ups",
+    lead: "Security case studies written with responsible disclosure: the reasoning, the cause and the fix, without exposing the target.",
+    abrir: "Read case study", github: "View on GitHub",
+  },
+  atividade: {
+    sobretitulo: "GitHub",
+    titulo: "Activity",
+    lead: "The same chart as my GitHub profile, updated once a day. It counts commits, pull requests and issues.",
+    contribuicoes: "Contributions in the last year", maiorSequencia: "Longest streak", diasAtivos: "Active days",
+    linguagens: "Languages in public repositories", recentes: "Recent repositories", lidoEm: "read on", menos: "Less", mais: "More",
+    dia: "day", dias: "days", contribuicao: "contribution", contribuicoesEm: "contributions on", semDescricao: "No description",
+    semana: ["", "Mon", "", "Wed", "", "Fri", ""],
+    meses: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  },
+  contato: {
+    sobretitulo: "Contact",
+    titulo: "Let's talk",
+    lead: "I am open to internships in cybersecurity and in development. Write to me and I will reply by e-mail.",
+    nome: "Name", email: "E-mail", mensagem: "Message", enviar: "Send message", enviando: "Sending…",
+    sucesso: "Message sent. Thank you for getting in touch!", erro: "Could not send right now. Please use the e-mail beside the form.",
+    indisponivel: "Sending through the site is not enabled yet. Please use the e-mail beside the form.",
+    perfis: "Profiles", placeholderNome: "Your name", placeholderEmail: "you@example.com", placeholderMensagem: "Write your message",
+  },
+  rodape: {
+    frase: "Between creation and the terminal.",
+    direitos: "All rights reserved.",
+  },
+};

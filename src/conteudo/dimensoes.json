@@ -1,0 +1,958 @@
+{
+ "/midia/capturas/arca/abertura-01.jpg": [
+  2880,
+  1398
+ ],
+ "/midia/capturas/arca/inicio-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/arca/inicio-02.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/arca/inicio-03.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/arca/inicio-04.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/arca/inicio-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/bebe-tricot/inicio-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/bebe-tricot/inicio-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/brasigran/admin-painel-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/brasigran/admin-registros-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/brasigran/admin-relatorio-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/brasigran/admin-usuarios-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/brasigran/admin-videos-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/brasigran/login-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/brasigran/login-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/brasigran/painel-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/brasigran/painel-colaborador-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/brasigran/setor-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/brasigran/setor-videos-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/brasigran/setores-ingles-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/cofre-de-tokens/terminal-1-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/cofre-de-tokens/terminal-2-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/cofre-de-tokens/terminal-3-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/diggi-saude/cadastro-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/diggi-saude/cobertura-modal-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/diggi-saude/galeria-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/diggi-saude/inicio-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/diggi-saude/inicio-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/diggi-saude/planos-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/dra-jania/inicio-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/dra-jania/inicio-02.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/dra-jania/inicio-03.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/dra-jania/inicio-04.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/dra-jania/inicio-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/hanadecor/inicio-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/hanadecor/inicio-02.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/hanadecor/inicio-03.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/hanadecor/inicio-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/hanadecor/modal-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/jogo-estatistica/itch-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/jogo-estatistica/itch-02.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/jogo-estatistica/portfolio2-stats-game.png": [
+  794,
+  791
+ ],
+ "/midia/capturas/mister-cook/inicio-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/mister-cook/inicio-02.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/mister-cook/inicio-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/mister-cook/secao-05.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/mister-cook/secao-09.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-os/sistema-csat.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-os/sistema-financeiro.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-os/sistema-inicio-celular.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/morro-alto-os/sistema-inicio.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-os/sistema-meet.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-os/sistema-oly.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-os/sistema-pautas.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-site/cases-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-site/comparativo-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-site/contato-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-site/inicio-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-site/inicio-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/morro-alto-site/quem-somos-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/morro-alto-site/servicos-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/robo-sumo/grupo-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/robo-sumo/manual-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/robo-sumo/manual-02.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/robo-sumo/manual-03.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/robo-sumo/manual-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/robo-sumo/render-c1_hero.png": [
+  1280,
+  800
+ ],
+ "/midia/capturas/robo-sumo/render-c2_traseira.png": [
+  1280,
+  800
+ ],
+ "/midia/capturas/robo-sumo/render-c3_eletronica.png": [
+  1280,
+  800
+ ],
+ "/midia/capturas/robo-sumo/render-c5_sensores.png": [
+  1280,
+  800
+ ],
+ "/midia/capturas/robo-sumo/render-c6_motores.png": [
+  1280,
+  800
+ ],
+ "/midia/capturas/robo-sumo/render-final_330.png": [
+  1280,
+  720
+ ],
+ "/midia/capturas/sao-jorge/inicio-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/sao-jorge/inicio-02.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/sao-jorge/inicio-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/sao-jorge/secao-08.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/sao-jorge/secao-18.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/solvered/feedbacks-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/solvered/inicio-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/solvered/inicio-celular-01.jpg": [
+  780,
+  1688
+ ],
+ "/midia/capturas/solvered/produto-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/capturas/solvered/produtos-01.jpg": [
+  2880,
+  1800
+ ],
+ "/midia/cartucho/junta-dir-papel.webp": [
+  70,
+  430
+ ],
+ "/midia/cartucho/junta-dir-preto.webp": [
+  70,
+  430
+ ],
+ "/midia/cartucho/junta-esq-papel.webp": [
+  70,
+  430
+ ],
+ "/midia/cartucho/junta-esq-preto.webp": [
+  70,
+  430
+ ],
+ "/midia/cartucho/medalhao-papel-240.webp": [
+  240,
+  216
+ ],
+ "/midia/cartucho/medalhao-papel.webp": [
+  480,
+  430
+ ],
+ "/midia/cartucho/medalhao-preto-240.webp": [
+  240,
+  216
+ ],
+ "/midia/cartucho/medalhao-preto.webp": [
+  480,
+  430
+ ],
+ "/midia/cartucho/painel-dir-papel.webp": [
+  150,
+  430
+ ],
+ "/midia/cartucho/painel-dir-preto.webp": [
+  150,
+  430
+ ],
+ "/midia/cartucho/painel-esq-papel.webp": [
+  150,
+  430
+ ],
+ "/midia/cartucho/painel-esq-preto.webp": [
+  150,
+  430
+ ],
+ "/midia/cartucho/ponta-dir-papel.webp": [
+  150,
+  430
+ ],
+ "/midia/cartucho/ponta-dir-preto.webp": [
+  150,
+  430
+ ],
+ "/midia/cartucho/ponta-esq-papel.webp": [
+  150,
+  430
+ ],
+ "/midia/cartucho/ponta-esq-preto.webp": [
+  150,
+  430
+ ],
+ "/midia/gravuras/01_moldura_horizontal_ornamental-papel-1200.webp": [
+  1200,
+  800
+ ],
+ "/midia/gravuras/01_moldura_horizontal_ornamental-papel-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/01_moldura_horizontal_ornamental-papel-800.webp": [
+  800,
+  534
+ ],
+ "/midia/gravuras/01_moldura_horizontal_ornamental-papel.webp": [
+  1536,
+  1024
+ ],
+ "/midia/gravuras/01_moldura_horizontal_ornamental-preto-1200.webp": [
+  1200,
+  800
+ ],
+ "/midia/gravuras/01_moldura_horizontal_ornamental-preto-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/01_moldura_horizontal_ornamental-preto-800.webp": [
+  800,
+  534
+ ],
+ "/midia/gravuras/01_moldura_horizontal_ornamental-preto.webp": [
+  1536,
+  1024
+ ],
+ "/midia/gravuras/02_moldura_vertical_certificado-papel-480.webp": [
+  480,
+  640
+ ],
+ "/midia/gravuras/02_moldura_vertical_certificado-papel-800.webp": [
+  800,
+  1066
+ ],
+ "/midia/gravuras/02_moldura_vertical_certificado-papel.webp": [
+  1086,
+  1448
+ ],
+ "/midia/gravuras/02_moldura_vertical_certificado-preto-480.webp": [
+  480,
+  640
+ ],
+ "/midia/gravuras/02_moldura_vertical_certificado-preto-800.webp": [
+  800,
+  1066
+ ],
+ "/midia/gravuras/02_moldura_vertical_certificado-preto.webp": [
+  1086,
+  1448
+ ],
+ "/midia/gravuras/03_ornamento_canto_acanto-papel-1200.webp": [
+  1200,
+  1098
+ ],
+ "/midia/gravuras/03_ornamento_canto_acanto-papel-480.webp": [
+  480,
+  440
+ ],
+ "/midia/gravuras/03_ornamento_canto_acanto-papel-800.webp": [
+  800,
+  732
+ ],
+ "/midia/gravuras/03_ornamento_canto_acanto-papel.webp": [
+  1312,
+  1200
+ ],
+ "/midia/gravuras/03_ornamento_canto_acanto-preto-1200.webp": [
+  1200,
+  1098
+ ],
+ "/midia/gravuras/03_ornamento_canto_acanto-preto-480.webp": [
+  480,
+  440
+ ],
+ "/midia/gravuras/03_ornamento_canto_acanto-preto-800.webp": [
+  800,
+  732
+ ],
+ "/midia/gravuras/03_ornamento_canto_acanto-preto.webp": [
+  1312,
+  1200
+ ],
+ "/midia/gravuras/04_cofre_bancario-papel-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/04_cofre_bancario-papel-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/04_cofre_bancario-papel-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/04_cofre_bancario-papel.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/04_cofre_bancario-preto-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/04_cofre_bancario-preto-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/04_cofre_bancario-preto-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/04_cofre_bancario-preto.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/05_busto_filosofa_balanca-papel-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/05_busto_filosofa_balanca-papel-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/05_busto_filosofa_balanca-papel-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/05_busto_filosofa_balanca-papel.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/05_busto_filosofa_balanca-preto-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/05_busto_filosofa_balanca-preto-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/05_busto_filosofa_balanca-preto-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/05_busto_filosofa_balanca-preto.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/06_prensa_antiga_gravura-papel-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/06_prensa_antiga_gravura-papel-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/06_prensa_antiga_gravura-papel-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/06_prensa_antiga_gravura-papel.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/06_prensa_antiga_gravura-preto-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/06_prensa_antiga_gravura-preto-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/06_prensa_antiga_gravura-preto-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/06_prensa_antiga_gravura-preto.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/07_maquina_cotacoes_bolsa-papel-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/07_maquina_cotacoes_bolsa-papel-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/07_maquina_cotacoes_bolsa-papel-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/07_maquina_cotacoes_bolsa-papel.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/07_maquina_cotacoes_bolsa-preto-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/07_maquina_cotacoes_bolsa-preto-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/07_maquina_cotacoes_bolsa-preto-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/07_maquina_cotacoes_bolsa-preto.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/08_olhos_lupas_medalhoes-papel-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/08_olhos_lupas_medalhoes-papel-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/08_olhos_lupas_medalhoes-papel-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/08_olhos_lupas_medalhoes-papel.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/08_olhos_lupas_medalhoes-preto-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/08_olhos_lupas_medalhoes-preto-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/08_olhos_lupas_medalhoes-preto-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/08_olhos_lupas_medalhoes-preto.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/09_carta_lacrada_pombo-papel-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/09_carta_lacrada_pombo-papel-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/09_carta_lacrada_pombo-papel-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/09_carta_lacrada_pombo-papel.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/09_carta_lacrada_pombo-preto-1200.webp": [
+  1200,
+  480
+ ],
+ "/midia/gravuras/09_carta_lacrada_pombo-preto-480.webp": [
+  480,
+  192
+ ],
+ "/midia/gravuras/09_carta_lacrada_pombo-preto-800.webp": [
+  800,
+  320
+ ],
+ "/midia/gravuras/09_carta_lacrada_pombo-preto.webp": [
+  1983,
+  792
+ ],
+ "/midia/gravuras/10_olho_abertura.webp": [
+  1000,
+  572
+ ],
+ "/midia/gravuras/10_olho_sem_iris-papel-480.webp": [
+  480,
+  274
+ ],
+ "/midia/gravuras/10_olho_sem_iris-papel-800.webp": [
+  800,
+  458
+ ],
+ "/midia/gravuras/10_olho_sem_iris-papel.webp": [
+  1000,
+  572
+ ],
+ "/midia/gravuras/10_olho_sem_iris-preto-480.webp": [
+  480,
+  274
+ ],
+ "/midia/gravuras/10_olho_sem_iris-preto-800.webp": [
+  800,
+  458
+ ],
+ "/midia/gravuras/10_olho_sem_iris-preto.webp": [
+  1000,
+  572
+ ],
+ "/midia/gravuras/11_iris_redonda-papel-480.webp": [
+  480,
+  480
+ ],
+ "/midia/gravuras/11_iris_redonda-papel-800.webp": [
+  800,
+  800
+ ],
+ "/midia/gravuras/11_iris_redonda-papel.webp": [
+  1000,
+  1000
+ ],
+ "/midia/gravuras/11_iris_redonda-preto-480.webp": [
+  480,
+  480
+ ],
+ "/midia/gravuras/11_iris_redonda-preto-800.webp": [
+  800,
+  800
+ ],
+ "/midia/gravuras/11_iris_redonda-preto.webp": [
+  1000,
+  1000
+ ],
+ "/midia/gravuras/12_camera_seguranca-papel-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/12_camera_seguranca-papel-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/12_camera_seguranca-papel.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/12_camera_seguranca-preto-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/12_camera_seguranca-preto-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/12_camera_seguranca-preto.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/13_cadeado_e_chave-papel-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/13_cadeado_e_chave-papel-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/13_cadeado_e_chave-papel.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/13_cadeado_e_chave-preto-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/13_cadeado_e_chave-preto-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/13_cadeado_e_chave-preto.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/14_computador_antigo-papel-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/14_computador_antigo-papel-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/14_computador_antigo-papel.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/14_computador_antigo-preto-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/14_computador_antigo-preto-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/14_computador_antigo-preto.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/15_mao_jogando_moeda-papel-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/15_mao_jogando_moeda-papel-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/15_mao_jogando_moeda-papel.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/15_mao_jogando_moeda-preto-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/15_mao_jogando_moeda-preto-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/15_mao_jogando_moeda-preto.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/16_robo_mini_sumo-papel-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/16_robo_mini_sumo-papel-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/16_robo_mini_sumo-papel.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/16_robo_mini_sumo-preto-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/16_robo_mini_sumo-preto-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/16_robo_mini_sumo-preto.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/17_telefone_antigo-papel-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/17_telefone_antigo-papel-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/17_telefone_antigo-papel.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/17_telefone_antigo-preto-480.webp": [
+  480,
+  320
+ ],
+ "/midia/gravuras/17_telefone_antigo-preto-800.webp": [
+  800,
+  532
+ ],
+ "/midia/gravuras/17_telefone_antigo-preto.webp": [
+  1000,
+  666
+ ],
+ "/midia/gravuras/18_ampulheta_versao_1-papel-480.webp": [
+  480,
+  720
+ ],
+ "/midia/gravuras/18_ampulheta_versao_1-papel-800.webp": [
+  800,
+  1200
+ ],
+ "/midia/gravuras/18_ampulheta_versao_1-papel.webp": [
+  1000,
+  1500
+ ],
+ "/midia/gravuras/18_ampulheta_versao_1-preto-480.webp": [
+  480,
+  720
+ ],
+ "/midia/gravuras/18_ampulheta_versao_1-preto-800.webp": [
+  800,
+  1200
+ ],
+ "/midia/gravuras/18_ampulheta_versao_1-preto.webp": [
+  1000,
+  1500
+ ],
+ "/midia/gravuras/19_ampulheta_versao_2-papel-480.webp": [
+  480,
+  720
+ ],
+ "/midia/gravuras/19_ampulheta_versao_2-papel-800.webp": [
+  800,
+  1200
+ ],
+ "/midia/gravuras/19_ampulheta_versao_2-papel.webp": [
+  1000,
+  1500
+ ],
+ "/midia/gravuras/19_ampulheta_versao_2-preto-480.webp": [
+  480,
+  720
+ ],
+ "/midia/gravuras/19_ampulheta_versao_2-preto-800.webp": [
+  800,
+  1200
+ ],
+ "/midia/gravuras/19_ampulheta_versao_2-preto.webp": [
+  1000,
+  1500
+ ],
+ "/midia/gravuras/20_leao_dominio_publico-papel-480.webp": [
+  480,
+  356
+ ],
+ "/midia/gravuras/20_leao_dominio_publico-papel-800.webp": [
+  800,
+  592
+ ],
+ "/midia/gravuras/20_leao_dominio_publico-papel.webp": [
+  900,
+  666
+ ],
+ "/midia/gravuras/20_leao_dominio_publico-preto-480.webp": [
+  480,
+  356
+ ],
+ "/midia/gravuras/20_leao_dominio_publico-preto-800.webp": [
+  800,
+  592
+ ],
+ "/midia/gravuras/20_leao_dominio_publico-preto.webp": [
+  900,
+  666
+ ],
+ "/midia/gravuras/26_cartucho_navegacao-silhueta.webp": [
+  1800,
+  430
+ ],
+ "/midia/gravuras/26_cartucho_navegacao-tinta.webp": [
+  1800,
+  430
+ ],
+ "/midia/og/og-en.jpg": [
+  1200,
+  630
+ ],
+ "/midia/og/og-pt.jpg": [
+  1200,
+  630
+ ]
+}
