@@ -199,6 +199,11 @@ main:focus,main > section:focus{outline:none}
 /* Projetos: a gravura de fundo (1983 px) esticada na seção inteira virava mancha borrada; fica só atrás do cabeçalho,
    quase no tamanho próprio, e some num degradê (EST-37) */
 .projetos-secao .fundo{bottom:auto;height:min(100%,900px);-webkit-mask:linear-gradient(#000 35%,transparent);mask:linear-gradient(#000 35%,transparent)}
+/* EST-60: mais duas prensas descendo pela seção (a do meio espelhada), fundidas em cima e embaixo */
+.projetos-secao .fundo-meio,.projetos-secao .fundo-baixo{height:min(60%,900px);-webkit-mask:linear-gradient(transparent,#000 30%,#000 70%,transparent);mask:linear-gradient(transparent,#000 30%,#000 70%,transparent)}
+.projetos-secao .fundo-meio{top:36%;bottom:auto}
+.projetos-secao .fundo-meio .gravura{transform:scaleX(-1)}
+.projetos-secao .fundo-baixo{top:auto;bottom:0;-webkit-mask:linear-gradient(transparent,#000 35%);mask:linear-gradient(transparent,#000 35%)}
 .filtro{display:flex;flex-wrap:wrap;gap:.5rem;max-width:1240px;margin:0 auto 3rem}
 .filtro button{font:600 .7rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;padding:.85em 1.1em;cursor:pointer;background:transparent;color:var(--texto);border:1px solid var(--linha)}
 .filtro button span{color:var(--acento);margin-left:.35rem}
@@ -432,7 +437,9 @@ html.lenis,html.lenis body{height:auto}
 .miniaturas button[aria-pressed="true"]{opacity:1;border-color:#C9DCC4;outline-color:#C9DCC4}
 .miniaturas img{display:block;width:100%;height:48px;object-fit:cover;object-position:top}
 .cap-vazia.grande{flex:1;aspect-ratio:auto;display:grid;place-content:center;justify-items:center;gap:1.2rem;text-align:center;background:none;border:0;font:500 .8rem/1.4 var(--mono);color:#A9B3A6}
-.cap-vazia.grande .gravura{width:min(420px,70%)}
+/* EST-62: no modal do write-up (sem captura), a gravura ocupa a coluna da foto, limitada pela altura do modal */
+.cap-vazia.grande .gravura{width:min(760px,94%)}
+.cap-vazia.grande img{width:100%;height:auto;max-height:58svh;object-fit:contain}
 .cap-vazia.grande .g-papel{display:none!important}.cap-vazia.grande .g-preto{display:block!important}
 .modal-texto{display:flex;flex-direction:column;min-height:0;padding:clamp(1.6rem,2.8vw,2.6rem);background:#F1EFE4;color:#121411}
 .modal-texto h2{font:600 clamp(2.2rem,3.2vw,3rem)/1 var(--titulo);color:#24442C;margin-bottom:.5rem}

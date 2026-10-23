@@ -69,3 +69,31 @@ describe("EST-24 tamanho mínimo de texto e alvos de toque", () => {
     expect(regras(".c-movel .c-movel-selo").join(";")).toMatch(/--alt:\s*52px/);
   });
 });
+
+describe("EST-60 Projetos com a gravura da prensa ao longo da seção inteira", () => {
+  // pedido de 2026-10-23: "depois não tem imagem de fundo ... coloque outras 2 daquela"
+  const pagina = readFileSync(join(process.cwd(), "src/componentes/Pagina.tsx"), "utf8");
+  it("a seção Projetos tem três fundos com a prensa: no topo, no meio e embaixo", () => {
+    const secao = pagina.slice(pagina.indexOf('id="projetos"'), pagina.indexOf("<Cabecalho", pagina.indexOf('id="projetos"')));
+    expect(secao.match(/<Gravura g="06_prensa_antiga_gravura"/g)?.length).toBe(3);
+    expect(secao).toMatch(/fundo fundo-meio/);
+    expect(secao).toMatch(/fundo fundo-baixo/);
+  });
+  it("as cópias descem pela seção e se fundem nas bordas de cima e de baixo", () => {
+    expect(regras(".projetos-secao .fundo-meio").join(";")).toMatch(/top:\s*3\d%/);
+    expect(regras(".projetos-secao .fundo-baixo").join(";")).toMatch(/top:\s*auto/);
+    expect(regras(".projetos-secao .fundo-baixo").join(";")).toMatch(/bottom:\s*0/);
+    for (const s of [".projetos-secao .fundo-meio", ".projetos-secao .fundo-baixo"])
+      expect(regras(s).join(";") + regras(".projetos-secao .fundo-meio,.projetos-secao .fundo-baixo").join(";")).toBeTruthy();
+  });
+});
+
+describe("EST-62 gravura maior no modal do write-up (sem captura)", () => {
+  // pedido de 2026-10-23: "a foto do controle de acesso em player deixe ela maior também pois assim ficou pequeno"
+  it("a gravura ocupa quase toda a largura da coluna da foto, sem passar da altura do modal", () => {
+    const c = regras(".cap-vazia.grande .gravura").join(";");
+    expect(c).toMatch(/width:\s*min\(\s*(\d+)px\s*,\s*9\d%\s*\)/);
+    expect(Number(c.match(/width:\s*min\(\s*(\d+)px/)![1])).toBeGreaterThanOrEqual(700);
+    expect(regras(".cap-vazia.grande img").join(";")).toMatch(/max-height:/);
+  });
+});

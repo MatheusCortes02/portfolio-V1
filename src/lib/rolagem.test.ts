@@ -32,3 +32,14 @@ describe("EST-28 seção atual por IntersectionObserver", () => {
     expect(linhaDeLeitura(72, 50)).toBe("-49px 0px 0px 0px");
   });
 });
+
+describe("EST-61 \"Ver menos\" não teleporta a página", () => {
+  // bug de 2026-10-23: "quando clica no botão ver mais e depois no ver menos a seção é teleportada lá para baixo"
+  it("rola para que o botão fique na mesma altura da tela em que foi clicado", async () => {
+    const { manterNaTela } = await import("./rolagem");
+    // botão estava a 600 px do topo da tela com a página em 9000; a lista encolheu e ele subiu para -4400
+    expect(manterNaTela(9000, 600, -4400)).toBe(4000);
+    expect(manterNaTela(0, 300, 300)).toBe(0);
+    expect(manterNaTela(100, 500, 200)).toBe(0); // nunca negativo
+  });
+});

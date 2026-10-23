@@ -57,7 +57,8 @@ describe("EST-29 papel e trabalho profissional", () => {
 
 describe("EST-30 destaques por força técnica", () => {
   it("são os seis escolhidos, nesta ordem, no começo da lista", () => {
-    const ordem = ["morro-alto-os", "brasigran", "hanadecor", "solvered", "sao-jorge", "robo-sumo"];
+    // 2026-10-23: "no lugar da hana decor coloque diggi" — Diggi Saúde entra no 3º lugar e a Hana Decor vai para "Ver mais"
+    const ordem = ["morro-alto-os", "brasigran", "diggi-saude", "solvered", "sao-jorge", "robo-sumo"];
     expect(DESTAQUES).toEqual(ordem);
     expect(projetos.slice(0, 6).map((p) => p.slug)).toEqual(ordem);
     expect(separar(projetos).principais.map((p) => p.slug)).toEqual(ordem);
@@ -66,15 +67,16 @@ describe("EST-30 destaques por força técnica", () => {
 
 describe("EST-45 Diggi Saúde e site da Morro Alto", () => {
   const novos = ["diggi-saude", "morro-alto-site"];
-  it("estão na lista como trabalho profissional de front-end e fora dos destaques; Diggi sem link", () => {
+  it("estão na lista como trabalho profissional de front-end; Diggi nos destaques (no lugar da Hana Decor) e sem link", () => {
     for (const s of novos) {
       const p = projetos.find((x) => x.slug === s);
       expect(p, s).toBeDefined();
       expect(p!.profissional, s).toBe(true);
       expect(p!.categoria, s).toBe("frontend");
-      expect(DESTAQUES, s).not.toContain(s);
-      expect(separar(projetos).demais.map((x) => x.slug), s).toContain(s);
     }
+    expect(DESTAQUES).toContain("diggi-saude");
+    expect(DESTAQUES).not.toContain("morro-alto-site");
+    expect(separar(projetos).demais.map((x) => x.slug)).toEqual(expect.arrayContaining(["morro-alto-site", "hanadecor"]));
     expect(projetos.find((x) => x.slug === "diggi-saude")!.links).toEqual([]);
   });
   it("EST-50 o site da Morro Alto leva a https://morroalto.co/ (pedido de 2026-10-23)", () => {

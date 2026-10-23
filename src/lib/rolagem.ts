@@ -15,3 +15,9 @@ export function linhaDeLeitura(linha: number, altura: number): string {
   const px = (n: number) => (n > 0 ? `-${n}px` : "0px");
   return `${px(topo)} 0px ${px(Math.max(0, altura - topo - 1))} 0px`;
 }
+
+/** EST-61: depois que a lista de projetos encolhe ("Ver menos"), a rolagem que deixa o botão na mesma altura da tela
+ *  em que foi clicado (`antes` e `depois` são o topo do botão na tela, antes e depois de encolher). */
+export function manterNaTela(rolagem: number, antes: number, depois: number): number {
+  return Math.max(0, Math.round(rolagem + depois - antes));
+}

@@ -239,7 +239,7 @@ export const projetosProprios: Projeto[] = [
 ];
 
 /** Destaques primeiro, na ordem de DESTAQUES (EST-30); o resto na ordem original. */
-export const DESTAQUES = ["morro-alto-os", "brasigran", "hanadecor", "solvered", "sao-jorge", "robo-sumo"];
+export const DESTAQUES = ["morro-alto-os", "brasigran", "diggi-saude", "solvered", "sao-jorge", "robo-sumo"];
 
 const todos = [...projetosProprios, ...projetosClientes];
 export const projetos: Projeto[] = [

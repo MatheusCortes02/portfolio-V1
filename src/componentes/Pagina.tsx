@@ -73,7 +73,7 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
 
   return (
     <>
-      {/* EST-59: tela de carregamento com a contadora de cédulas (1ª visita da sessão ou ?abertura=1) */}
+      {/* EST-59: tela de carregamento com a contadora de cédulas, em toda carga e recarga (nunca com movimento reduzido) */}
       <Carregando />
       <Navegacao t={t.nav} idioma={idioma} />
       <main id="conteudo">
@@ -117,6 +117,9 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
         {/* 02 · Projetos */}
         <section className="secao lado-papel projetos-secao com-fundo" id="projetos">
           <div className="fundo" aria-hidden="true"><Gravura g="06_prensa_antiga_gravura" /></div>
+          {/* EST-60: a mesma prensa repete no meio (espelhada) e embaixo, para o fundo cobrir todos os projetos */}
+          <div className="fundo fundo-meio" aria-hidden="true"><Gravura g="06_prensa_antiga_gravura" /></div>
+          <div className="fundo fundo-baixo" aria-hidden="true"><Gravura g="06_prensa_antiga_gravura" /></div>
           <Cabecalho num="02" sobre={t.projetos.sobretitulo} titulo={t.projetos.titulo} lead={t.projetos.lead} g="15_mao_jogando_moeda" />
           <Projetos lista={soIdioma(projetos, idioma)} t={t.projetos} idioma={idioma} />
         </section>

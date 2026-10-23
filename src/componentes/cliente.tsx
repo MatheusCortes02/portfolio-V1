@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { CATEGORIAS, contagens, visiveis as visiveisDe } from "@/conteudo/projetos";
 import type { pt } from "@/conteudo/pt";
 import type { Categoria, Idioma, Projeto } from "@/conteudo/tipos";
@@ -9,7 +10,7 @@ import { montarEnvio } from "@/lib/contato";
 import { abaVizinha, focarDestino, setaDaFoto } from "@/lib/acessibilidade";
 import { IDIOMAS, opcaoVizinha, rotaDoIdioma } from "@/lib/idioma";
 import { localDe, mascararIp, SERVICO_IP } from "@/lib/registro";
-import { atrasoEscalonado, linhaDeLeitura } from "@/lib/rolagem";
+import { atrasoEscalonado, linhaDeLeitura, manterNaTela } from "@/lib/rolagem";
 import { Gravura, ImgGravura } from "./Gravura";
 
 const calmo = () => typeof window !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -301,6 +302,18 @@ export function Projetos({ lista, t, idioma }: { lista: Projeto[]; t: typeof pt.
   // EST-31: "Ver mais" só em Todos; num tipo escolhido aparecem todos
   const { itens: visiveis, temMais, nDemais } = useMemo(() => visiveisDe(lista, cat, mais), [lista, cat, mais]);
   const n = contagens(lista);
+  const botaoMais = useRef<HTMLButtonElement>(null);
+  // EST-61: ao encolher a lista, a página perde a altura dos projetos extras; a rolagem é corrigida para o botão
+  // ficar no mesmo lugar da tela, em vez de o visitante cair numa seção lá embaixo
+  const alternarMais = () => {
+    const b = botaoMais.current;
+    if (!mais || !b) { setMais(!mais); return; }
+    const antes = b.getBoundingClientRect().top;
+    dispatchEvent(new Event("rolagem:pausa"));
+    flushSync(() => setMais(false));
+    scrollTo({ top: manterNaTela(scrollY, antes, b.getBoundingClientRect().top), behavior: "instant" });
+    requestAnimationFrame(() => dispatchEvent(new Event("rolagem:volta")));
+  };
 
   useEffect(() => {
     const abrir = (e: MouseEvent) => {
@@ -361,7 +374,7 @@ export function Projetos({ lista, t, idioma }: { lista: Projeto[]; t: typeof pt.
       </ol>
       {temMais && (
         <div className="ver-mais">
-          <button type="button" className="botao vazado" aria-expanded={mais} onClick={() => setMais(!mais)}>
+          <button ref={botaoMais} type="button" className="botao vazado" aria-expanded={mais} onClick={alternarMais}>
             {mais ? t.verMenos : `${t.verMais} (${nDemais})`}
           </button>
         </div>
