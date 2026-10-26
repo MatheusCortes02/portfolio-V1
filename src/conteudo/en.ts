@@ -54,17 +54,30 @@ export const en: Dicionario = {
     oQueFaco: {
       titulo: "What I do",
       itens: [
-        { titulo: "Interfaces", texto: "From layout to the published page: React, Next.js and CSS with care for design, performance and accessibility." },
-        { titulo: "Systems", texto: "Full applications with authentication, databases and APIs, such as Solvered and the Morro Alto system." },
-        { titulo: "Security", texto: "I study offensive security: networks, Linux, traffic analysis and write-ups published with responsible disclosure." },
+        { titulo: "Interfaces", texto: "Websites and interfaces from layout to launch: fast, mobile-friendly and accessible.",
+          pontos: ["Company websites, landing pages and link-in-bio pages for real clients", "Care for performance, SEO and accessibility in every delivery"] },
+        { titulo: "Systems", texto: "End-to-end web applications, from business rules to a system in use.",
+          pontos: ["Login, role-based permissions, databases and integrations, including AI", "Specs and automated tests written before the code"] },
+        { titulo: "Security", texto: "I study offensive security to build systems that are harder to break.",
+          pontos: ["Networks, Linux, traffic analysis and web application flaws", "Write-ups in report format, with responsible disclosure"] },
       ],
     },
     trajetoria: {
       titulo: "Path so far",
       itens: [
-        { periodo: "2026 – present · 2nd semester", titulo: "Software Engineering", local: "Universidade Vila Velha (UVV)", texto: "Algorithms, data structures, networks and systems fundamentals." },
-        { periodo: "May 2026 – Oct 2026 · 6 months", titulo: "Web development", local: "Morro Alto – Creative Office · Part-time · Vila Velha, Espírito Santo, Brazil · On-site", texto: "Web development focused on website maintenance, building landing pages and integrating automations using AI tools." },
-        { periodo: "2026 · 2 months", titulo: "InovaWeek UVV", local: "Guerreiros de Realengo", texto: "Autonomous mini sumo robot: firmware, modelling and an assembly manual for the team." },
+        { periodo: "2026 – present · 2nd semester", titulo: "Software Engineering", local: "Universidade Vila Velha (UVV)", texto: "Algorithms, data structures, networks and systems fundamentals.", destaques: [] },
+        { periodo: "May 2026 – Oct 2026 · 6 months", titulo: "Web development", local: "Morro Alto – Creative Office · Part-time · Vila Velha, Espírito Santo, Brazil · On-site", texto: "Websites, landing pages, link-in-bio pages and systems for the agency's clients and for Morro Alto itself, with maintenance, deployment and AI-powered automations.",
+          destaques: [
+            "The agency's internal system (content tasks, finance, meetings and an AI assistant), in daily use by the team",
+            "Brasigran's five-language training portal and the new Hana Decor page, replacing WordPress",
+            "Specs and tests written before the code on the larger projects",
+          ] },
+        { periodo: "2026 · 2 months", titulo: "InovaWeek UVV", local: "Guerreiros de Realengo", texto: "In a team of five, I built most of the autonomous mini sumo robot.",
+          destaques: [
+            "Assembling and soldering the electronics",
+            "C++ firmware for the ESP32 that reads the sensors and drives the motors",
+            "A 3D model and a bilingual assembly manual, used as the team's guide",
+          ] },
       ],
     },
     tecnologias: {

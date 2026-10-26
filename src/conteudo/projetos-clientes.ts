@@ -6,6 +6,7 @@ import type { Projeto } from "./tipos";
  * Morro Alto Creative Office (aparecem com crédito à agência, autorizado pelo Matheus).
  * Diggi Saúde (sem link) e o site da própria Morro Alto (capturas da versão `site-institucional`, em desenvolvimento; link para
  * morroalto.co, a versão no ar): pedidos de 2026-10-23.
+ * Páginas de links da SumWise, do Scardua Lab e da Dra. Jânia (EST-70): pedido de 2026-10-26, crédito à agência.
  * Mister Cook: a nota da vault registra o projeto como cliente da Acex Partners, por isso fica sem crédito.
  * Todos os fatos vêm das notas da vault Obsidian (90 - Projetos) ou do código; capturas conferidas em 2026-10-20.
  */
@@ -742,6 +743,204 @@ export const projetosClientes: Projeto[] = [
         alt: {
           pt: "Abertura no celular, com o título centralizado, o botão de diagnóstico gratuito e o paredão de vídeos em faixas horizontais.",
           en: "Opening on a phone, with the centered headline, the free assessment button and the video wall in horizontal strips.",
+        },
+        tipo: "celular",
+      },
+    ],
+  },
+
+  // EST-70. Fonte: Projetos Analisados/site-linktree-sumwise.md:12 (cliente, conceito de cupom/extrato), :15 (o site
+  // institucional sumwise.com.br NÃO é deste trabalho), :23-24 (HTML + CSS + JS sem dependências, Poppins e IBM Plex Mono),
+  // :26 e :122 (sem spec nem testes), :27 (Vercel), :35 e :41 (troca do WhatsApp em 2026-10-07, publicação automática),
+  // :46-58 (7 lançamentos com ação, saldo de resultados, carimbo), :60 (código de barras), :61 (crédito "Desenvolvido por
+  // Morro Alto Creative Office"), :66 (cores da logo), :81-90 (efeitos só em CSS), :93-96 (HTML com números finais, JS só
+  // encena, movimento reduzido), :113 e :139 (CNAME criado no painel errado), :128 (og:image relativo).
+  // Link pedido pelo Matheus em 2026-10-26: https://links.sumwise.com.br/. Em 2026-10-26 esse subdomínio ainda NÃO resolve
+  // (NXDOMAIN no 8.8.8.8 e no 1.1.1.1, como a nota já registrava em :28 e :115); a página está no ar em
+  // https://sumwiselinktree.vercel.app/ (HTTP 200, título "SumWise Consultoria · Links"), de onde saíram as capturas.
+  // A nota deixa como hipótese (:37-38) que a criação inicial foi feita em outra máquina.
+  {
+    slug: "sumwise-links",
+    profissional: true,
+    papel: { pt: "Desenvolvimento na agência", en: "Agency development" },
+    titulo: { pt: "SumWise: página de links", en: "SumWise: link-in-bio page" },
+    categoria: "frontend",
+    ano: "2026",
+    credito: creditoMorroAlto,
+    resumo: {
+      pt: "Página de links da bio da SumWise Consultoria, de gestão financeira e BPO financeiro para postos de combustíveis, desenhada como um cupom fiscal que sai da impressora.",
+      en: "A link-in-bio page for SumWise Consultoria, a financial management and outsourced finance (BPO) firm for fuel stations, designed as a receipt coming out of a printer.",
+    },
+    desafio: {
+      pt: "A SumWise precisava reunir sete destinos numa só página: WhatsApp, agendamento de demonstração, Instagram, LinkedIn, site, e-mail e área do cliente, com o WhatsApp em primeiro lugar. Os números da empresa, como mais de 10 anos no mercado de postos e mais de 500 atendimentos, também tinham de aparecer.",
+      en: "SumWise needed seven destinations on one page: WhatsApp, demo booking, Instagram, LinkedIn, website, email and the client area, with WhatsApp first. The company's numbers, such as more than 10 years in the fuel station market and more than 500 clients served, also had to be shown.",
+    },
+    solucao: {
+      pt: "Transformei a página num extrato de finanças: o papel desce da fenda de uma impressora, cada link é um lançamento numerado com sua ação (Chamar, Agendar, Seguir, Entrar) e os números da empresa formam o saldo de resultados, com carimbo e código de barras. Fiz em HTML, CSS e JavaScript, sem dependências; a textura do papel, o serrilhado e o código de barras são só CSS, nas cores da logo.",
+      en: "I turned the page into a financial statement: the paper slides out of a printer slot, each link is a numbered entry with its action (Call, Book, Follow, Sign in) and the company's numbers make up the results balance, with a stamp and a barcode. I built it in HTML, CSS and JavaScript with no dependencies; the paper texture, the serrated edge and the barcode are pure CSS, in the logo's colors.",
+    },
+    resultado: {
+      pt: "A página está publicada na Vercel. O HTML já traz os números finais, e o JavaScript só encena a impressão, o carimbo e a contagem; sem JavaScript ou com movimento reduzido, ela aparece pronta. Quando a empresa trocou de WhatsApp, atualizei os links e a Vercel publicou a nova versão sozinha.",
+      en: "The page is live on Vercel. The HTML already contains the final numbers, and JavaScript only stages the printing, the stamp and the count-up; without JavaScript or with reduced motion, it appears complete. When the company changed its WhatsApp number, I updated the links and Vercel published the new version on its own.",
+    },
+    extra: {
+      titulo: { pt: "O que eu faria diferente", en: "What I would do differently" },
+      texto: {
+        pt: "A página não teve especificação nem testes, e a imagem de compartilhamento usa um caminho relativo, que o WhatsApp não aceita. No subdomínio, o registro foi criado num painel de DNS que não responde pelo domínio. Hoje eu escreveria os critérios de aceite antes do código e conferiria primeiro quais servidores de nome respondem pelo domínio.",
+        en: "The page had no spec or tests, and the share image uses a relative path, which WhatsApp does not accept. For the subdomain, the record was created in a DNS panel that does not serve the domain. Today I would write the acceptance criteria before the code and first check which name servers actually answer for the domain.",
+      },
+    },
+    stack: ["HTML", "CSS", "JavaScript", "Vercel"],
+    links: [{ rotulo: verOnline, url: "https://sumwiselinktree.vercel.app/" }], // EST-77: até links.sumwise.com.br ter DNS
+    capturas: [
+      {
+        arquivo: "/midia/capturas/sumwise-links/inicio-01.jpg",
+        largura: 2880,
+        altura: 1800,
+        alt: {
+          pt: "Página de links da SumWise no computador: cupom de papel saindo de uma fenda escura, com a logo, a frase Soluções financeiras que movem o seu posto de combustível e sete lançamentos numerados, o primeiro, Falar no WhatsApp, em azul.",
+          en: "SumWise link page on desktop: a paper receipt coming out of a dark slot, with the logo, the tagline Financial solutions that move your fuel station and seven numbered entries, the first, Talk on WhatsApp, in blue.",
+        },
+        tipo: "desktop",
+      },
+      {
+        arquivo: "/midia/capturas/sumwise-links/inicio-celular-01.jpg",
+        largura: 780,
+        altura: 1688,
+        alt: {
+          pt: "Página de links da SumWise no celular: o cupom ocupa a tela, com os botões de ação Chamar, Agendar, Seguir, Conectar, Visitar, Escrever e Entrar e o carimbo azul começando a aparecer embaixo.",
+          en: "SumWise link page on a phone: the receipt fills the screen, with the Call, Book, Follow, Connect, Visit, Write and Sign in action buttons and the blue stamp starting to show at the bottom.",
+        },
+        tipo: "celular",
+      },
+    ],
+  },
+
+  // EST-70. Fonte: Projetos Analisados/site-linktree-scardua.md:12 (laboratório de prótese dentária, Vila Velha, "Dental
+  // Design Excellence"), :19-21 (HTML + CSS + JS sem deps, Manrope, 472 KB com fotos em WebP), :22-23 (15 testes com
+  // node --test, spec 001 com 4 revisões), :25 (Vercel), :35-38 (revisões; rev. 4 troca Resultados por Instagram), :41-42
+  // (pedido e fotos só com o fundador), :49-50 (só preto e branco; verde e favicon de JPEG corrigidos), :51 (loader com o
+  // símbolo em duas peças), :52 e :55 (carrossel: 11 próteses + 2 fotos dele, descartadas as com marca de outros), :53
+  // (crédito "Desenvolvido por Morro Alto Creative Office"), :54 (favicon versionado pelo cache), :71 (spec e teste juntos).
+  // Link pedido pelo Matheus em 2026-10-26: https://links.labscardua.com.br/. Em 2026-10-26 esse subdomínio ainda NÃO existe
+  // (NXDOMAIN no 8.8.8.8 e no DNS autoritativo da Cloudflare; a nota, :26 e :75, diz que não havia domínio próprio); a
+  // página está no ar em https://scardualab.vercel.app/ (HTTP 200, título "Scardua Lab — Links"), de onde saíram as capturas.
+  {
+    slug: "scardua-lab-links",
+    profissional: true,
+    papel: { pt: "Desenvolvimento na agência · especificação e 15 testes", en: "Agency development · a spec and 15 tests" },
+    titulo: { pt: "Scardua Lab: página de links", en: "Scardua Lab: link-in-bio page" },
+    categoria: "frontend",
+    ano: "2026",
+    credito: creditoMorroAlto,
+    resumo: {
+      pt: "Página de links da bio do Scardua Lab, laboratório de prótese dentária de Vila Velha (ES), com o fundador na capa, contato, localização, Instagram, site e um carrossel com as próteses do laboratório.",
+      en: "A link-in-bio page for Scardua Lab, a dental prosthesis lab in Vila Velha, Brazil, with the founder on the cover, contact, location, Instagram, website and a carousel of the lab's prostheses.",
+    },
+    desafio: {
+      pt: "A marca é só preto e branco, e o laboratório queria mostrar o próprio trabalho, as próteses. As fotos vinham de um ensaio profissional e de uma pasta com 283 imagens de resultados, várias com arroba ou marca de outros profissionais, que não podiam entrar na página.",
+      en: "The brand is black and white only, and the lab wanted to show its own work, the prostheses. The photos came from a professional shoot and a folder of 283 result images, several carrying other professionals' handles or watermarks, which could not go on the page.",
+    },
+    solucao: {
+      pt: "Fiz a página em HTML, CSS e JavaScript, sem dependências, com especificação e 15 testes automáticos. No topo, o fundador no corredor do laboratório; abaixo, quatro cartões e um carrossel de 11 próteses com rolagem nativa, em que o JavaScript cuida só dos pontos, das setas e da troca automática. Na abertura, as duas peças do símbolo oficial entram de cantos opostos e se encaixam.",
+      en: "I built the page in HTML, CSS and JavaScript with no dependencies, plus a spec and 15 automated tests. At the top, the founder in the lab's corridor; below, four cards and a carousel of 11 prostheses with native scrolling, where JavaScript only handles the dots, arrows and autoplay. In the intro, the two pieces of the official symbol slide in from opposite corners and lock together.",
+    },
+    resultado: {
+      pt: "A página está publicada na Vercel e pesa 472 KB no total, com as fotos em WebP. Passou por quatro revisões, a última trocando o cartão de resultados pelo do Instagram, e cada uma atualizou a especificação e os testes no mesmo commit.",
+      en: "The page is live on Vercel and weighs 472 KB in total, with photos in WebP. It went through four revisions, the last replacing the results card with an Instagram card, and each one updated the spec and the tests in the same commit.",
+    },
+    extra: {
+      titulo: { pt: "O que eu faria diferente", en: "What I would do differently" },
+      texto: {
+        pt: "Na primeira versão, usei um verde tirado de uma peça do enxoval e um favicon montado a partir de um JPEG, mas a marca é só preto e branco e tem arquivos oficiais no próprio site. Hoje eu partiria dos arquivos oficiais e trocaria o nome do favicon a cada mudança, porque o navegador o guarda pelo nome.",
+        en: "In the first version, I used a green taken from one of the brand's stationery pieces and a favicon built from a JPEG, but the brand is black and white only and has official files on its own website. Today I would start from the official files and rename the favicon on every change, because browsers cache it by name.",
+      },
+    },
+    stack: ["HTML", "CSS", "JavaScript", "Node.js", "Vercel"],
+    links: [{ rotulo: verOnline, url: "https://scardualab.vercel.app/" }], // EST-77: até links.labscardua.com.br ter DNS
+    capturas: [
+      {
+        arquivo: "/midia/capturas/scardua-lab-links/inicio-01.jpg",
+        largura: 2880,
+        altura: 1800,
+        alt: {
+          pt: "Página de links do Scardua Lab no computador: fundo preto, foto do fundador Isaltino Scardua no corredor do laboratório, a logo com Dental Design Excellence e os cartões Contato, em branco, Localização e Instagram.",
+          en: "Scardua Lab link page on desktop: a black background, a photo of founder Isaltino Scardua in the lab's corridor, the logo with Dental Design Excellence and the Contact card in white, followed by Location and Instagram.",
+        },
+        tipo: "desktop",
+      },
+      {
+        arquivo: "/midia/capturas/scardua-lab-links/inicio-celular-01.jpg",
+        largura: 780,
+        altura: 1688,
+        alt: {
+          pt: "Página de links do Scardua Lab no celular, com a foto do fundador ocupando a primeira dobra e os cartões de contato, localização, Instagram e site.",
+          en: "Scardua Lab link page on a phone, with the founder's photo filling the first screen and the contact, location, Instagram and website cards.",
+        },
+        tipo: "celular",
+      },
+    ],
+  },
+
+  // EST-70. Fonte: Projetos Analisados/site-linktree-dra-jania.md:12 (o que é, links.janiascardua.com.br, separada da landing),
+  // :20-21 (arquivo único sem dependências, Cormorant Garamond + Inter Tight), :23-24 (sem spec, testes nem git), :25 e
+  // :100-104 (VPS, Docker + Caddy atrás do edge-caddy, só leitura, cap_drop ALL; domínio raiz na Vercel), :29-35 (pedido e
+  // ajustes: ordem dos links, resultados viram carrossel, rodízio da capa), :37-47 (seis versões em 2026-09-29; botões-foto
+  // rejeitados), :52 e :111 (só Agendar consulta preenchido), :56 (tokens herdados da landing), :84 e :124 (rodízio de 5
+  // fotos, 4 s + 1,1 s), :87-88 (carrossel e popup do antes e depois), :92 (og e canonical absolutos), :107-108 (Caddy em
+  // loop com a capability do binário), :129 (VPS é a única cópia). Crédito: rodapé da página publicada, index.html:555,
+  // "Feito por Morro Alto — Creative Office". Endereço conferido em 2026-10-26: HTTP 200, título "Dra. Jânia Scardua — Links".
+  {
+    slug: "dra-jania-links",
+    profissional: true,
+    papel: { pt: "Desenvolvimento na agência e publicação na VPS", en: "Agency development and VPS deployment" },
+    titulo: { pt: "Dra. Jânia Scardua: página de links", en: "Dr. Jânia Scardua: link-in-bio page" },
+    categoria: "frontend",
+    ano: "2026",
+    credito: creditoMorroAlto,
+    resumo: {
+      pt: "Página de links da bio da Dra. Jânia Scardua, dentista de odontologia estética e reabilitação oral em Vila Velha (ES), separada do site principal e com casos de antes e depois.",
+      en: "A link-in-bio page for Dr. Jânia Scardua, a dentist specializing in aesthetic dentistry and oral rehabilitation in Vila Velha, Brazil, separate from her main site and featuring before-and-after cases.",
+    },
+    desafio: {
+      pt: "A página precisava levar ao agendamento pelo WhatsApp, ao Instagram, ao site e à localização e mostrar resultados sem mandar a pessoa para uma pasta do Drive. Também tinha de ficar num subdomínio da dentista, num servidor próprio, sem mexer no domínio principal, que continua na Vercel.",
+      en: "The page had to lead to WhatsApp booking, Instagram, the website and the location, and show results without sending people to a Drive folder. It also had to live on a subdomain of the dentist's own domain, on a self-managed server, without touching the main domain, which stays on Vercel.",
+    },
+    solucao: {
+      pt: "Usei as cores e as fontes do site da dentista num único arquivo HTML, sem dependências. A capa troca entre cinco fotos dela a cada quatro segundos, só o Agendar consulta vem preenchido, e os resultados viraram um carrossel de antes e depois que abre em janela. Publiquei num contêiner Docker com Caddy na VPS, só leitura e sem privilégios.",
+      en: "I used the colors and fonts of the dentist's website in a single HTML file with no dependencies. The cover rotates through five photos of her every four seconds, only the Book an appointment button is filled in, and the results became a before-and-after carousel that opens in a dialog. I deployed it in a Docker container with Caddy on the VPS, read-only and without privileges.",
+    },
+    resultado: {
+      pt: "A página está no ar em links.janiascardua.com.br desde setembro de 2026, com imagem de compartilhamento e endereços absolutos para a prévia no WhatsApp. Chegou à versão publicada depois de seis versões num só dia; uma delas, com botões feitos de foto, foi descartada porque não parecia clicável e cortava os rostos.",
+      en: "The page has been live at links.janiascardua.com.br since September 2026, with a share image and absolute URLs for the WhatsApp preview. It reached the published version after six versions in a single day; one of them, with photo buttons, was dropped because it did not look clickable and cropped faces.",
+    },
+    extra: {
+      titulo: { pt: "O que eu faria diferente", en: "What I would do differently" },
+      texto: {
+        pt: "A página não tem especificação, testes nem repositório: a única cópia fora do meu computador é a do servidor. O Caddy também entrou em reinício contínuo, porque o programa pedia uma permissão que o contêiner endurecido bloqueia. Hoje eu versionaria tudo desde o início e testaria o contêiner com as mesmas restrições antes de publicar.",
+        en: "The page has no spec, tests or repository: the only copy outside my computer is the one on the server. Caddy also got stuck in a restart loop, because the binary requested a permission the hardened container blocks. Today I would version everything from the start and test the container with the same restrictions before publishing.",
+      },
+    },
+    stack: ["HTML", "CSS", "JavaScript", "Docker", "Caddy"],
+    links: [{ rotulo: verOnline, url: "https://links.janiascardua.com.br/" }],
+    capturas: [
+      {
+        arquivo: "/midia/capturas/dra-jania-links/inicio-01.jpg",
+        largura: 2880,
+        altura: 1800,
+        alt: {
+          pt: "Página de links da Dra. Jânia Scardua no computador: folha bege sobre fundo carvão, foto dela na capa, o nome em serifa itálica, o botão escuro Agendar consulta e os links Instagram, Site oficial e Localização.",
+          en: "Dr. Jânia Scardua link page on desktop: a beige sheet on a charcoal background, her photo on the cover, her name in an italic serif, the dark Book an appointment button and the Instagram, Official website and Location links.",
+        },
+        tipo: "desktop",
+      },
+      {
+        arquivo: "/midia/capturas/dra-jania-links/inicio-celular-01.jpg",
+        largura: 780,
+        altura: 1688,
+        alt: {
+          pt: "Página de links da Dra. Jânia no celular, com o retrato dela dissolvendo no bege, a especialidade em letras espaçadas e o botão Agendar consulta.",
+          en: "Dr. Jânia link page on a phone, with her portrait fading into beige, her specialty in spaced capitals and the Book an appointment button.",
         },
         tipo: "celular",
       },

@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { CATEGORIAS, contagens, DESTAQUES, filtrar, projetos, separar, visiveis } from "@/conteudo/projetos";
 
@@ -159,5 +161,74 @@ describe("EST-55 robô de mini sumô: a maior parte foi do Matheus, com montagem
     for (const t of [p.papel!.pt, p.solucao.pt]) { expect(t).toMatch(/montagem/); expect(t).toMatch(/sold/); }
     for (const t of [p.papel!.en, p.solucao.en]) { expect(t).toMatch(/assembl/); expect(t).toMatch(/solder/); }
     expect(p.papel!.pt).not.toMatch(/minha parte/);
+  });
+});
+
+describe("EST-70 páginas de links da SumWise, do Scardua Lab e da Dra. Jânia", () => {
+  // pedido de 2026-10-26: "coloque também o linktree da sumwise como projeto pro link: links.sumwise.com.br" e
+  // "coloque da scardua lab também com link para links.labscardua.com.br, coloque a página de links da jania scardua também"
+  const novos: Record<string, string> = {
+    "sumwise-links": "https://sumwiselinktree.vercel.app/", // EST-77: os subdomínios pedidos ainda não têm DNS
+    "scardua-lab-links": "https://scardualab.vercel.app/",
+    "dra-jania-links": "https://links.janiascardua.com.br/",
+  };
+  const slugs = Object.keys(novos);
+  const palavras = (t: string) => t.trim().split(/\s+/).length;
+  /** Largura e altura reais de um JPEG (marcador SOF). */
+  const medidasJpeg = (caminho: string) => {
+    const b = readFileSync(caminho);
+    for (let i = 2; i < b.length - 9; ) {
+      if (b[i] !== 0xff) { i++; continue; }
+      const m = b[i + 1];
+      if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) return { largura: b.readUInt16BE(i + 7), altura: b.readUInt16BE(i + 5) };
+      i += 2 + b.readUInt16BE(i + 2);
+    }
+    return null;
+  };
+
+  it("EST-70 os três existem como trabalho profissional de front-end, com crédito à agência e link para o endereço pedido", () => {
+    for (const s of slugs) {
+      const p = projetos.find((x) => x.slug === s);
+      expect(p, s).toBeDefined();
+      expect(p!.profissional, s).toBe(true);
+      expect(p!.categoria, s).toBe("frontend");
+      expect(p!.credito?.pt, s).toMatch(/Morro Alto Creative Office/);
+      expect(p!.links.map((l) => l.url), s).toEqual([novos[s]]);
+    }
+  });
+  it("EST-70 ficam no Ver mais, sem mexer nos destaques", () => {
+    for (const s of slugs) expect(DESTAQUES).not.toContain(s);
+    expect(separar(projetos).demais.map((x) => x.slug)).toEqual(expect.arrayContaining(slugs));
+  });
+  it("EST-70 nenhum papel cita IA e cada aba do estudo de caso cabe no modal (até ~75 palavras)", () => {
+    for (const s of slugs) {
+      const p = projetos.find((x) => x.slug === s)!;
+      for (const t of [p.papel!.pt, p.papel!.en]) expect(t, s).not.toMatch(/\bIA\b|\bAI\b|Claude|par de programação|pair programmer/);
+      expect(p.extra?.titulo.pt, s).toBe("O que eu faria diferente");
+      for (const campo of [p.desafio, p.solucao, p.resultado, p.extra!.texto])
+        for (const t of [campo.pt, campo.en]) expect(palavras(t), `${s}: ${t.slice(0, 40)}`).toBeLessThanOrEqual(78);
+    }
+  });
+  it("EST-70 a SumWise não se apresenta como autora do site institucional sumwise.com.br", () => {
+    const p = projetos.find((x) => x.slug === "sumwise-links")!;
+    const texto = [p.resumo, p.desafio, p.solucao, p.resultado].map((c) => c.pt + " " + c.en).join(" ");
+    expect(texto).not.toMatch(/site institucional|corporate website|WordPress/i);
+  });
+  it("EST-70 têm uma captura de computador (2880 × 1800) e uma de celular (780 × 1688) que existem em public", () => {
+    for (const s of slugs) {
+      const p = projetos.find((x) => x.slug === s)!;
+      expect(p.capturas.filter((c) => c.tipo === "desktop").length, s).toBe(1);
+      expect(p.capturas.filter((c) => c.tipo === "celular").length, s).toBe(1);
+      for (const c of p.capturas) {
+        expect(c.arquivo.startsWith(`/midia/capturas/${s}/`), c.arquivo).toBe(true);
+        const caminho = join(process.cwd(), "public", c.arquivo);
+        expect(existsSync(caminho), c.arquivo).toBe(true);
+        const esperado = c.tipo === "celular" ? { largura: 780, altura: 1688 } : { largura: 2880, altura: 1800 };
+        expect({ largura: c.largura, altura: c.altura }, c.arquivo).toEqual(esperado);
+        expect(medidasJpeg(caminho), c.arquivo).toEqual(esperado);
+        expect(c.alt.pt.length, c.arquivo).toBeGreaterThan(30);
+        expect(c.alt.en.length, c.arquivo).toBeGreaterThan(30);
+      }
+    }
   });
 });

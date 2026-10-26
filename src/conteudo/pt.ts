@@ -52,17 +52,31 @@ export const pt = {
     oQueFaco: {
       titulo: "O que eu faço",
       itens: [
-        { titulo: "Interfaces", texto: "Do layout à página publicada: React, Next.js e CSS com cuidado de design, desempenho e acessibilidade." },
-        { titulo: "Sistemas", texto: "Aplicações completas com autenticação, banco de dados e APIs, como o Solvered e o sistema da Morro Alto." },
-        { titulo: "Segurança", texto: "Estudo segurança ofensiva: redes, Linux, análise de tráfego e write-ups escritos com divulgação responsável." },
+        // EST-71/EST-74: generalista e na medida (uma frase e 2 pontos), sem nome de projeto nem de ferramenta
+        { titulo: "Interfaces", texto: "Sites e interfaces do layout à publicação: rápidos, bons no celular e acessíveis.",
+          pontos: ["Sites institucionais, landing pages e páginas de links para clientes reais", "Atenção a desempenho, SEO e acessibilidade em cada entrega"] },
+        { titulo: "Sistemas", texto: "Aplicações web de ponta a ponta, da regra de negócio ao sistema em uso.",
+          pontos: ["Login, permissões por cargo, banco de dados e integrações, inclusive com IA", "Especificação e testes automatizados escritos antes do código"] },
+        { titulo: "Segurança", texto: "Estudo segurança ofensiva para construir sistemas mais difíceis de quebrar.",
+          pontos: ["Redes, Linux, análise de tráfego e falhas em aplicações web", "Write-ups em formato de relatório, com divulgação responsável"] },
       ],
     },
     trajetoria: {
       titulo: "Trajetória",
       itens: [
-        { periodo: "2026 – atual · 2º período", titulo: "Engenharia de Software", local: "Universidade Vila Velha (UVV)", texto: "Algoritmos, estruturas de dados, redes e fundamentos de sistemas." },
-        { periodo: "mai. de 2026 – out. de 2026 · 6 meses", titulo: "Desenvolvimento web", local: "Morro Alto – Creative Office · Meio período · Vila Velha, Espírito Santo, Brasil · No local", texto: "Atuação no desenvolvimento web com foco em manutenção de sites, criação de landing pages e integração de automações utilizando ferramentas de IA." },
-        { periodo: "2026 · 2 meses", titulo: "InovaWeek UVV", local: "Guerreiros de Realengo", texto: "Robô autônomo de mini sumô: firmware, modelagem e manual de montagem para a equipe." },
+        { periodo: "2026 – atual · 2º período", titulo: "Engenharia de Software", local: "Universidade Vila Velha (UVV)", texto: "Algoritmos, estruturas de dados, redes e fundamentos de sistemas.", destaques: [] },
+        { periodo: "mai. de 2026 – out. de 2026 · 6 meses", titulo: "Desenvolvimento web", local: "Morro Alto – Creative Office · Meio período · Vila Velha, Espírito Santo, Brasil · No local", texto: "Sites, landing pages, páginas de links e sistemas para clientes da agência e para a própria Morro Alto, com manutenção, publicação e automações com IA.",
+          destaques: [
+            "Sistema interno da agência (pautas, financeiro, reuniões e assistente com IA), em uso diário pela equipe",
+            "Portal da Brasigran em cinco idiomas e nova página da Hana Decor, no lugar do WordPress",
+            "Especificação e testes escritos antes do código nos projetos maiores",
+          ] },
+        { periodo: "2026 · 2 meses", titulo: "InovaWeek UVV", local: "Guerreiros de Realengo", texto: "Numa equipe de cinco, fiz a maior parte do robô autônomo de mini sumô.",
+          destaques: [
+            "Montagem e soldagem da eletrônica",
+            "Firmware em C++ para o ESP32, que lê os sensores e aciona os motores",
+            "Modelo 3D e manual de montagem bilíngue, usado como guia pela equipe",
+          ] },
       ],
     },
     tecnologias: {

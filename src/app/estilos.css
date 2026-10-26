@@ -122,6 +122,8 @@ main:focus,main > section:focus{outline:none}
 /* ------------------------------------------------ tela de carregamento: a porta do cofre (EST-16) */
 .cofre-tela{display:none}
 .cofre-ativo,.cofre-ativo body{overflow:hidden}
+/* EST-66: enquanto a moldura é gravada, a página não rola */
+.hero-gravando,.hero-gravando body{overflow:hidden}
 /* EST-59: a contadora de cédulas no centro do papel (o visor do vídeo já conta; sem contador de texto). O papel do
    vídeo se funde ao da tela com "darken" */
 .cofre-ativo .cofre-tela{position:fixed;inset:0;z-index:200;display:block;background:#F1EFE4;color:#24442C;opacity:1;transition:opacity .7s ease}
@@ -170,7 +172,7 @@ main:focus,main > section:focus{outline:none}
 /* EST-48/EST-49: Ato III — vídeo no lugar da moldura vertical da ficha "Quem sou" */
 /* "darken" sobre o fundo da própria seção (que alterna #F1EFE4/#E9E6D8): o papel do vídeo some e só a tinta aparece */
 .certificado-moldura.ato3{background:var(--fundo);isolation:isolate}
-.certificado-moldura.ato3 video{display:block;width:100%;height:auto;aspect-ratio:1086/1448;background:transparent;mix-blend-mode:darken}
+.certificado-moldura.ato3 video{display:block;width:100%;height:auto;aspect-ratio:1086/1448;background:transparent}
 .faixa-inicio{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(1.5rem,4vw,3rem);max-width:1240px;margin:clamp(2.5rem,5vw,4rem) auto 0;align-items:center}
 .numeros{margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);padding:1.4rem 0}
 .numeros div{display:flex;flex-direction:column-reverse;gap:.2rem}
@@ -196,14 +198,11 @@ main:focus,main > section:focus{outline:none}
 .com-fundo .fundo .gravura{position:absolute;inset:0}
 .com-fundo .fundo img{width:100%;height:100%;object-fit:cover;object-position:center;opacity:.16}
 .com-fundo .fundo::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 0,var(--fundo) 85%)}
-/* Projetos: a gravura de fundo (1983 px) esticada na seção inteira virava mancha borrada; fica só atrás do cabeçalho,
-   quase no tamanho próprio, e some num degradê (EST-37) */
-.projetos-secao .fundo{bottom:auto;height:min(100%,900px);-webkit-mask:linear-gradient(#000 35%,transparent);mask:linear-gradient(#000 35%,transparent)}
-/* EST-60: mais duas prensas descendo pela seção (a do meio espelhada), fundidas em cima e embaixo */
-.projetos-secao .fundo-meio,.projetos-secao .fundo-baixo{height:min(60%,900px);-webkit-mask:linear-gradient(transparent,#000 30%,#000 70%,transparent);mask:linear-gradient(transparent,#000 30%,#000 70%,transparent)}
-.projetos-secao .fundo-meio{top:36%;bottom:auto}
-.projetos-secao .fundo-meio .gravura{transform:scaleX(-1)}
-.projetos-secao .fundo-baixo{top:auto;bottom:0;-webkit-mask:linear-gradient(transparent,#000 35%);mask:linear-gradient(transparent,#000 35%)}
+/* EST-67: Projetos: a prensa se repete pela seção (uma a cada 2 projetos) e acompanha "Ver mais"; cada uma é um quadro
+   opaco no tom do papel, com a opacidade, a vinheta e o degradê já na imagem (ferramentas/preparar_fundo_projetos.py) */
+.projetos-secao > .fundos-projetos{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.fundos-projetos img{position:absolute;left:0;width:100%;height:auto;max-height:none}
+.fundos-projetos img.espelho{transform:scaleX(-1)}
 .filtro{display:flex;flex-wrap:wrap;gap:.5rem;max-width:1240px;margin:0 auto 3rem}
 .filtro button{font:600 .7rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;padding:.85em 1.1em;cursor:pointer;background:transparent;color:var(--texto);border:1px solid var(--linha)}
 .filtro button span{color:var(--acento);margin-left:.35rem}
@@ -247,6 +246,19 @@ main:focus,main > section:focus{outline:none}
 .certificado-nome{margin:0 0 .4em;font:600 7.4cqw/1 var(--titulo);color:var(--acento-forte)}
 .sobre-paragrafos p{margin:0 0 1rem;color:var(--texto-2)}
 .sobre-paragrafos{margin-bottom:2.4rem}
+/* EST-74: certificado à esquerda (acompanha a rolagem enquanto a coluna da direita passa), história e trajetória à
+   direita, "O que eu faço" numa faixa de largura total com os três cartões lado a lado. Numa coluna (≤ 860 px) os
+   invólucros somem e a ordem fica certificado → história → "O que eu faço" → trajetória */
+.sobre-esq,.sobre-col{display:grid;align-content:start}
+.sobre-esq{position:sticky;top:5.5rem}
+.sobre-faco{grid-column:1/-1;margin-top:1rem}
+.sobre-faco .faco{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.2rem,3vw,2.6rem);margin-bottom:0}
+.sobre-faco .faco > li{border-bottom:0;border-top:1px solid var(--linha);padding:1.1rem 0 0}
+@media (max-width:860px){
+  .sobre-esq,.sobre-col{display:contents}
+  .sobre-grade .certificado{order:1}.sobre-paragrafos{order:2}.sobre-faco{order:3;margin-top:0}.sobre-trajetoria{order:4}
+  .sobre-faco .faco{grid-template-columns:minmax(0,1fr)}
+}
 .certificado-texto p{margin:0 0 .8em;color:var(--texto-2)}
 .fatos{margin:1em 0;display:grid;gap:.6em}
 .fatos dt{font:500 .64em/1.3 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--acento)}
@@ -258,6 +270,10 @@ main:focus,main > section:focus{outline:none}
 .faco-num{grid-row:span 2;font:400 2rem/1 var(--gotica);color:var(--acento)}
 .faco strong{font:700 .78rem/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase}
 .faco p{margin:.2rem 0 0;color:var(--texto-2)}
+/* EST-73: os pontos de cada cartão e as entregas da trajetória, com marcador de losango */
+.faco-pontos,.lt-destaques{grid-column:2;list-style:none;margin:.7rem 0 0;padding:0;display:grid;gap:.4rem;color:var(--texto-2);font-size:.86rem;line-height:1.55}
+.faco-pontos li,.lt-destaques li{position:relative;display:block;padding:0 0 0 1.1rem;border:0}
+.faco-pontos li::before,.linha-tempo .lt-destaques li::before{content:"";position:absolute;left:.1rem;top:.62em;width:5px;height:5px;border:0;border-radius:0;background:var(--acento);transform:rotate(45deg)}
 .linha-tempo{list-style:none;margin:0;padding:0 0 0 1.4rem;border-left:1px solid var(--acento);display:grid;gap:1.4rem}
 .linha-tempo li{position:relative}
 .linha-tempo li::before{content:"";position:absolute;left:calc(-1.4rem - 6px);top:.45rem;width:11px;height:11px;border-radius:50%;background:var(--fundo);border:2px solid var(--acento)}
@@ -754,28 +770,27 @@ main > .secao + .secao{border-top:3px double rgba(47,93,58,.35)}
 /* ------------------------------------------------ vídeos da 2ª leva do Blender (EST-56 a EST-58) */
 .video-animado{display:block}
 .video-animado video{display:block;width:100%;height:auto;background:transparent}
-/* EST-56: chuva de notas atrás da moldura; multiply funde o papel do vídeo ao da página, a opacidade baixa e a máscara
-   radial (centro claro) deixam o nome e o texto legíveis. Só aparece quando o vídeo já está tocando */
+/* EST-65: hero gravado sobre a moldura parada, no mesmo retângulo (o vídeo tem a resolução e o enquadramento da
+   imagem); "darken" funde o papel do vídeo ao da página. Invisível até um dos vídeos estar tocando */
 .abertura{position:relative;isolation:isolate}
-.chuva-fundo{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
-  -webkit-mask-image:radial-gradient(ellipse 62% 58% at 51% 49%,transparent 38%,#000 100%);mask-image:radial-gradient(ellipse 62% 58% at 51% 49%,transparent 38%,#000 100%)}
-.chuva-fundo video{width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;opacity:0;transition:opacity 1.2s ease}
-.chuva-fundo video[data-tocando]{opacity:.42}
-/* EST-57: o cofre ocupa o lugar da gravura; o invólucro (que é contexto de empilhamento por causa da paralaxe) se funde
-   ao fundo da seção com "darken", então o papel do vídeo some sem desenhar retângulo */
-.cofre-video{mix-blend-mode:darken}
-.cofre-video video{background:transparent;filter:brightness(1.03)} /* o papel do vídeo era 3 níveis mais escuro que o da seção: clareado, some no darken */
+.hero-gravado{position:absolute;inset:0;pointer-events:none}
+.hero-gravado video{position:absolute;inset:0;width:100%;height:100%;opacity:0}
+.hero-gravado[data-ativo="intro"] .hero-intro,.hero-gravado[data-ativo="loop"] .hero-loop{opacity:1}
+/* com um vídeo ativo, a moldura parada sai de baixo (senão o "darken" a mostraria por cima do papel em branco da gravação) */
+.moldura:has(.hero-gravado[data-ativo]) .moldura-h{visibility:hidden}
+/* EST-69: cofre, fita e selo sem mix-blend-mode, máscara ou filtro (repintavam a área do vídeo a cada quadro e travavam a
+   rolagem): o papel da seção e as bordas esmaecidas já vêm nos quadros (ferramentas/assar_videos.py) */
 /* EST-58: fita de cotação no cabeçalho da Atividade, na linha do título (3ª coluna); no celular, logo abaixo dele */
 .cab.com-extra{grid-template-columns:auto minmax(0,1fr) minmax(0,440px)}
-.fita-video{mix-blend-mode:darken;width:100%;align-self:end}
+.fita-video{width:100%;align-self:end}
 .fita-video video{background:transparent}
-/* bordas esmaecidas: o sombreado do papel do vídeo não desenha um retângulo sobre o fundo da seção */
-.cofre-video video,.fita-video video,.ato1-video{
+/* a contadora só toca na tela de carregamento (fora da rolagem): mantém a máscara de bordas */
+.ato1-video{
   -webkit-mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(transparent,#000 9%,#000 91%,transparent);
   -webkit-mask-composite:source-in;
   mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(transparent,#000 9%,#000 91%,transparent);
   mask-composite:intersect}
-@media (max-width:860px){.chuva-fundo{display:none}
+@media (max-width:860px){.hero-gravado{display:none}
   .cab.com-extra{grid-template-columns:minmax(0,1fr) auto}
   .cab .fita-video{grid-column:1/-1;width:min(100%,26rem);margin:.4rem auto -1rem}}
 
@@ -788,7 +803,4 @@ main > .secao + .secao{border-top:3px double rgba(47,93,58,.35)}
   .quadro-github .grafico{margin:auto 0}
   .quadro-github figcaption{margin-top:.8rem}
 }
-/* cofre: esmaecimento lateral mais longo, para o chão hachurado do vídeo não terminar numa faixa visível */
-.cofre-video video{
-  -webkit-mask-image:linear-gradient(to right,transparent,#000 18%,#000 82%,transparent),linear-gradient(transparent,#000 10%,#000 88%,transparent);
-  mask-image:linear-gradient(to right,transparent,#000 18%,#000 82%,transparent),linear-gradient(transparent,#000 10%,#000 88%,transparent)}
+/* cofre: o esmaecimento lateral mais longo (18%, para o chão hachurado não terminar numa faixa) está assado no vídeo (EST-69) */

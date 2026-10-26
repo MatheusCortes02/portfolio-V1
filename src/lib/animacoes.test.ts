@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { statSync } from "node:fs";
-import { ATO1, ATO3_MIDIA, CHUVA_MIDIA, COFRE_MIDIA, CONTADORA_MIDIA, FITA_MIDIA, acaoAoRegistrar, cofreAberto, mostrarAbertura, passoDoLoop, passoDoSelo, posterReduzido, type EstadoDoSelo, type MidiaVideo } from "@/lib/animacoes";
+import { ATO1, ATO3_MIDIA, CARREGANDO_FIM, COFRE_MIDIA, HERO_INTRO_MIDIA, HERO_LOOP_MIDIA, aoFimDaIntro, inicioDoHero, CONTADORA_MIDIA, FITA_MIDIA, acaoAoRegistrar, cofreAberto, mostrarAbertura, passoDoLoop, passoDoSelo, posterReduzido, type EstadoDoSelo, type MidiaVideo } from "@/lib/animacoes";
 
 const raiz = process.cwd();
 const ler = (p: string) => readFileSync(join(raiz, p), "utf8");
@@ -34,7 +34,11 @@ describe("EST-59 tela de carregamento com a contadora (volta o EST-46)", () => {
   it("EST-59 prazo de 4 a 5 s e o vídeo (5 s) cabe nele na velocidade escolhida", () => {
     expect(ATO1.prazoMs).toBeGreaterThanOrEqual(4000);
     expect(ATO1.prazoMs).toBeLessThanOrEqual(5000);
-    expect((5000 / ATO1.velocidade)).toBeLessThanOrEqual(ATO1.prazoMs);
+    expect((ATO1.duracaoMs / ATO1.velocidade)).toBeLessThanOrEqual(ATO1.prazoMs);
+  });
+  it("EST-63 sem final: o vídeo termina no visor em 100, antes da cédula sair da máquina (v2, 3,875 s)", () => {
+    expect(CONTADORA_MIDIA.webm).toMatch(/contadora-v2\.webm$/);
+    expect(ATO1.duracaoMs).toBe(3875);
   });
   it("EST-59 usa a mídia da contadora, sem o contador de texto antigo", () => {
     const c = semComentarios(ler("src/componentes/cliente.tsx"));
@@ -45,23 +49,43 @@ describe("EST-59 tela de carregamento com a contadora (volta o EST-46)", () => {
   it("EST-59 mídia versionada dentro do orçamento", () => confereMidia(CONTADORA_MIDIA, 1.25));
 });
 
-describe("EST-56 chuva de notas no fundo da abertura", () => {
-  it("EST-56 mídia versionada dentro do orçamento (≤ 2,5 MB por formato)", () => confereMidia(CHUVA_MIDIA, 2.5));
-  it("EST-56 o vídeo fica dentro da abertura, em loop, só no desktop e depois do load", () => {
+describe("EST-65 hero gravado (substitui a chuva de notas do EST-56)", () => {
+  it("EST-65 mídia versionada dentro do orçamento (≤ 2,5 MB por formato)", () => {
+    confereMidia(HERO_INTRO_MIDIA, 2.5);
+    confereMidia(HERO_LOOP_MIDIA, 2.5);
+  });
+  it("EST-65 a chuva saiu da abertura e o hero gravado entrou, só no desktop", () => {
     const p = semComentarios(ler("src/componentes/Pagina.tsx"));
     const abertura = p.slice(p.indexOf('id="inicio"'), p.indexOf('id="registro"'));
-    expect(abertura).toMatch(/<VideoAnimado[^>]*midia=\{CHUVA_MIDIA\}[^>]*modo="loop"[^>]*soDesktop[^>]*aposCarga[^>]*semPosterReduzido/);
+    expect(abertura).not.toMatch(/CHUVA_MIDIA|chuva-fundo/);
+    expect(abertura).toMatch(/<HeroGravado/);
+    expect(existsSync(join(raiz, "public/midia/animacoes/chuva"))).toBe(false);
     const css = semComentarios(ler("src/app/estilos.css"));
-    expect(css).toMatch(/\.chuva-fundo video\{[^}]*mix-blend-mode:multiply/);
-    expect(css).toMatch(/@media \(max-width:860px\)\{[^{}]*\.chuva-fundo\{display:none\}/);
+    expect(css).toMatch(/@media \(max-width:860px\)\{[^{}]*\.hero-gravado\{display:none\}/);
+    expect(css).toMatch(/\.moldura:has\(\.hero-gravado\[data-ativo\]\) \.moldura-h\{visibility:hidden\}/);
   });
-  it("EST-56 sem movimento reduzido no fundo: nada de pôster", () => {
-    expect(posterReduzido("loop", CHUVA_MIDIA, false)).toBeNull();
+  it("EST-65 a gravação só toca se o vídeo estiver pronto e a abertura visível ao fim do carregamento; senão vai direto ao ciclo", () => {
+    expect(inicioDoHero({ introPronta: true, visivel: true })).toBe("intro");
+    expect(inicioDoHero({ introPronta: false, visivel: true })).toBe("loop");
+    expect(inicioDoHero({ introPronta: true, visivel: false })).toBe("loop");
+  });
+  it("EST-65 ao fim da gravação, entra o ciclo das rosáceas (ou espera ele carregar, com a moldura parada)", () => {
+    expect(aoFimDaIntro(true)).toBe("loop");
+    expect(aoFimDaIntro(false)).toBe("esperar-loop");
+  });
+  it("EST-65 a tela de carregamento avisa quando começa a sair", () => {
+    expect(CARREGANDO_FIM).toBe("carregando:fim");
+    expect(semComentarios(ler("src/componentes/cliente.tsx"))).toMatch(/dispatchEvent\(new Event\(CARREGANDO_FIM\)\)/);
   });
 });
 
 describe("EST-57 cofre com segredo no Registro", () => {
-  it("EST-57 mídia versionada dentro do orçamento", () => confereMidia(COFRE_MIDIA, 1.25));
+  // EST-75 (2026-10-26, "deixar o cofre com maior qualidade pelo Blender"): aparece com 1333–1440 px de largura, então
+  // vai em 1920 × 1080; o orçamento sobe de 1,25 para 3,5 MB (só é baixado quando o cofre entra na tela)
+  it("EST-57/EST-75 mídia versionada em 1920 × 1080 dentro do orçamento", () => {
+    confereMidia(COFRE_MIDIA, 3.5);
+    expect(COFRE_MIDIA.webm).toMatch(/cofre-v3\.webm$/);
+  });
   it("EST-57 o vídeo substitui a gravura estática e toca uma vez", () => {
     const p = semComentarios(ler("src/componentes/Pagina.tsx"));
     const reg = p.slice(p.indexOf('id="registro"'), p.indexOf("</section>", p.indexOf('id="registro"')));
@@ -165,9 +189,9 @@ describe("EST-49 Ato III repete ao sair e voltar", () => {
   it("sair sem ter tocado não faz nada", () => {
     expect(passo("pronto", false, 0)).toEqual({ estado: "pronto", acao: null });
   });
-  it("a mídia tem nome novo (-v2) e existe em public", () => {
+  it("a mídia tem nome versionado (v3 desde o EST-69) e existe em public", () => {
     for (const url of Object.values(ATO3_MIDIA)) {
-      expect(url, url).toMatch(/-v2\.(webm|mp4|webp)$/);
+      expect(url, url).toMatch(/-v3[.-]/);
       expect(existsSync(join(raiz, "public", url)), url).toBe(true);
     }
   });

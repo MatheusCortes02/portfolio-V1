@@ -70,21 +70,12 @@ describe("EST-24 tamanho mínimo de texto e alvos de toque", () => {
   });
 });
 
-describe("EST-60 Projetos com a gravura da prensa ao longo da seção inteira", () => {
-  // pedido de 2026-10-23: "depois não tem imagem de fundo ... coloque outras 2 daquela"
-  const pagina = readFileSync(join(process.cwd(), "src/componentes/Pagina.tsx"), "utf8");
-  it("a seção Projetos tem três fundos com a prensa: no topo, no meio e embaixo", () => {
-    const secao = pagina.slice(pagina.indexOf('id="projetos"'), pagina.indexOf("<Cabecalho", pagina.indexOf('id="projetos"')));
-    expect(secao.match(/<Gravura g="06_prensa_antiga_gravura"/g)?.length).toBe(3);
-    expect(secao).toMatch(/fundo fundo-meio/);
-    expect(secao).toMatch(/fundo fundo-baixo/);
-  });
-  it("as cópias descem pela seção e se fundem nas bordas de cima e de baixo", () => {
-    expect(regras(".projetos-secao .fundo-meio").join(";")).toMatch(/top:\s*3\d%/);
-    expect(regras(".projetos-secao .fundo-baixo").join(";")).toMatch(/top:\s*auto/);
-    expect(regras(".projetos-secao .fundo-baixo").join(";")).toMatch(/bottom:\s*0/);
-    for (const s of [".projetos-secao .fundo-meio", ".projetos-secao .fundo-baixo"])
-      expect(regras(s).join(";") + regras(".projetos-secao .fundo-meio,.projetos-secao .fundo-baixo").join(";")).toBeTruthy();
+describe("EST-60 → EST-67 Projetos com a gravura da prensa ao longo da seção inteira", () => {
+  // EST-60 (2026-10-23) usava três fundos fixos; EST-67 (2026-10-26) troca por um a cada 2 projetos, sem máscara CSS
+  it("EST-67 sem máscara nem opacidade CSS nos fundos dos projetos (vêm prontos na imagem)", () => {
+    const r = regras(".fundos-projetos img").join(";");
+    expect(r).not.toMatch(/mask|opacity/);
+    expect(regras(".projetos-secao > .fundos-projetos").join(";")).toMatch(/position:\s*absolute/);
   });
 });
 

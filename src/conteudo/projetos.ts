@@ -267,6 +267,11 @@ export function visiveis(lista: Projeto[], categoria: Categoria | "todos", mais:
   return { itens: mais ? filtrados : principais, temMais: demais.length > 0, nDemais: demais.length };
 }
 
+/** EST-67: uma gravura de fundo a cada 2 projetos visíveis (no mínimo 1), para o fundo acompanhar "Ver mais". */
+export function quantosFundos(nVisiveis: number): number {
+  return Math.max(1, Math.ceil(nVisiveis / 2));
+}
+
 export function separar(lista: Projeto[]): { principais: Projeto[]; demais: Projeto[] } {
   return {
     principais: lista.filter((p) => DESTAQUES.includes(p.slug)),

@@ -8,8 +8,8 @@ import type { Idioma } from "@/conteudo/tipos";
 import { estatisticas, type Dia } from "@/lib/github";
 import { buscarContribuicoes } from "@/lib/github-dados";
 import { soIdioma } from "@/lib/so-idioma";
-import { Autenticacao, VideoAnimado } from "./animacoes";
-import { CHUVA_MIDIA, COFRE_MIDIA, FITA_MIDIA } from "@/lib/animacoes";
+import { Autenticacao, HeroGravado, VideoAnimado } from "./animacoes";
+import { COFRE_MIDIA, FITA_MIDIA } from "@/lib/animacoes";
 import { Gravura } from "./Gravura";
 import { Carregando, Contato, Decifra, Movimento, Navegacao, Olho, Projetos, Registro } from "./cliente";
 
@@ -79,11 +79,11 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
       <main id="conteudo">
         {/* 01 · Início */}
         <section className="secao lado-papel abertura" id="inicio">
-          {/* EST-56: chuva de notas MC, fundo decorativo só no desktop, carregada depois do load */}
-          <VideoAnimado midia={CHUVA_MIDIA} modo="loop" className="chuva-fundo" largura={1280} altura={720} soDesktop aposCarga semPosterReduzido />
           <div className="moldura">
             <Gravura g="01_moldura_horizontal_ornamental" className="moldura-h" prioridade ocultaEm="(max-width: 860px)" />
             <Gravura g="02_moldura_vertical_certificado" className="moldura-v" />
+            {/* EST-65: a moldura gravada a buril e as rosáceas em ciclo, sobre a moldura parada (só desktop) */}
+            <HeroGravado />
             <div className="moldura-texto">
               {/* EST-32: etiqueta de disponibilidade como carimbo de cédula */}
               <h1>Matheus Cortes</h1>
@@ -114,20 +114,11 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
           </div>
         </section>
 
-        {/* 02 · Projetos */}
-        <section className="secao lado-papel projetos-secao com-fundo" id="projetos">
-          <div className="fundo" aria-hidden="true"><Gravura g="06_prensa_antiga_gravura" /></div>
-          {/* EST-60: a mesma prensa repete no meio (espelhada) e embaixo, para o fundo cobrir todos os projetos */}
-          <div className="fundo fundo-meio" aria-hidden="true"><Gravura g="06_prensa_antiga_gravura" /></div>
-          <div className="fundo fundo-baixo" aria-hidden="true"><Gravura g="06_prensa_antiga_gravura" /></div>
-          <Cabecalho num="02" sobre={t.projetos.sobretitulo} titulo={t.projetos.titulo} lead={t.projetos.lead} g="15_mao_jogando_moeda" />
-          <Projetos lista={soIdioma(projetos, idioma)} t={t.projetos} idioma={idioma} />
-        </section>
-
-        {/* 03 · Sobre */}
+        {/* 02 · Sobre (EST-64: antes de Projetos) */}
         <section className="secao lado-papel sobre" id="sobre">
-          <Cabecalho num="03" sobre={t.sobre.sobretitulo} titulo={t.sobre.titulo} lead={t.sobre.paragrafos[0]} g="20_leao_dominio_publico" />
+          <Cabecalho num="02" sobre={t.sobre.sobretitulo} titulo={t.sobre.titulo} lead={t.sobre.paragrafos[0]} g="20_leao_dominio_publico" />
           <div className="sobre-grade">
+            <div className="sobre-esq">
             <div className="certificado">
               {/* EST-48/EST-49: Ato III — o selo MC é gravado no oval toda vez que a ficha entra na tela */}
               <Autenticacao />
@@ -141,17 +132,26 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
                 <p className="cv"><a className="botao" href={CURRICULO.pt} download hrefLang="pt-BR">{t.sobre.cv} PT</a><a className="botao vazado" href={CURRICULO.en} download hrefLang="en">{t.sobre.cv} EN</a></p>
               </div>
             </div>
+            </div>
             <div className="sobre-col">
               <div className="sobre-paragrafos">{t.sobre.paragrafos.slice(1).map((p) => <p key={p}>{p}</p>)}</div>
-              <h3 className="subtitulo">{t.sobre.oQueFaco.titulo}</h3>
-              <ol className="faco">
-                {t.sobre.oQueFaco.itens.map((it, i) => <li key={it.titulo}><span className="faco-num">0{i + 1}</span><strong>{it.titulo}</strong><p>{it.texto}</p></li>)}
-              </ol>
+              <div className="sobre-trajetoria">
               <h3 className="subtitulo">{t.sobre.trajetoria.titulo}</h3>
               <ol className="linha-tempo">
                 {t.sobre.trajetoria.itens.map((it) => (
-                  <li key={it.titulo}><span className="lt-periodo">{it.periodo}</span><strong>{it.titulo}</strong><span className="lt-local">{it.local}</span><p>{it.texto}</p></li>
+                  <li key={it.titulo}><span className="lt-periodo">{it.periodo}</span><strong>{it.titulo}</strong><span className="lt-local">{it.local}</span><p>{it.texto}</p>
+                    {it.destaques.length > 0 && <ul className="lt-destaques">{it.destaques.map((d) => <li key={d}>{d}</li>)}</ul>}</li>
                 ))}
+              </ol>
+              </div>
+            </div>
+            {/* EST-74: "O que eu faço" em faixa de largura total, três cartões lado a lado; certificado à esquerda,
+                história e trajetória à direita, com alturas parecidas */}
+            <div className="sobre-faco">
+              <h3 className="subtitulo">{t.sobre.oQueFaco.titulo}</h3>
+              <ol className="faco">
+                {t.sobre.oQueFaco.itens.map((it, i) => <li key={it.titulo}><span className="faco-num">0{i + 1}</span><strong>{it.titulo}</strong><p>{it.texto}</p>
+                  <ul className="faco-pontos">{it.pontos.map((p) => <li key={p}>{p}</li>)}</ul></li>)}
               </ol>
             </div>
           </div>
@@ -174,6 +174,12 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* 03 · Projetos */}
+        <section className="secao lado-papel projetos-secao com-fundo" id="projetos">
+          <Cabecalho num="03" sobre={t.projetos.sobretitulo} titulo={t.projetos.titulo} lead={t.projetos.lead} g="15_mao_jogando_moeda" />
+          <Projetos lista={soIdioma(projetos, idioma)} t={t.projetos} idioma={idioma} />
         </section>
 
         {/* 04 · Certificações (EST-21) */}

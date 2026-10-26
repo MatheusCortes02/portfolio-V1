@@ -2,10 +2,11 @@
 import Image from "next/image";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { CATEGORIAS, contagens, visiveis as visiveisDe } from "@/conteudo/projetos";
+import { CATEGORIAS, contagens, quantosFundos, visiveis as visiveisDe } from "@/conteudo/projetos";
 import type { pt } from "@/conteudo/pt";
 import type { Categoria, Idioma, Projeto } from "@/conteudo/tipos";
-import { ATO1, CONTADORA_MIDIA, mostrarAbertura, REGISTRO_CHAVE, REGISTRO_EVENTO } from "@/lib/animacoes";
+import { olharPara } from "@/lib/olho";
+import { ATO1, CARREGANDO_FIM, CONTADORA_MIDIA, SAIDA_CARREGANDO_MS, mostrarAbertura, REGISTRO_CHAVE, REGISTRO_EVENTO } from "@/lib/animacoes";
 import { montarEnvio } from "@/lib/contato";
 import { abaVizinha, focarDestino, setaDaFoto } from "@/lib/acessibilidade";
 import { IDIOMAS, opcaoVizinha, rotaDoIdioma } from "@/lib/idioma";
@@ -16,7 +17,7 @@ import { Gravura, ImgGravura } from "./Gravura";
 const calmo = () => typeof window !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ------------------------------------------------ navegação: faixa de serial da cédula, aparece ao rolar (EST-13) */
-const LINKS = ["projetos", "sobre", "certificacoes", "writeups", "atividade", "contato"] as const;
+const LINKS = ["sobre", "projetos", "certificacoes", "writeups", "atividade", "contato"] as const;
 const FAIXA = 72; // altura da faixa: a seção que passa dessa linha é a atual
 
 /* idioma em menu suspenso (EST-20): botão com o idioma atual e lista com os dois; leva à outra rota mantendo a seção */
@@ -189,11 +190,13 @@ export function Carregando() {
       saiu = true;
       clearTimeout(prazo);
       setFase("saindo");
+      dispatchEvent(new Event(CARREGANDO_FIM)); // EST-65: o hero começa a gravar por baixo do esmaecimento
       setTimeout(() => {
         h.classList.remove("cofre-ativo");
-        dispatchEvent(new Event("rolagem:volta"));
+        // EST-66: se o hero começou a gravar, é ele quem devolve a rolagem ao terminar
+        if (!h.classList.contains("hero-gravando")) dispatchEvent(new Event("rolagem:volta"));
         setFase("fim");
-      }, 750);
+      }, SAIDA_CARREGANDO_MS);
     };
     prazo = window.setTimeout(sair, Math.max(0, ATO1.prazoMs - performance.now()));
     if (!v) return () => clearTimeout(prazo);
@@ -212,7 +215,8 @@ export function Carregando() {
   return (
     <>
       <div className={`cofre-tela${fase === "saindo" ? " saindo" : ""}`} aria-hidden="true">
-        <video ref={video} id="ato1" className="ato1-video" muted playsInline preload="none" disablePictureInPicture tabIndex={-1} width={960} height={540}>
+        <video ref={video} id="ato1" className="ato1-video" suppressHydrationWarning muted playsInline preload="none" disablePictureInPicture tabIndex={-1} width={960} height={540}>
+          {/* suppressHydrationWarning: o script anterior à hidratação põe o pôster neste vídeo */}
           <source src={CONTADORA_MIDIA.webm} type="video/webm" />
           <source src={CONTADORA_MIDIA.mp4} type="video/mp4" />
         </video>
@@ -327,8 +331,20 @@ export function Projetos({ lista, t, idioma }: { lista: Projeto[]; t: typeof pt.
     return () => document.removeEventListener("click", abrir);
   }, [lista]);
 
+  const nFundos = quantosFundos(visiveis.length);
   return (
     <>
+      {/* EST-67: a prensa de fundo se repete pela seção inteira e acompanha "Ver mais"; opacidade, vinheta e degradê já
+          vêm na imagem (sem máscara CSS, que pesava na rolagem); uma sim, outra não, espelhada */}
+      <div className="fundos-projetos" aria-hidden="true">
+        {Array.from({ length: nFundos }, (_, k) => (
+          <picture key={k}>
+            <source type="image/avif" srcSet="/midia/gravuras/06_prensa_fundo-e9e6d8-960.avif 960w, /midia/gravuras/06_prensa_fundo-e9e6d8-1600.avif 1600w" sizes="100vw" />
+            <img src="/midia/gravuras/06_prensa_fundo-e9e6d8-1600.webp" srcSet="/midia/gravuras/06_prensa_fundo-e9e6d8-960.webp 960w, /midia/gravuras/06_prensa_fundo-e9e6d8-1600.webp 1600w" sizes="100vw"
+              alt="" width={1600} height={1000} loading="lazy" decoding="async" className={k % 2 ? "espelho" : undefined} style={{ top: `${((k / nFundos) * 100).toFixed(2)}%` }} />
+          </picture>
+        ))}
+      </div>
       <div className="filtro" role="toolbar" aria-label={t.titulo}>
         {(["todos", ...CATEGORIAS] as const).filter((c) => c === "todos" || n[c] > 0).map((c) => (
           <button key={c} type="button" aria-pressed={cat === c} onClick={() => { setCat(c); setMais(false); }}>
@@ -502,9 +518,7 @@ export function Olho() {
       const r = ref.current?.getBoundingClientRect();
       if (!r) return;
       const cx = r.left + r.width * 0.505, cy = r.top + r.height * 0.522;
-      const dx = e.clientX - cx, dy = e.clientY - cy;
-      const dist = Math.hypot(dx, dy) || 1, alcance = Math.min(1, dist / 500);
-      setPos({ x: (dx / dist) * alcance * 7.6, y: (dy / dist) * alcance * 1 });
+      setPos(olharPara(e.clientX - cx, e.clientY - cy)); // EST-68: também para cima e para baixo
     };
     addEventListener("pointermove", mover, { passive: true });
     return () => removeEventListener("pointermove", mover);
@@ -562,7 +576,8 @@ export function Movimento() {
     import("lenis").then(({ default: Lenis }) => {
       if (!vivo) return;
       lenis = new Lenis({ lerp: 0.085, anchors: { offset: -8 }, autoRaf: true });
-      if (document.documentElement.classList.contains("cofre-ativo") || document.documentElement.classList.contains("modal-aberto")) lenis.stop();
+      const h = document.documentElement;
+      if (h.classList.contains("cofre-ativo") || h.classList.contains("modal-aberto") || h.classList.contains("hero-gravando")) lenis.stop();
     });
     // modal aberto: a página por trás não rola
     const pausa = () => lenis?.stop();

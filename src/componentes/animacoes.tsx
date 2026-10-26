@@ -2,9 +2,10 @@
 // "A vida de uma cédula" — Ato III (docs/animacoes-magnific.md; spec 003, EST-48 e EST-49).
 // Isolado aqui e com a mídia em public/midia/animacoes/ato3/ para ser trocado sem mexer no resto da página.
 // O Ato I e o Ato II saíram do site em 2026-10-23. Abaixo, o componente genérico dos vídeos da 2ª leva do Blender
-// (EST-56 a EST-58); a tela de carregamento com a contadora (EST-59) é o Carregando, em cliente.tsx.
+// (EST-57 e EST-58) e o hero gravado da abertura (EST-65, no lugar da chuva do EST-56); a tela de carregamento com a
+// contadora (EST-59) é o Carregando, em cliente.tsx.
 import { useEffect, useRef } from "react";
-import { acaoAoRegistrar, ATO3_MIDIA, cofreAberto, passoDoLoop, REGISTRO_CHAVE, REGISTRO_EVENTO, passoDoSelo, posterReduzido, type EstadoDoSelo, type MidiaVideo, type ModoVideo } from "@/lib/animacoes";
+import { acaoAoRegistrar, aoFimDaIntro, ATO3_MIDIA, CARREGANDO_FIM, cofreAberto, HERO_INTRO_MIDIA, HERO_LOOP_MIDIA, inicioDoHero, SAIDA_CARREGANDO_MS, travaMaximaDoHero, passoDoLoop, REGISTRO_CHAVE, REGISTRO_EVENTO, passoDoSelo, posterReduzido, type EstadoDoSelo, type MidiaVideo, type ModoVideo } from "@/lib/animacoes";
 
 const DESKTOP = "(min-width: 861px)";
 const reduzido = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -139,6 +140,88 @@ export function VideoAnimado({ midia, modo, className = "", largura, altura, soD
       <video ref={ref} muted playsInline preload="none" disablePictureInPicture tabIndex={-1} width={largura} height={altura}>
         <source src={midia.webm} type="video/webm" />
         <source src={midia.mp4} type="video/mp4" />
+      </video>
+    </span>
+  );
+}
+
+/* ------------------------------------------------ hero gravado da abertura (EST-65) */
+/** Sobre a moldura parada (que continua sendo a imagem do LCP): ao sair a tela de carregamento, a moldura é gravada a
+ *  buril (uma vez) e as rosáceas passam a oscilar em ciclo. Só no desktop e sem movimento reduzido; a gravação é pedida
+ *  depois do `load`. Se ela não estiver pronta (ou a abertura não estiver na tela), vai direto ao ciclo; o ciclo toca só
+ *  enquanto a abertura está visível. Nada aparece antes de um vídeo estar tocando (a moldura parada fica por baixo). */
+export function HeroGravado() {
+  const caixa = useRef<HTMLSpanElement>(null);
+  const intro = useRef<HTMLVideoElement>(null);
+  const loop = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const cx = caixa.current, vi = intro.current, vl = loop.current;
+    if (!cx || !vi || !vl) return;
+    vi.muted = vl.muted = true;
+    if (!matchMedia(DESKTOP).matches || reduzido()) return;
+    let fase: "espera" | "intro" | "esperar-loop" | "loop" = "espera";
+    let visivel = true, espera = 0, seguranca = 0;
+    const h = document.documentElement;
+    // EST-66: a página só volta a rolar quando a gravação termina (ou falha, ou no prazo de segurança)
+    const destravar = () => {
+      clearTimeout(seguranca);
+      if (!h.classList.contains("hero-gravando")) return;
+      h.classList.remove("hero-gravando");
+      dispatchEvent(new Event("rolagem:volta"));
+    };
+    const pronto = (v: HTMLVideoElement) => v.readyState >= 3;
+    const pedir = (v: HTMLVideoElement) => { if (v.preload !== "auto") { v.preload = "auto"; v.load(); } };
+    const tocarLoop = () => {
+      fase = "loop";
+      cx.dataset.ativo = "loop";
+      vi.pause();
+      if (visivel) vl.play().catch(() => {});
+    };
+    const esperarLoop = () => {
+      destravar();
+      pedir(vl);
+      if (aoFimDaIntro(pronto(vl)) === "loop") tocarLoop();
+      else { fase = "esperar-loop"; vl.addEventListener("canplay", tocarLoop, { once: true }); }
+    };
+    const comecar = () => {
+      if (fase !== "espera") return;
+      const r = cx.getBoundingClientRect();
+      visivel = r.bottom > 0 && r.top < innerHeight;
+      if (inicioDoHero({ introPronta: pronto(vi), visivel }) === "intro") {
+        fase = "intro";
+        h.classList.add("hero-gravando");
+        seguranca = window.setTimeout(destravar, travaMaximaDoHero());
+        // papel em branco (1º quadro) enquanto a tela de carregamento esmaece; a gravação começa quando ela some
+        cx.dataset.ativo = "intro";
+        vi.addEventListener("ended", esperarLoop, { once: true });
+        espera = window.setTimeout(() => vi.play().then(() => pedir(vl)).catch(esperarLoop), SAIDA_CARREGANDO_MS);
+      } else esperarLoop();
+    };
+    const obs = new IntersectionObserver((es) => {
+      visivel = es[es.length - 1].isIntersecting;
+      if (fase === "loop") { if (passoDoLoop(visivel) === "tocar") vl.play().catch(() => {}); else vl.pause(); }
+    }, { threshold: 0 });
+    obs.observe(cx);
+    const comLoader = document.documentElement.classList.contains("cofre-ativo");
+    const cancelar = depoisDaCarga(() => {
+      if (comLoader) pedir(vi); // a gravação só faz sentido saindo da tela de carregamento
+      else comecar(); // sem tela de carregamento: a moldura já está à vista, vai direto ao ciclo
+    });
+    if (comLoader) addEventListener(CARREGANDO_FIM, comecar, { once: true });
+    return () => {
+      cancelar(); clearTimeout(espera); destravar(); obs.disconnect(); removeEventListener(CARREGANDO_FIM, comecar);
+      vi.removeEventListener("ended", esperarLoop); vl.removeEventListener("canplay", tocarLoop); vi.pause(); vl.pause();
+    };
+  }, []);
+  return (
+    <span ref={caixa} className="hero-gravado" aria-hidden="true">
+      <video ref={intro} className="hero-intro" muted playsInline preload="none" disablePictureInPicture tabIndex={-1} width={1536} height={1024}>
+        <source src={HERO_INTRO_MIDIA.webm} type="video/webm" />
+        <source src={HERO_INTRO_MIDIA.mp4} type="video/mp4" />
+      </video>
+      <video ref={loop} className="hero-loop" muted loop playsInline preload="none" disablePictureInPicture tabIndex={-1} width={1536} height={1024}>
+        <source src={HERO_LOOP_MIDIA.webm} type="video/webm" />
+        <source src={HERO_LOOP_MIDIA.mp4} type="video/mp4" />
       </video>
     </span>
   );
