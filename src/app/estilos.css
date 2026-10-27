@@ -888,4 +888,22 @@ main > .secao + .secao{border-top:3px double rgba(47,93,58,.35)}
   /* EST-84: mensagem mais baixa; rodapé sem a lista de links (o medalhão do menu navega) */
   .ficha textarea{min-height:6.5rem;height:6.5rem}
   .rodape-nav{display:none}
+
+  /* EST-90: ornamentos de gravura do Matheus (2026-10-27, imagens 28 a 30) — a moldura vertical vira a borda dos cartões
+     (9 fatias: cantos de acanto inteiros, faixa de guilloché esticada no topo e na base), o medalhão oval fica atrás do
+     "Nº" e a faixa com roseta separa as seções no lugar da régua dupla */
+  .projeto,.sobre-faco .faco > li,.cert-lista > li{border:solid transparent;border-width:40px 34px;outline:0;
+    border-image:url(/midia/gravuras/28_moldura_cartao-papel-420.webp) 18% 21% / 40px 34px / 0 stretch}
+  .sobre-faco .faco > li,.cert-lista > li{padding:.5rem .55rem .6rem}
+  .projeto-visual{padding:.4rem .4rem 0}
+  .projeto-texto{padding:.7rem .5rem .6rem}
+  .cab-num{display:inline-flex;align-items:center;justify-content:center;width:5.4rem;aspect-ratio:1014/621;padding:0;border:0;outline:0;
+    background:url(/midia/gravuras/29_selo_oval-papel-260.webp) center/contain no-repeat}
+  main > .secao + .secao{border-top:0}
+  main > .secao + .secao::before{content:"";position:absolute;top:.55rem;left:50%;width:min(92%,26rem);aspect-ratio:2166/255;transform:translateX(-50%);pointer-events:none;
+    background:url(/midia/gravuras/30_faixa_divisoria-papel-900.webp) center/contain no-repeat}
+  /* no cartão de "O que eu faço" o número vai em cima (a coluna lateral espremia o texto); respiro entre a faixa e o selo */
+  .sobre-faco .faco > li{display:block}
+  .sobre-faco .faco .faco-num{display:block;margin-bottom:.2rem;font-size:1.7rem}
+  main > .secao:not(.abertura){padding-top:3.7rem}
 }

@@ -79,3 +79,16 @@ describe("EST-83/EST-84 Atividade, Contato e rodapé", () => {
     expect(celular).toMatch(/\.rodape-nav\{display:none\}/);
   });
 });
+
+describe("EST-90 ornamentos de gravura no celular (imagens 28 a 30 do Matheus, 2026-10-27)", () => {
+  const arquivos = ["28_moldura_cartao-papel-420.webp", "29_selo_oval-papel-260.webp", "30_faixa_divisoria-papel-900.webp"];
+  it("EST-90 as três gravuras existem e são leves (≤ 80 KB cada)", async () => {
+    const { statSync } = await import("node:fs");
+    for (const a of arquivos) expect(statSync(join(process.cwd(), "public/midia/gravuras", a)).size / 1024, a).toBeLessThanOrEqual(80);
+  });
+  it("EST-90 cartões dos carrosséis com a moldura de gravura (border-image), selo oval no Nº e faixa entre as seções", () => {
+    expect(celular).toMatch(/\.projeto,\s*\.sobre-faco \.faco > li,\s*\.cert-lista > li\{[^}]*border-image:url\(\/midia\/gravuras\/28_moldura_cartao-papel-420\.webp\)/);
+    expect(celular).toMatch(/\.cab-num\{[^}]*background:url\(\/midia\/gravuras\/29_selo_oval-papel-260\.webp\)/);
+    expect(celular).toMatch(/main > \.secao \+ \.secao::before\{[^}]*30_faixa_divisoria-papel-900\.webp/);
+  });
+});
