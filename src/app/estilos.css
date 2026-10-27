@@ -852,9 +852,8 @@ main > .secao + .secao{border-top:3px double rgba(47,93,58,.35)}
   .projeto::before{display:none}
   .projeto-visual{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:auto;aspect-ratio:auto;padding:1rem 1rem 0;border-bottom:1px solid var(--linha);
     background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(47,93,58,.07) 6px 7px);transform:none}
-  .projeto:has(.cap-celular) .cap-principal{display:none}
-  .projeto-visual .cap-celular{position:relative;inset:auto;right:auto;bottom:auto;width:auto;height:280px;margin:0 auto -1px;transform:none}
-  .projeto-visual:not(:has(.cap-celular)) .cap-principal,.projeto-visual .cap-vazia{width:100%;height:auto;aspect-ratio:16/10;margin-bottom:1rem;padding:6px;transform:none}
+  .projeto-visual .cap-celular{display:none}
+  .projeto-visual .cap-principal,.projeto-visual .cap-vazia{width:100%;height:auto;aspect-ratio:16/10;margin-bottom:1rem;padding:6px;object-fit:cover;object-position:top;transform:none}
   .projeto-texto{position:static;display:flex;flex-direction:column;padding:.95rem 1.1rem 1.15rem;text-align:left;transform:none}
   .projeto-texto .projeto-num{position:static;order:0;margin:0 0 .35rem;padding:0;font:600 .6875rem/1 var(--mono);letter-spacing:.18em;color:var(--acento);-webkit-text-stroke:0;background:none}
   .projeto-texto .projeto-num::before{content:"Nº "}
@@ -921,4 +920,20 @@ main > .secao + .secao{border-top:3px double rgba(47,93,58,.35)}
   .cofre-img{width:100%;margin-left:0;translate:none;rotate:none}
   .registro{width:100%;margin:1.2rem auto 0}
   .ato1-video{width:100vw;height:45svh;aspect-ratio:auto;object-fit:cover;object-position:37% 50%}
+
+  /* EST-93 (print do Matheus, iPhone/Safari, 2026-10-27): o Safari desenhava a moldura em 9 fatias (border-image) como
+     uma mini-moldura em cima e outra embaixo. A moldura vertical vem em 4 peças recortadas (topo, base, laterais) e
+     montadas como fundos, nas mesmas proporções de antes (topo 0,4604 · base 0,4144 · lado 0,1473 da largura) */
+  .moldura{border:0;border-image:none;
+    background-image:url(/midia/molduras/02_moldura_celular-topo-papel.webp),url(/midia/molduras/02_moldura_celular-base-papel.webp),url(/midia/molduras/02_moldura_celular-esq-papel.webp),url(/midia/molduras/02_moldura_celular-dir-papel.webp);
+    background-position:center top,center bottom,left 0 top calc(var(--l) * .4604),right 0 top calc(var(--l) * .4604);
+    background-size:100% auto,100% auto,calc(var(--l) * .1473) calc(100% - var(--l) * .8748),calc(var(--l) * .1473) calc(100% - var(--l) * .8748);
+    background-repeat:no-repeat}
+  .menu{border:0;border-image:none;
+    background-image:url(/midia/molduras/02_moldura_celular-topo-preto.webp),url(/midia/molduras/02_moldura_celular-base-preto.webp),url(/midia/molduras/02_moldura_celular-esq-preto.webp),url(/midia/molduras/02_moldura_celular-dir-preto.webp);
+    background-position:center top,center bottom,left 0 top calc(var(--l) * .4604),right 0 top calc(var(--l) * .4604);
+    background-size:100% auto,100% auto,calc(var(--l) * .1473) calc(100% - var(--l) * .8748),calc(var(--l) * .1473) calc(100% - var(--l) * .8748);
+    background-repeat:no-repeat}
+  /* a contadora sem a máscara de bordas no celular (o Safari a desenhava mal; o papel do vídeo já é o da tela) */
+  .ato1-video{-webkit-mask-image:none;mask-image:none}
 }

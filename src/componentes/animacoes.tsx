@@ -42,8 +42,8 @@ export function Autenticacao() {
   return (
     <span className="gravura certificado-moldura ato3" aria-hidden="true">
       <video ref={ref} muted playsInline preload="none" disablePictureInPicture tabIndex={-1} width={1086} height={1448}>
-        <source src={ATO3_MIDIA.webm} type="video/webm" />
         <source src={ATO3_MIDIA.mp4} type="video/mp4" />
+        <source src={ATO3_MIDIA.webm} type="video/webm" />
       </video>
     </span>
   );
@@ -133,8 +133,8 @@ export function VideoAnimado({ midia, modo, className = "", largura, altura, soD
   return (
     <span className={`video-animado ${className}`.trim()} aria-hidden="true">
       <video ref={ref} muted playsInline preload="none" disablePictureInPicture tabIndex={-1} width={largura} height={altura}>
-        <source src={midia.webm} type="video/webm" />
         <source src={midia.mp4} type="video/mp4" />
+        <source src={midia.webm} type="video/webm" />
       </video>
     </span>
   );
@@ -215,12 +215,12 @@ export function HeroGravado() {
   return (
     <span ref={caixa} className="hero-gravado" aria-hidden="true">
       <video ref={intro} className="hero-intro" muted playsInline preload="none" disablePictureInPicture tabIndex={-1} width={1536} height={1024}>
-        <source src={HERO_INTRO_MIDIA.webm} type="video/webm" />
         <source src={HERO_INTRO_MIDIA.mp4} type="video/mp4" />
+        <source src={HERO_INTRO_MIDIA.webm} type="video/webm" />
       </video>
       <video ref={loop} className="hero-loop" muted loop playsInline preload="none" disablePictureInPicture tabIndex={-1} width={1536} height={1024}>
-        <source src={HERO_LOOP_MIDIA.webm} type="video/webm" />
         <source src={HERO_LOOP_MIDIA.mp4} type="video/mp4" />
+        <source src={HERO_LOOP_MIDIA.webm} type="video/webm" />
       </video>
     </span>
   );

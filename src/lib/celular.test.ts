@@ -35,7 +35,10 @@ describe("EST-79 projetos em carrossel de deslizar", () => {
     expect(celular).toMatch(/\.ver-mais\{display:none\}/);
   });
   it("EST-79 o cartão usa a captura de celular quando existe e mostra no máximo 3 tecnologias", () => {
-    expect(celular).toMatch(/\.projeto:has\(\.cap-celular\) \.cap-principal\{display:none\}/);
+    // EST-93 (2026-10-27: "não tem lógica os projetos no celular serem mostrados pelo molde de celular, coloque normal"):
+    // no cartão vai a captura normal (de computador); o molde de iPhone some no celular
+    expect(celular).toMatch(/\.projeto-visual \.cap-celular\{display:none\}/);
+    expect(celular).not.toMatch(/\.projeto:has\(\.cap-celular\) \.cap-principal\{display:none\}/);
     expect(celular).toMatch(/\.projeto \.stack li:nth-child\(n\+4\)\{display:none\}/);
   });
   it("EST-79 o filtro é uma fileira que desliza", () => {
@@ -94,5 +97,22 @@ describe("EST-91 celular sem animações que quebram (Matheus, 2026-10-27: \"qua
   });
   it("EST-91 texto legível e com respiro: corpo do texto no celular com pelo menos 15 px", () => {
     expect(celular).toMatch(/--texto-celular:\.9375rem/);
+  });
+});
+
+describe("EST-93 Safari do iPhone: moldura da abertura e do menu sem border-image; vídeos em MP4 primeiro", () => {
+  // print do Matheus (iPhone, Safari, 2026-10-27): a moldura em 9 fatias (border-image) virava uma mini-moldura em cima e
+  // outra embaixo; reproduzido no WebKit do Playwright
+  const ultimo = celular;
+  it("EST-93 a moldura vertical vem em peças (topo, base e laterais) como fundos, sem border-image", () => {
+    expect(ultimo).toMatch(/\.moldura\{[^}]*border-image:none[^}]*background-image:url\(\/midia\/molduras\/02_moldura_celular-topo-papel\.webp\)/);
+    expect(ultimo).toMatch(/\.menu\{[^}]*border-image:none[^}]*02_moldura_celular-topo-preto\.webp/);
+  });
+  it("EST-93 em todo vídeo o MP4 vem antes do WebM (o Safari toca MP4 melhor)", () => {
+    for (const arq of ["src/componentes/animacoes.tsx", "src/componentes/cliente.tsx"]) {
+      const c = ler(arq);
+      const fontes = [...c.matchAll(/<source src=\{[^}]*\.(webm|mp4)\}/g)].map((m) => m[1]);
+      for (let i = 0; i + 1 < fontes.length; i += 2) expect(fontes.slice(i, i + 2), arq).toEqual(["mp4", "webm"]);
+    }
   });
 });

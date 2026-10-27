@@ -218,8 +218,8 @@ export function Carregando() {
       <div className={`cofre-tela${fase === "saindo" ? " saindo" : ""}`} aria-hidden="true">
         <video ref={video} id="ato1" className="ato1-video" suppressHydrationWarning muted playsInline preload="none" disablePictureInPicture tabIndex={-1} width={960} height={540}>
           {/* suppressHydrationWarning: o script anterior à hidratação põe o pôster neste vídeo */}
-          <source src={CONTADORA_MIDIA.webm} type="video/webm" />
           <source src={CONTADORA_MIDIA.mp4} type="video/mp4" />
+          <source src={CONTADORA_MIDIA.webm} type="video/webm" />
         </video>
       </div>
       <script dangerouslySetInnerHTML={{ __html: SCRIPT_COFRE }} />
