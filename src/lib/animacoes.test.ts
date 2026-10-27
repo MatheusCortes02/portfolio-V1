@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { statSync } from "node:fs";
-import { ATO1, ATO3_MIDIA, CARREGANDO_FIM, COFRE_MIDIA, HERO_INTRO_MIDIA, HERO_LOOP_MIDIA, aoFimDaIntro, inicioDoHero, CONTADORA_MIDIA, FITA_MIDIA, acaoAoRegistrar, cofreAberto, mostrarAbertura, passoDoLoop, passoDoSelo, posterReduzido, type EstadoDoSelo, type MidiaVideo } from "@/lib/animacoes";
+import { ATO1, ATO3_MIDIA, CARREGANDO_FIM, COFRE_MIDIA, HERO_INTRO_MIDIA, HERO_LOOP_MIDIA, aoFimDaIntro, inicioDoHero, CONTADORA_MIDIA, FITA_MIDIA, acaoAoRegistrar, mostrarAbertura, passoDoLoop, passoDoSelo, posterReduzido, type EstadoDoSelo, type MidiaVideo } from "@/lib/animacoes";
 
 const raiz = process.cwd();
 const ler = (p: string) => readFileSync(join(raiz, p), "utf8");
@@ -99,23 +99,20 @@ describe("EST-57 cofre com segredo no Registro", () => {
     const acoes = seq.map(([visivel, razao]) => { const r = passoDoSelo(e, { visivel, razao }); e = r.estado; return r.acao; });
     expect(acoes).toEqual(["tocar", "rebobinar", "tocar"]);
   });
-  it("EST-57 quem já registrou a entrada vê o cofre aberto e ele não toca mais", () => {
-    expect(cofreAberto("1")).toBe(true);
-    expect(cofreAberto(null)).toBe(false);
-    expect(cofreAberto("")).toBe(false);
-  });
   it("EST-57 ao registrar: se está tocando, termina aberto; se não, vai direto ao último quadro", () => {
     expect(acaoAoRegistrar(true)).toBe("deixar-terminar");
     expect(acaoAoRegistrar(false)).toBe("ir-ao-fim");
   });
-  it("EST-57 o Registro grava a marca persistente e avisa o cofre; o cofre a consulta", () => {
+  // EST-89 (2026-10-27, Matheus: "a animação do cofre fica salva no navegador e não roda toda vez que recarrega ou entra
+  // novamente no site; não quero isso"): nada fica guardado; só na mesma visita, depois de registrar, o cofre fica aberto
+  it("EST-89 nada é guardado no navegador: o cofre anima a cada visita e a cada recarga", () => {
     const c = semComentarios(ler("src/componentes/cliente.tsx"));
-    expect(c).toMatch(/localStorage\.setItem\(REGISTRO_CHAVE/);
-    expect(c).toMatch(/new Event\(REGISTRO_EVENTO\)/);
-    const p = semComentarios(ler("src/componentes/Pagina.tsx"));
-    expect(p).toMatch(/<VideoAnimado[^>]*midia=\{COFRE_MIDIA\}[^>]*abertoAoRegistrar/);
     const a = semComentarios(ler("src/componentes/animacoes.tsx"));
-    expect(a).toMatch(/localStorage\.getItem\(REGISTRO_CHAVE\)/);
+    expect(c + a).not.toMatch(/localStorage|sessionStorage|REGISTRO_CHAVE|cofreAberto/);
+  });
+  it("EST-57/EST-89 na mesma visita, ao registrar, o Registro avisa o cofre, que termina aberto", () => {
+    expect(semComentarios(ler("src/componentes/cliente.tsx"))).toMatch(/new Event\(REGISTRO_EVENTO\)/);
+    expect(semComentarios(ler("src/componentes/Pagina.tsx"))).toMatch(/<VideoAnimado[^>]*midia=\{COFRE_MIDIA\}[^>]*abertoAoRegistrar/);
   });
   it("EST-57 movimento reduzido: pôster do último quadro", () => {
     expect(posterReduzido("uma-vez", COFRE_MIDIA)).toBe(COFRE_MIDIA.fim);

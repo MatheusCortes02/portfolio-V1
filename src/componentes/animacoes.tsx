@@ -5,7 +5,7 @@
 // (EST-57 e EST-58) e o hero gravado da abertura (EST-65, no lugar da chuva do EST-56); a tela de carregamento com a
 // contadora (EST-59) é o Carregando, em cliente.tsx.
 import { useEffect, useRef } from "react";
-import { acaoAoRegistrar, aoFimDaIntro, ATO3_MIDIA, CARREGANDO_FIM, cofreAberto, HERO_INTRO_MIDIA, HERO_LOOP_MIDIA, inicioDoHero, SAIDA_CARREGANDO_MS, travaMaximaDoHero, passoDoLoop, REGISTRO_CHAVE, REGISTRO_EVENTO, passoDoSelo, posterReduzido, type EstadoDoSelo, type MidiaVideo, type ModoVideo } from "@/lib/animacoes";
+import { acaoAoRegistrar, aoFimDaIntro, ATO3_MIDIA, CARREGANDO_FIM, HERO_INTRO_MIDIA, HERO_LOOP_MIDIA, inicioDoHero, SAIDA_CARREGANDO_MS, travaMaximaDoHero, passoDoLoop, REGISTRO_EVENTO, passoDoSelo, posterReduzido, type EstadoDoSelo, type MidiaVideo, type ModoVideo } from "@/lib/animacoes";
 
 const DESKTOP = "(min-width: 861px)";
 const reduzido = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -73,7 +73,7 @@ function depoisDaCarga(fn: () => void): () => void {
 export function VideoAnimado({ midia, modo, className = "", largura, altura, soDesktop = false, aposCarga = false, semPosterReduzido = false, abertoAoRegistrar = false }: {
   midia: MidiaVideo; modo: ModoVideo; className?: string; largura: number; altura: number;
   soDesktop?: boolean; aposCarga?: boolean; semPosterReduzido?: boolean;
-  /** EST-57: quem já registrou a entrada vê o último quadro (aberto); ao registrar, termina aberto e fica aberto */
+  /** EST-57/EST-89: ao registrar a entrada nesta visita, termina aberto e fica aberto até recarregar (nada é guardado) */
   abertoAoRegistrar?: boolean;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -82,11 +82,6 @@ export function VideoAnimado({ midia, modo, className = "", largura, altura, soD
     if (!v) return;
     v.muted = true;
     if (soDesktop && !matchMedia(DESKTOP).matches) return;
-    if (abertoAoRegistrar) {
-      let registrado = false;
-      try { registrado = cofreAberto(localStorage.getItem(REGISTRO_CHAVE)); } catch {}
-      if (registrado) { v.poster = midia.fim; return; }
-    }
     if (reduzido()) {
       const p = posterReduzido(modo, midia, !semPosterReduzido);
       if (p) v.poster = p;

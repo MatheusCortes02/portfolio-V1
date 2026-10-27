@@ -92,15 +92,9 @@ export function passoDoLoop(visivel: boolean): "tocar" | "pausar" {
   return visivel ? "tocar" : "pausar";
 }
 
-/** EST-57: marca persistente (localStorage) gravada pelo Registro quando o visitante registra a entrada, e o evento que
- *  avisa o cofre na mesma página. */
-export const REGISTRO_CHAVE = "mc-registro";
+/** EST-57/EST-89: evento com que o Registro avisa o cofre, na mesma página, que a entrada foi registrada. Nada fica
+ *  guardado no navegador (2026-10-27: "não quero" que o cofre fique salvo); na próxima visita ele anima de novo. */
 export const REGISTRO_EVENTO = "registro:feito";
-
-/** EST-57: quem já registrou a entrada vê o cofre aberto (último quadro), sem tocar de novo. */
-export function cofreAberto(valor: string | null): boolean {
-  return valor === "1";
-}
 
 /** EST-57: no momento do registro, o cofre termina aberto e fica aberto: se está tocando, deixa terminar; senão, vai
  *  direto ao último quadro. */

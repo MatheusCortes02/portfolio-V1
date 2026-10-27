@@ -7,7 +7,7 @@ import type { pt } from "@/conteudo/pt";
 import type { Categoria, Idioma, Projeto } from "@/conteudo/tipos";
 import { olharPara, olharPelaRolagem } from "@/lib/olho";
 import { indiceDoCarrossel } from "@/lib/carrossel";
-import { ATO1, CARREGANDO_FIM, CONTADORA_MIDIA, SAIDA_CARREGANDO_MS, mostrarAbertura, REGISTRO_CHAVE, REGISTRO_EVENTO } from "@/lib/animacoes";
+import { ATO1, CARREGANDO_FIM, CONTADORA_MIDIA, SAIDA_CARREGANDO_MS, mostrarAbertura, REGISTRO_EVENTO } from "@/lib/animacoes";
 import { montarEnvio } from "@/lib/contato";
 import { abaVizinha, focarDestino, setaDaFoto } from "@/lib/acessibilidade";
 import { IDIOMAS, opcaoVizinha, rotaDoIdioma } from "@/lib/idioma";
@@ -273,8 +273,7 @@ export function Registro({ t, idioma }: { t: typeof pt.registro; idioma: Idioma 
       .then((v) => {
         setValores(v);
         setFase("pronto");
-        // EST-57: a partir daqui o cofre fica aberto (nesta e nas próximas visitas)
-        try { localStorage.setItem(REGISTRO_CHAVE, "1"); } catch {}
+        // EST-57/EST-89: o cofre termina aberto nesta visita; nada fica guardado, na próxima ele anima de novo
         dispatchEvent(new Event(REGISTRO_EVENTO));
       })
       .finally(() => clearTimeout(prazo));
