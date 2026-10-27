@@ -80,15 +80,19 @@ describe("EST-83/EST-84 Atividade, Contato e rodapé", () => {
   });
 });
 
-describe("EST-90 ornamentos de gravura no celular (imagens 28 a 30 do Matheus, 2026-10-27)", () => {
-  const arquivos = ["28_moldura_cartao-papel-420.webp", "29_selo_oval-papel-260.webp", "30_faixa_divisoria-papel-900.webp"];
-  it("EST-90 as três gravuras existem e são leves (≤ 80 KB cada)", async () => {
-    const { statSync } = await import("node:fs");
-    for (const a of arquivos) expect(statSync(join(process.cwd(), "public/midia/gravuras", a)).size / 1024, a).toBeLessThanOrEqual(80);
+describe("EST-91 celular sem animações que quebram (Matheus, 2026-10-27: \"quando tem que arrastar para o lado a tela fica bugada\", \"os vídeos posicionados errados\", \"as imagens colocadas estão ruins\", \"tudo muito colado\")", () => {
+  it("EST-91 no celular não há entradas animadas, rolagem suave nem paralaxe (cartões fora da tela ficavam invisíveis e o cofre torto)", () => {
+    const mov = cliente.slice(cliente.indexOf("export function Movimento"), cliente.indexOf("return null;", cliente.indexOf("export function Movimento")));
+    expect(mov).toMatch(/if \(calmo\(\) \|\| matchMedia\(CELULAR\)\.matches\) return;/);
   });
-  it("EST-90 cartões dos carrosséis com a moldura de gravura (border-image), selo oval no Nº e faixa entre as seções", () => {
-    expect(celular).toMatch(/\.projeto,\s*\.sobre-faco \.faco > li,\s*\.cert-lista > li\{[^}]*border-image:url\(\/midia\/gravuras\/28_moldura_cartao-papel-420\.webp\)/);
-    expect(celular).toMatch(/\.cab-num\{[^}]*background:url\(\/midia\/gravuras\/29_selo_oval-papel-260\.webp\)/);
-    expect(celular).toMatch(/main > \.secao \+ \.secao::before\{[^}]*30_faixa_divisoria-papel-900\.webp/);
+  it("EST-91 sem os ornamentos de imagem nos cartões, no Nº e entre as seções", () => {
+    expect(celular).not.toMatch(/28_moldura_cartao|29_selo_oval|30_faixa_divisoria/);
+  });
+  it("EST-91 vídeos no lugar: cofre inteiro (sem corte lateral) e contadora centrada na máquina", () => {
+    expect(celular).toMatch(/\.cofre-img\{width:100%;margin-left:0/);
+    expect(celular).toMatch(/\.ato1-video\{[^}]*object-fit:cover/);
+  });
+  it("EST-91 texto legível e com respiro: corpo do texto no celular com pelo menos 15 px", () => {
+    expect(celular).toMatch(/--texto-celular:\.9375rem/);
   });
 });

@@ -889,21 +889,36 @@ main > .secao + .secao{border-top:3px double rgba(47,93,58,.35)}
   .ficha textarea{min-height:6.5rem;height:6.5rem}
   .rodape-nav{display:none}
 
-  /* EST-90: ornamentos de gravura do Matheus (2026-10-27, imagens 28 a 30) — a moldura vertical vira a borda dos cartões
-     (9 fatias: cantos de acanto inteiros, faixa de guilloché esticada no topo e na base), o medalhão oval fica atrás do
-     "Nº" e a faixa com roseta separa as seções no lugar da régua dupla */
-  .projeto,.sobre-faco .faco > li,.cert-lista > li{border:solid transparent;border-width:40px 34px;outline:0;
-    border-image:url(/midia/gravuras/28_moldura_cartao-papel-420.webp) 18% 21% / 40px 34px / 0 stretch}
-  .sobre-faco .faco > li,.cert-lista > li{padding:.5rem .55rem .6rem}
-  .projeto-visual{padding:.4rem .4rem 0}
-  .projeto-texto{padding:.7rem .5rem .6rem}
-  .cab-num{display:inline-flex;align-items:center;justify-content:center;width:5.4rem;aspect-ratio:1014/621;padding:0;border:0;outline:0;
-    background:url(/midia/gravuras/29_selo_oval-papel-260.webp) center/contain no-repeat}
-  main > .secao + .secao{border-top:0}
-  main > .secao + .secao::before{content:"";position:absolute;top:.55rem;left:50%;width:min(92%,26rem);aspect-ratio:2166/255;transform:translateX(-50%);pointer-events:none;
-    background:url(/midia/gravuras/30_faixa_divisoria-papel-900.webp) center/contain no-repeat}
   /* no cartão de "O que eu faço" o número vai em cima (a coluna lateral espremia o texto); respiro entre a faixa e o selo */
   .sobre-faco .faco > li{display:block}
   .sobre-faco .faco .faco-num{display:block;margin-bottom:.2rem;font-size:1.7rem}
   main > .secao:not(.abertura){padding-top:3.7rem}
+
+  /* EST-91 (2026-10-27: "os textos cobrem tudo, tudo muito colado", "as imagens colocadas estão ruins", "os vídeos
+     posicionados errados"): sem ornamentos de imagem, texto maior e com mais entrelinha, mais respiro e vídeos no lugar */
+  :root{--texto-celular:.9375rem}
+  main > .secao:not(.abertura){padding:3.2rem 1.25rem 4.6rem}
+  main > .secao + .secao{border-top:3px double var(--linha)}
+  .cab{gap:.6rem .8rem;margin-bottom:1.9rem}
+  .cab-num{width:auto;aspect-ratio:auto;padding:.45em .72em;border:1px solid var(--acento);outline:1px solid var(--linha);outline-offset:2px;background:none}
+  .cab h2{font-size:clamp(2.3rem,11.5vw,2.9rem);line-height:1;margin-top:.35rem}
+  .cab-lead,.sobre-paragrafos p,.projeto-texto > p:not([class]),.faco p,.writeup p,.cert-descricao,.linha-tempo p{font-size:var(--texto-celular);line-height:1.7}
+  .sobre-paragrafos p{margin-bottom:1.15rem}
+  .faco-pontos,.lt-destaques{font-size:.875rem;line-height:1.6;gap:.5rem}
+  .linha-tempo{gap:1.6rem}
+  /* cartões: borda simples de cédula e bastante respiro por dentro */
+  .projeto,.sobre-faco .faco > li,.cert-lista > li{flex-basis:86%;border:1px solid var(--acento);border-image:none;outline:1px solid var(--linha);outline-offset:-7px}
+  .sobre-faco .faco > li,.cert-lista > li{padding:1.6rem 1.4rem 1.7rem}
+  .lista-projetos,.faco,.cert-lista{gap:1rem;margin-inline:-1.25rem;padding-inline:1.25rem;scroll-padding-inline:1.25rem}
+  .filtro{margin-inline:-1.25rem;padding-inline:1.25rem}
+  .projeto-visual{padding:1.2rem 1.2rem 0}
+  .projeto-texto{padding:1.2rem 1.4rem 1.5rem}
+  .projeto-texto h3{font-size:1.75rem;margin-bottom:.45rem}
+  .projeto-texto .credito{margin-bottom:.7rem}
+  .cert-competencias{margin-top:1rem}
+  /* vídeos: o cofre aparece inteiro, com a ficha embaixo; a contadora fica centrada na máquina */
+  .cofre{padding:3rem 1.25rem 3.6rem}
+  .cofre-img{width:100%;margin-left:0;translate:none;rotate:none}
+  .registro{width:100%;margin:1.2rem auto 0}
+  .ato1-video{width:100vw;height:45svh;aspect-ratio:auto;object-fit:cover;object-position:37% 50%}
 }

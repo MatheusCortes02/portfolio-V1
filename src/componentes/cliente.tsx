@@ -635,7 +635,9 @@ const PARALAXE = ".solto, .cofre-img";
 /* rolagem com inércia, entradas em sequência e paralaxe (EST-14) */
 export function Movimento() {
   useEffect(() => {
-    if (calmo()) return;
+    // EST-91 (2026-10-27): no celular, nada de entradas animadas, rolagem suave ou paralaxe — os cartões que entram pelo
+    // lado nos carrosséis nunca "apareciam" (ficavam invisíveis), blocos ficavam em branco ao rolar e o cofre saía torto
+    if (calmo() || matchMedia(CELULAR).matches) return;
     // Lenis por import() dinâmico: fica fora do pacote inicial e chega depois da primeira pintura (EST-28)
     let lenis: { stop(): void; start(): void; destroy(): void } | undefined;
     let vivo = true;
