@@ -405,8 +405,8 @@ export const projetosClientes: Projeto[] = [
       en: "I built the mobile-first landing page that sells Diggi Saúde's four plans in Next.js, with only three production dependencies. Each plan opens a dialog with its full coverage, and benefits not yet available appear struck through and labeled Coming soon. The form checks that the CPF is valid, separates required from optional consent and opens the sales WhatsApp with the sign-up already filled in.",
     },
     resultado: {
-      pt: "A página está no ar em endereço provisório, enquanto o domínio definitivo não é decidido. Como os textos ficam separados dos componentes, apliquei numa só rodada as revisões do cliente nesta página e na versão para empresas. O site não carrega scripts de terceiros e, por isso, dispensa o aviso de cookies.",
-      en: "The page is live at a temporary address while the final domain is decided. Because the copy is kept apart from the components, I applied the client's revisions to this page and to the business version in a single round. The site loads no third-party scripts, so it needs no cookie banner.",
+      pt: "A página está no ar em lp1.diggisaude.com.br, e a versão para empresas em lp2.diggisaude.com.br. Como os textos ficam separados dos componentes, apliquei numa só rodada as revisões do cliente nas duas páginas. O site não carrega scripts de terceiros e, por isso, dispensa o aviso de cookies.",
+      en: "The page is live at lp1.diggisaude.com.br, and the business version at lp2.diggisaude.com.br. Because the copy is kept apart from the components, I applied the client's revisions to both pages in a single round. The site loads no third-party scripts, so it needs no cookie banner.",
     },
     extra: {
       titulo: { pt: "O que eu faria diferente", en: "What I would do differently" },
@@ -416,7 +416,8 @@ export const projetosClientes: Projeto[] = [
       },
     },
     stack: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
-    links: [],
+    // EST-92: as duas páginas no ar (pessoas e empresas/jurídico)
+    links: [{ rotulo: verOnline, url: "https://lp1.diggisaude.com.br/" }, { rotulo: { pt: "Versão para empresas", en: "Business version" }, url: "https://lp2.diggisaude.com.br/" }],
     capturas: [
       {
         arquivo: "/midia/capturas/diggi-saude/inicio-01.jpg",

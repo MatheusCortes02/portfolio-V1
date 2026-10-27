@@ -70,11 +70,16 @@ describe("EST-30/EST-88 destaques por força técnica", () => {
 
 describe("EST-45 Diggi Saúde", () => {
   const p = () => projetos.find((x) => x.slug === "diggi-saude")!;
-  it("é trabalho profissional de front-end, nos destaques e sem link", () => {
+  it("é trabalho profissional de front-end e está nos destaques", () => {
     expect(p().profissional).toBe(true);
     expect(p().categoria).toBe("frontend");
     expect(DESTAQUES).toContain("diggi-saude");
-    expect(p().links).toEqual([]);
+  });
+  // EST-92 (2026-10-27, Matheus: "na Diggi o link das páginas são lp1.diggisaude.com.br e a jurídico é lp2")
+  it("EST-92 leva às duas páginas no ar: pessoas (lp1) e empresas/jurídico (lp2); sem \"endereço provisório\"", () => {
+    expect(p().links.map((l) => l.url)).toEqual(["https://lp1.diggisaude.com.br/", "https://lp2.diggisaude.com.br/"]);
+    expect(p().resultado.pt).not.toMatch(/provisório/);
+    expect(p().resultado.en).not.toMatch(/temporary/);
   });
   it("tem crédito à agência, estudo de caso nos dois idiomas e capturas de computador e de celular", () => {
     expect(p().credito?.pt).toMatch(/Morro Alto Creative Office/);
