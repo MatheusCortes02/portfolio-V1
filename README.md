@@ -1,60 +1,64 @@
-# Portfólio — Matheus Cortes
+# Portfolio — Matheus Cortes
 
-Portfólio pessoal de Matheus Cortes, estudante de Engenharia de Software na UVV, com foco em desenvolvimento web e cibersegurança. O site reúne projetos com estudo de caso, certificações, write-ups de segurança e a atividade pública no GitHub, em português e em inglês.
+Personal portfolio of Matheus Cortes, a Software Engineering student at UVV (Brazil) focused on web development and cybersecurity. The site brings together projects with case studies, certifications, security write-ups and public GitHub activity, in Portuguese and English.
 
-![Abertura do site no computador](.github/readme/captura-computador.webp)
+**Live:** [matheuscortes.vercel.app](https://matheuscortes.vercel.app/)
 
-## Tecnologias
+![Site opening on desktop](.github/readme/captura-computador.webp)
 
-- Next.js 16.4.2 e React 19.3.1
+## Tech stack
+
+- Next.js 16.4.2 and React 19.3.1
 - TypeScript 6.0.3
-- CSS próprio, sem framework de componentes
-- Lenis 1.3.27 para a rolagem
-- Vitest 5.0.5 para os testes
-- Animações modeladas e renderizadas no Blender 5.2
+- Hand-written CSS, no component framework
+- Lenis 1.3.27 for scrolling
+- Vitest 5.0.5 for tests
+- Animations modelled and rendered in Blender 5.2
 
-## O que o site faz
+## What the site does
 
-- Projetos com filtro por categoria; cada um abre um estudo de caso com o que eu fiz, o desafio, o resultado e o que eu faria diferente
-- Versões em português (`/`) e em inglês (`/en`)
-- Acessibilidade: abas no padrão WAI-ARIA, menu e modal em `<dialog>`, link para pular ao conteúdo e texto alternativo nas capturas; animações desligadas com `prefers-reduced-motion`
-- Busca: metadados, Open Graph, JSON-LD (`ProfilePage` e `Person`), `sitemap.xml`, `robots.txt`, `llms.txt` e `llms-full.txt`
-- Segurança: Content Security Policy e cabeçalhos no `next.config.ts`, proxy que recusa raspadores conhecidos e nenhum segredo no repositório
-- Formulário de contato pelo Web3Forms
+- Projects with a category filter; each one opens a case study covering what I did, the challenge, the result and what I would do differently
+- A mobile layout designed for phones, not a squeezed desktop: swipeable carousels for projects, skills and certifications
+- Portuguese (`/`) and English (`/en`) versions
+- Accessibility: WAI-ARIA tabs, menu and modal in `<dialog>`, a skip link and alt text on every screenshot; animations turn off with `prefers-reduced-motion`
+- Search: metadata, Open Graph, JSON-LD (`ProfilePage` and `Person`), `sitemap.xml`, `robots.txt`, `llms.txt` and `llms-full.txt`
+- Security: Content Security Policy and security headers in `next.config.ts`, a proxy that turns away known scrapers, self-hosted fonts and no secrets in the repository
+- Contact form through Web3Forms
 
-## Como rodar
+## Running locally
 
-Requer Node.js.
+Requires Node.js.
 
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm test         # testes
+npm test         # tests
 npm run lint     # ESLint
-npm run build    # build de produção
-npm run start    # serve o build
+npm run build    # production build
+npm run start    # serve the build
 ```
 
-Para o formulário de contato entregar as mensagens, crie um `.env.local` com a chave do Web3Forms:
+For the contact form to deliver messages, create a `.env.local` file with your Web3Forms access key:
 
 ```bash
-NEXT_PUBLIC_WEB3FORMS_KEY=sua-chave
+NEXT_PUBLIC_WEB3FORMS_KEY=your-key
 ```
 
-## Estrutura
+## Structure
 
 ```
 src/
-├── app/            rotas (pt e en), robots, sitemap, llms.txt e estilos
-├── componentes/    página, navegação, estudo de caso e animações
-├── conteudo/       textos, projetos, certificações e tecnologias
-└── lib/            regras puras: SEO, rolagem, idioma, contato, animações
+├── app/            routes (pt and en), robots, sitemap, llms.txt and styles
+├── componentes/    page, navigation, case study modal and animations
+├── conteudo/       copy, projects, certifications and skills
+├── fontes/         self-hosted fonts (SIL Open Font License)
+└── lib/            pure logic: SEO, scrolling, language, contact, animations
 ```
 
-Cada comportamento tem um critério de aceite com identificador (`EST-01`, `EST-02`…), e o teste correspondente leva o mesmo identificador no nome.
+The code is written in Portuguese. Every behaviour has an acceptance criterion with an ID (`EST-01`, `EST-02`…), and the matching test carries the same ID in its name.
 
-## Direitos
+## Rights
 
-© 2026 Matheus Cortes. Todos os direitos reservados.
+© 2026 Matheus Cortes. All rights reserved.
 
-O código está público para consulta. Reutilizar, copiar ou redistribuir o código, os textos, a identidade visual, as imagens ou as animações exige autorização. As capturas de projetos de clientes pertencem aos respectivos titulares; as gravuras antigas usadas como base estão em domínio público.
+The code is public for reference only. Reusing, copying or redistributing the code, copy, visual identity, images or animations requires permission. Screenshots of client projects belong to their respective owners; the old engravings used as a base are in the public domain.
