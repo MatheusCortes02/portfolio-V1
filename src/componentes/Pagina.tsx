@@ -11,7 +11,7 @@ import { soIdioma } from "@/lib/so-idioma";
 import { Autenticacao, HeroGravado, VideoAnimado } from "./animacoes";
 import { COFRE_MIDIA, FITA_MIDIA } from "@/lib/animacoes";
 import { Gravura } from "./Gravura";
-import { Carregando, Contato, Decifra, Movimento, Navegacao, Olho, Projetos, Registro } from "./cliente";
+import { Carregando, Contato, Decifra, Deslizar, Movimento, Navegacao, Olho, Projetos, Registro } from "./cliente";
 
 import { EMAIL, PERFIS, urlDoPerfil } from "@/conteudo/perfis";
 import { CURRICULO } from "@/lib/curriculo";
@@ -22,12 +22,11 @@ function Icone({ nome }: { nome: string }) {
   return ic ? <svg viewBox="0 0 24 24" className={`icone ${ic.tipo}`} aria-hidden="true"><path d={ic.path} /></svg> : null;
 }
 
-function Cabecalho({ num, sobre, titulo, lead, g, children }: { num: string; sobre: string; titulo: string; lead: string; g?: string; children?: ReactNode }) {
+function Cabecalho({ num, sobre, titulo, lead, children }: { num: string; sobre: string; titulo: string; lead: string; children?: ReactNode }) {
   return (
     <header className={`cab${children ? " com-extra" : ""}`}>
+      {/* EST-78 (2026-10-27): sem vinheta ao lado do número ("essas imagens do lado do número das seções eu já mandei tirar") */}
       <p className="cab-num" aria-hidden="true">{num}</p>
-      {/* celular (2026-10-22): vinheta da seção ao lado do número, como o canto de uma cédula; escondida no desktop */}
-      {g && <Gravura g={g} className="cab-gravura" />}
       <div>
         <p className="sobretitulo">{sobre}</p>
         <h2>{titulo}</h2>
@@ -116,7 +115,7 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
 
         {/* 02 · Sobre (EST-64: antes de Projetos) */}
         <section className="secao lado-papel sobre" id="sobre">
-          <Cabecalho num="02" sobre={t.sobre.sobretitulo} titulo={t.sobre.titulo} lead={t.sobre.paragrafos[0]} g="20_leao_dominio_publico" />
+          <Cabecalho num="02" sobre={t.sobre.sobretitulo} titulo={t.sobre.titulo} lead={t.sobre.paragrafos[0]} />
           <div className="sobre-grade">
             <div className="sobre-esq">
             <div className="certificado">
@@ -149,10 +148,13 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
                 história e trajetória à direita, com alturas parecidas */}
             <div className="sobre-faco">
               <h3 className="subtitulo">{t.sobre.oQueFaco.titulo}</h3>
+              {/* EST-80: no celular, carrossel de 3 cartões */}
+              <Deslizar>
               <ol className="faco">
                 {t.sobre.oQueFaco.itens.map((it, i) => <li key={it.titulo}><span className="faco-num">0{i + 1}</span><strong>{it.titulo}</strong><p>{it.texto}</p>
                   <ul className="faco-pontos">{it.pontos.map((p) => <li key={p}>{p}</li>)}</ul></li>)}
               </ol>
+              </Deslizar>
             </div>
           </div>
           <h3 className="subtitulo centro">{t.sobre.tecnologias.titulo}</h3>
@@ -178,13 +180,15 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
 
         {/* 03 · Projetos */}
         <section className="secao lado-papel projetos-secao com-fundo" id="projetos">
-          <Cabecalho num="03" sobre={t.projetos.sobretitulo} titulo={t.projetos.titulo} lead={t.projetos.lead} g="15_mao_jogando_moeda" />
+          <Cabecalho num="03" sobre={t.projetos.sobretitulo} titulo={t.projetos.titulo} lead={t.projetos.lead} />
           <Projetos lista={soIdioma(projetos, idioma)} t={t.projetos} idioma={idioma} />
         </section>
 
         {/* 04 · Certificações (EST-21) */}
         <section className="secao lado-papel certificacoes" id="certificacoes">
-          <Cabecalho num="04" sobre={t.certificacoes.sobretitulo} titulo={t.certificacoes.titulo} lead={t.certificacoes.lead} g="13_cadeado_e_chave" />
+          <Cabecalho num="04" sobre={t.certificacoes.sobretitulo} titulo={t.certificacoes.titulo} lead={t.certificacoes.lead} />
+          {/* EST-81: no celular, carrossel de cartões */}
+          <Deslizar>
           <ol className="cert-lista">
             {certificacoes.map((c) => (
               <li key={c.titulo.pt} className="cert-item">
@@ -195,11 +199,12 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
               </li>
             ))}
           </ol>
+          </Deslizar>
         </section>
 
         {/* 05 · Write-ups */}
         <section className="secao lado-papel writeups" id="writeups">
-          <Cabecalho num="05" sobre={t.writeups.sobretitulo} titulo={t.writeups.titulo} lead={t.writeups.lead} g="14_computador_antigo" />
+          <Cabecalho num="05" sobre={t.writeups.sobretitulo} titulo={t.writeups.titulo} lead={t.writeups.lead} />
           <div className="writeups-grade">
             <Olho />
             <article className="writeup">
@@ -217,9 +222,9 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
 
         {/* 06 · Atividade */}
         <section className="secao lado-papel atividade" id="atividade">
-          <Cabecalho num="06" sobre={t.atividade.sobretitulo} titulo={t.atividade.titulo} lead={t.atividade.lead} g="18_ampulheta_versao_1">
+          <Cabecalho num="06" sobre={t.atividade.sobretitulo} titulo={t.atividade.titulo} lead={t.atividade.lead}>
             {/* EST-58: fita de cotação alinhada ao título "Atividade", decorativa, em loop enquanto visível */}
-            <VideoAnimado midia={FITA_MIDIA} modo="loop" className="fita-video" largura={960} altura={540} />
+            <VideoAnimado midia={FITA_MIDIA} modo="loop" className="fita-video" largura={960} altura={540} soDesktop />
           </Cabecalho>
           <div className="ativ-grade">
             <figure className="quadro-github">
@@ -238,7 +243,7 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
         {/* 07 · Contato */}
         <section className="secao lado-papel contato com-fundo" id="contato">
           <div className="fundo" aria-hidden="true"><Gravura g="09_carta_lacrada_pombo" /></div>
-          <Cabecalho num="07" sobre={t.contato.sobretitulo} titulo={t.contato.titulo} lead={t.contato.lead} g="17_telefone_antigo" />
+          <Cabecalho num="07" sobre={t.contato.sobretitulo} titulo={t.contato.titulo} lead={t.contato.lead} />
           <div className="contato-grade">
             <Contato t={t.contato} />
             <div className="perfis">

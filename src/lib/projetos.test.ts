@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { CATEGORIAS, contagens, DESTAQUES, filtrar, projetos, separar, visiveis } from "@/conteudo/projetos";
@@ -52,63 +52,40 @@ describe("EST-29 papel e trabalho profissional", () => {
   });
   it("clientes e o sistema da agência são profissionais; os pessoais não", () => {
     const prof = projetos.filter((p) => p.profissional).map((p) => p.slug);
-    expect(prof).toEqual(expect.arrayContaining(["morro-alto-os", "dra-jania", "hanadecor", "brasigran", "sao-jorge", "bebe-tricot", "mister-cook", "diggi-saude", "morro-alto-site"]));
+    expect(prof).toEqual(expect.arrayContaining(["morro-alto-os", "dra-jania", "hanadecor", "brasigran", "sao-jorge", "diggi-saude"]));
     for (const s of ["solvered", "arca", "robo-sumo", "cofre-de-tokens", "jogo-estatistica"]) expect(prof).not.toContain(s);
   });
 });
 
-describe("EST-30 destaques por força técnica", () => {
+describe("EST-30/EST-88 destaques por força técnica", () => {
   it("são os seis escolhidos, nesta ordem, no começo da lista", () => {
-    // 2026-10-23: "no lugar da hana decor coloque diggi" — Diggi Saúde entra no 3º lugar e a Hana Decor vai para "Ver mais"
-    const ordem = ["morro-alto-os", "brasigran", "diggi-saude", "solvered", "sao-jorge", "robo-sumo"];
+    // EST-88 (2026-10-27, avaliação para cibersegurança, "pode aplicar"): Sistema, Brasigran, Solvered, Diggi Saúde
+    // (no lugar do Cofre de Tokens até a v2), Robô e São Jorge
+    const ordem = ["morro-alto-os", "brasigran", "solvered", "diggi-saude", "robo-sumo", "sao-jorge"];
     expect(DESTAQUES).toEqual(ordem);
     expect(projetos.slice(0, 6).map((p) => p.slug)).toEqual(ordem);
     expect(separar(projetos).principais.map((p) => p.slug)).toEqual(ordem);
   });
 });
 
-describe("EST-45 Diggi Saúde e site da Morro Alto", () => {
-  const novos = ["diggi-saude", "morro-alto-site"];
-  it("estão na lista como trabalho profissional de front-end; Diggi nos destaques (no lugar da Hana Decor) e sem link", () => {
-    for (const s of novos) {
-      const p = projetos.find((x) => x.slug === s);
-      expect(p, s).toBeDefined();
-      expect(p!.profissional, s).toBe(true);
-      expect(p!.categoria, s).toBe("frontend");
-    }
+describe("EST-45 Diggi Saúde", () => {
+  const p = () => projetos.find((x) => x.slug === "diggi-saude")!;
+  it("é trabalho profissional de front-end, nos destaques e sem link", () => {
+    expect(p().profissional).toBe(true);
+    expect(p().categoria).toBe("frontend");
     expect(DESTAQUES).toContain("diggi-saude");
-    expect(DESTAQUES).not.toContain("morro-alto-site");
-    expect(separar(projetos).demais.map((x) => x.slug)).toEqual(expect.arrayContaining(["morro-alto-site", "hanadecor"]));
-    expect(projetos.find((x) => x.slug === "diggi-saude")!.links).toEqual([]);
+    expect(p().links).toEqual([]);
   });
-  it("EST-50 o site da Morro Alto leva a https://morroalto.co/ (pedido de 2026-10-23)", () => {
-    const p = projetos.find((x) => x.slug === "morro-alto-site")!;
-    expect(p.links.map((l) => l.url)).toEqual(["https://morroalto.co/"]);
-    expect(p.resultado.pt).not.toMatch(/sem link/);
-    expect(p.resultado.en).not.toMatch(/no link/);
-  });
-  it("têm crédito à agência, papel, estudo de caso nos dois idiomas e capturas de computador e de celular", () => {
-    for (const s of novos) {
-      const p = projetos.find((x) => x.slug === s)!;
-      expect(p.credito?.pt, s).toMatch(/Morro Alto Creative Office/);
-      expect(p.extra?.texto.en.length, s).toBeGreaterThan(10);
-      expect(p.capturas.filter((c) => c.tipo === "desktop").length, s).toBeGreaterThanOrEqual(4);
-      expect(p.capturas.filter((c) => c.tipo === "celular").length, s).toBe(1);
-      for (const c of p.capturas) expect(c.arquivo.startsWith(`/midia/capturas/${s}/`), c.arquivo).toBe(true);
-    }
+  it("tem crédito à agência, estudo de caso nos dois idiomas e capturas de computador e de celular", () => {
+    expect(p().credito?.pt).toMatch(/Morro Alto Creative Office/);
+    expect(p().extra?.texto.en.length).toBeGreaterThan(10);
+    expect(p().capturas.filter((c) => c.tipo === "desktop").length).toBeGreaterThanOrEqual(4);
+    expect(p().capturas.filter((c) => c.tipo === "celular").length).toBe(1);
   });
   it("cada aba do estudo de caso cabe no modal (até ~75 palavras)", () => {
     const palavras = (t: string) => t.trim().split(/\s+/).length;
-    for (const s of novos) {
-      const p = projetos.find((x) => x.slug === s)!;
-      for (const campo of [p.desafio, p.solucao, p.resultado, p.extra!.texto])
-        for (const t of [campo.pt, campo.en]) expect(palavras(t), `${s}: ${t.slice(0, 40)}`).toBeLessThanOrEqual(78);
-    }
-  });
-  it("o site da Morro Alto avisa que é a versão nova, em desenvolvimento", () => {
-    const p = projetos.find((x) => x.slug === "morro-alto-site")!;
-    expect(p.resumo.pt + p.resultado.pt).toMatch(/em desenvolvimento/);
-    expect(p.resumo.en + p.resultado.en).toMatch(/in development/);
+    for (const campo of [p().desafio, p().solucao, p().resultado, p().extra!.texto])
+      for (const t of [campo.pt, campo.en]) expect(palavras(t), t.slice(0, 40)).toBeLessThanOrEqual(78);
   });
 });
 
@@ -164,71 +141,88 @@ describe("EST-55 robô de mini sumô: a maior parte foi do Matheus, com montagem
   });
 });
 
-describe("EST-70 páginas de links da SumWise, do Scardua Lab e da Dra. Jânia", () => {
-  // pedido de 2026-10-26: "coloque também o linktree da sumwise como projeto pro link: links.sumwise.com.br" e
-  // "coloque da scardua lab também com link para links.labscardua.com.br, coloque a página de links da jania scardua também"
-  const novos: Record<string, string> = {
-    "sumwise-links": "https://sumwiselinktree.vercel.app/", // EST-77: os subdomínios pedidos ainda não têm DNS
-    "scardua-lab-links": "https://scardualab.vercel.app/",
-    "dra-jania-links": "https://links.janiascardua.com.br/",
-  };
-  const slugs = Object.keys(novos);
-  const palavras = (t: string) => t.trim().split(/\s+/).length;
-  /** Largura e altura reais de um JPEG (marcador SOF). */
-  const medidasJpeg = (caminho: string) => {
-    const b = readFileSync(caminho);
-    for (let i = 2; i < b.length - 9; ) {
-      if (b[i] !== 0xff) { i++; continue; }
-      const m = b[i + 1];
-      if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) return { largura: b.readUInt16BE(i + 7), altura: b.readUInt16BE(i + 5) };
-      i += 2 + b.readUInt16BE(i + 2);
+describe("EST-88 portfólio enxuto para quem busca cibersegurança", () => {
+  // avaliação de 2026-10-27 (docs/plano-cyber-2026-10.pdf) aplicada a pedido do Matheus ("pode aplicar"); o Jogo de
+  // Estatística fica, porque a parte dele no trabalho foram os jogos (EST-87)
+  const removidos = ["bebe-tricot", "sumwise-links", "scardua-lab-links", "dra-jania-links", "morro-alto-site", "mister-cook"];
+  it("EST-88 saíram as páginas de links soltas, o site da Morro Alto e o Mister Cook (e as capturas deles)", () => {
+    for (const s of removidos) {
+      expect(projetos.some((p) => p.slug === s), s).toBe(false);
+      expect(existsSync(join(process.cwd(), "public/midia/capturas", s)), s).toBe(false);
     }
-    return null;
-  };
+  });
+  it("EST-88 a página de links da Dra. Jânia entra no estudo de caso do site dela", () => {
+    const p = projetos.find((x) => x.slug === "dra-jania")!;
+    expect(p.links.map((l) => l.url)).toContain("https://links.janiascardua.com.br/");
+    expect(p.resultado.pt).toMatch(/página de links/);
+    expect(p.resultado.en).toMatch(/link-in-bio page/);
+  });
+  it("EST-88 ficam 13 projetos, com o write-up, o chat e o jogo", () => {
+    expect(projetos).toHaveLength(13);
+    for (const s of ["controle-de-acesso-video", "morro-alto-chat", "jogo-estatistica", "cofre-de-tokens"]) expect(projetos.some((p) => p.slug === s), s).toBe(true);
+  });
+});
 
-  it("EST-70 os três existem como trabalho profissional de front-end, com crédito à agência e link para o endereço pedido", () => {
-    for (const s of slugs) {
-      const p = projetos.find((x) => x.slug === s);
-      expect(p, s).toBeDefined();
-      expect(p!.profissional, s).toBe(true);
-      expect(p!.categoria, s).toBe("frontend");
-      expect(p!.credito?.pt, s).toMatch(/Morro Alto Creative Office/);
-      expect(p!.links.map((l) => l.url), s).toEqual([novos[s]]);
+describe("EST-86 Morro Alto Chat no formato do Sistema da Morro Alto, sem link", () => {
+  // pedido de 2026-10-27: "quero que coloque o chat.morroalto.co [...] no portfólio também, porém sem link, e quero que o
+  // formato seja parecido com sistema morro alto". O dash.morroalto.co fica pendente: "ainda está sendo feito".
+  const slug = "morro-alto-chat";
+  const p = projetos.find((x) => x.slug === slug);
+  const palavras = (t: string) => t.trim().split(/\s+/).length;
+
+  it("EST-86 existe como sistema profissional full stack, restrito, com crédito à agência e fora dos destaques", () => {
+    expect(p, slug).toBeDefined();
+    expect(p!.categoria).toBe("fullstack");
+    expect(p!.profissional).toBe(true);
+    expect(p!.restrito).toBe(true);
+    expect(p!.credito?.pt).toMatch(/Morro Alto Creative Office/);
+    expect(p!.credito?.en).toMatch(/Morro Alto Creative Office/);
+    expect(DESTAQUES).not.toContain(slug);
+    expect(separar(projetos).demais.map((x) => x.slug)).toContain(slug);
+  });
+  it("EST-86 não tem link, e nenhum projeto leva a chat.morroalto.co", () => {
+    expect(p!.links).toEqual([]);
+    for (const x of projetos) for (const l of x.links) expect(l.url, x.slug).not.toMatch(/chat\.morroalto\.co/);
+  });
+  it("EST-86 papel sem IA e com a escolha da stack; stack real da VPS (Next.js e PostgreSQL, sem Supabase nem Lovable)", () => {
+    for (const t of [p!.papel!.pt, p!.papel!.en]) expect(t).not.toMatch(/\bIA\b|\bAI\b|Claude|par de programação|pair programmer/);
+    expect(p!.papel!.pt).toMatch(/agência/);
+    expect(p!.papel!.en).toMatch(/agency/);
+    expect(p!.stack).toEqual(expect.arrayContaining(["Next.js", "PostgreSQL"]));
+    expect(p!.stack.join(" ")).not.toMatch(/Supabase|Lovable/);
+  });
+  it("EST-86 estudo de caso com as abas do sistema da agência, cada uma cabendo no modal (até ~75 palavras)", () => {
+    expect(p!.extra?.texto.pt.length).toBeGreaterThan(10);
+    for (const campo of [p!.resumo, p!.desafio, p!.solucao, p!.resultado, p!.extra!.texto])
+      for (const t of [campo.pt, campo.en]) expect(palavras(t), t.slice(0, 40)).toBeLessThanOrEqual(78);
+    // o resultado não promete o que não foi verificado: sem "uso diário" e sem verificação em duas etapas (tirada em a00dc73)
+    const texto = [p!.resumo, p!.desafio, p!.solucao, p!.resultado, p!.extra!.texto].map((c) => c.pt + " " + c.en).join(" ");
+    expect(texto).not.toMatch(/uso diário|daily use|duas etapas|two-factor|2FA/i);
+  });
+  it("EST-86 capturas só da tela pública (entrar), no computador (2880 × 1800) e no celular (780 × 1688), que existem em public", () => {
+    expect(p!.capturas.filter((c) => c.tipo === "desktop").length).toBe(1);
+    expect(p!.capturas.filter((c) => c.tipo === "celular").length).toBe(1);
+    for (const c of p!.capturas) {
+      expect(c.arquivo.startsWith(`/midia/capturas/${slug}/`), c.arquivo).toBe(true);
+      expect(existsSync(join(process.cwd(), "public", c.arquivo)), c.arquivo).toBe(true);
+      const esperado = c.tipo === "celular" ? { largura: 780, altura: 1688 } : { largura: 2880, altura: 1800 };
+      expect({ largura: c.largura, altura: c.altura }, c.arquivo).toEqual(esperado);
+      expect(c.alt.pt.length, c.arquivo).toBeGreaterThan(30);
+      expect(c.alt.en.length, c.arquivo).toBeGreaterThan(30);
     }
   });
-  it("EST-70 ficam no Ver mais, sem mexer nos destaques", () => {
-    for (const s of slugs) expect(DESTAQUES).not.toContain(s);
-    expect(separar(projetos).demais.map((x) => x.slug)).toEqual(expect.arrayContaining(slugs));
+});
+
+describe("EST-87 Jogo de Estatística: o jogo é todo dele", () => {
+  // Matheus, 2026-10-27: "esse jogo eu fiz ele inteiro e fez parte de um trabalho da faculdade, assim como fala no README"
+  const p = projetos.find((x) => x.slug === "jogo-estatistica")!;
+  // "o jogo eu fiz somente os jogos no Wordwall e em Python": a parte dele no trabalho foram os jogos
+  it("EST-87 papel e solução dizem que a parte dele foram os jogos (Wordwall e Python) e que o de Python é todo dele", () => {
+    for (const t of [p.papel!.pt, p.solucao.pt]) { expect(t).toMatch(/minha parte foram os jogos/); expect(t).toMatch(/Wordwall/); expect(t).toMatch(/fiz inteiro/); }
+    expect(p.papel!.en).toMatch(/my part was the games/);
   });
-  it("EST-70 nenhum papel cita IA e cada aba do estudo de caso cabe no modal (até ~75 palavras)", () => {
-    for (const s of slugs) {
-      const p = projetos.find((x) => x.slug === s)!;
-      for (const t of [p.papel!.pt, p.papel!.en]) expect(t, s).not.toMatch(/\bIA\b|\bAI\b|Claude|par de programação|pair programmer/);
-      expect(p.extra?.titulo.pt, s).toBe("O que eu faria diferente");
-      for (const campo of [p.desafio, p.solucao, p.resultado, p.extra!.texto])
-        for (const t of [campo.pt, campo.en]) expect(palavras(t), `${s}: ${t.slice(0, 40)}`).toBeLessThanOrEqual(78);
-    }
-  });
-  it("EST-70 a SumWise não se apresenta como autora do site institucional sumwise.com.br", () => {
-    const p = projetos.find((x) => x.slug === "sumwise-links")!;
-    const texto = [p.resumo, p.desafio, p.solucao, p.resultado].map((c) => c.pt + " " + c.en).join(" ");
-    expect(texto).not.toMatch(/site institucional|corporate website|WordPress/i);
-  });
-  it("EST-70 têm uma captura de computador (2880 × 1800) e uma de celular (780 × 1688) que existem em public", () => {
-    for (const s of slugs) {
-      const p = projetos.find((x) => x.slug === s)!;
-      expect(p.capturas.filter((c) => c.tipo === "desktop").length, s).toBe(1);
-      expect(p.capturas.filter((c) => c.tipo === "celular").length, s).toBe(1);
-      for (const c of p.capturas) {
-        expect(c.arquivo.startsWith(`/midia/capturas/${s}/`), c.arquivo).toBe(true);
-        const caminho = join(process.cwd(), "public", c.arquivo);
-        expect(existsSync(caminho), c.arquivo).toBe(true);
-        const esperado = c.tipo === "celular" ? { largura: 780, altura: 1688 } : { largura: 2880, altura: 1800 };
-        expect({ largura: c.largura, altura: c.altura }, c.arquivo).toEqual(esperado);
-        expect(medidasJpeg(caminho), c.arquivo).toEqual(esperado);
-        expect(c.alt.pt.length, c.arquivo).toBeGreaterThan(30);
-        expect(c.alt.en.length, c.arquivo).toBeGreaterThan(30);
-      }
-    }
+  it("EST-87 nenhum texto fala em trabalho em grupo nem em \"criamos\"", () => {
+    const tudo = [p.credito?.pt, p.papel!.pt, p.solucao.pt, p.credito?.en, p.papel!.en, p.solucao.en].join(" ");
+    expect(tudo).not.toMatch(/grupo|criamos|compilamos|publicamos|group|we built|we compiled|we published/i);
   });
 });

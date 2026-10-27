@@ -1,11 +1,12 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 import { CATEGORIAS, contagens, quantosFundos, visiveis as visiveisDe } from "@/conteudo/projetos";
 import type { pt } from "@/conteudo/pt";
 import type { Categoria, Idioma, Projeto } from "@/conteudo/tipos";
-import { olharPara } from "@/lib/olho";
+import { olharPara, olharPelaRolagem } from "@/lib/olho";
+import { indiceDoCarrossel } from "@/lib/carrossel";
 import { ATO1, CARREGANDO_FIM, CONTADORA_MIDIA, SAIDA_CARREGANDO_MS, mostrarAbertura, REGISTRO_CHAVE, REGISTRO_EVENTO } from "@/lib/animacoes";
 import { montarEnvio } from "@/lib/contato";
 import { abaVizinha, focarDestino, setaDaFoto } from "@/lib/acessibilidade";
@@ -299,12 +300,62 @@ export function Registro({ t, idioma }: { t: typeof pt.registro; idioma: Idioma 
 }
 
 /* ------------------------------------------------ projetos: filtro, linhas e estudo de caso (EST-04, EST-05) */
+/* ------------------------------------------------ celular: carrosséis de deslizar (EST-79 a EST-81) */
+const CELULAR = "(max-width: 860px)";
+/** true no celular (depois da hidratação; no servidor e no primeiro desenho, false, como o desktop) */
+function useCelular(): boolean {
+  const [celular, setCelular] = useState(false);
+  useEffect(() => {
+    const m = matchMedia(CELULAR);
+    const ver = () => setCelular(m.matches);
+    ver();
+    m.addEventListener("change", ver);
+    return () => m.removeEventListener("change", ver);
+  }, []);
+  return celular;
+}
+
+/** Envolve uma lista que, no celular, vira carrossel de deslizar (CSS) e mostra "01 / 18" acompanhando o deslize.
+ *  No desktop o invólucro some (display: contents) e o contador fica escondido. */
+export function Deslizar({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState({ i: 1, n: 0 });
+  useEffect(() => {
+    const lista = ref.current?.querySelector<HTMLElement>(":scope > ol, :scope > ul");
+    if (!lista) return;
+    let quadro = 0;
+    const medir = () => {
+      cancelAnimationFrame(quadro);
+      quadro = requestAnimationFrame(() => {
+        const itens = [...lista.children].filter((x) => !x.classList.contains("vazio")) as HTMLElement[];
+        const passo = itens.length > 1 ? itens[1].offsetLeft - itens[0].offsetLeft : 0;
+        setPos({ i: indiceDoCarrossel(lista.scrollLeft, passo, itens.length), n: itens.length });
+      });
+    };
+    medir();
+    lista.addEventListener("scroll", medir, { passive: true });
+    addEventListener("resize", medir);
+    const mo = new MutationObserver(medir);
+    mo.observe(lista, { childList: true });
+    return () => { lista.removeEventListener("scroll", medir); removeEventListener("resize", medir); mo.disconnect(); cancelAnimationFrame(quadro); };
+  }, []);
+  const dois = (x: number) => String(x).padStart(2, "0");
+  return (
+    <div className="deslizar" ref={ref}>
+      {children}
+      {pos.n > 1 && <p className="deslizar-contador" aria-hidden="true"><span>{dois(pos.i)}</span> / {dois(pos.n)}</p>}
+    </div>
+  );
+}
+
 export function Projetos({ lista, t, idioma }: { lista: Projeto[]; t: typeof pt.projetos; idioma: Idioma }) {
   const [cat, setCat] = useState<Categoria | "todos">("todos");
   const [aberto, setAberto] = useState<number | null>(null);
   const [mais, setMais] = useState(false);
   // EST-31: "Ver mais" só em Todos; num tipo escolhido aparecem todos
-  const { itens: visiveis, temMais, nDemais } = useMemo(() => visiveisDe(lista, cat, mais), [lista, cat, mais]);
+  // EST-79: no celular, o carrossel mostra todos os projetos do filtro (sem "Ver mais")
+  const celular = useCelular();
+  const { itens: visiveis, temMais, nDemais } = useMemo(() => visiveisDe(lista, cat, mais || celular), [lista, cat, mais, celular]);
   const n = contagens(lista);
   const botaoMais = useRef<HTMLButtonElement>(null);
   // EST-61: ao encolher a lista, a página perde a altura dos projetos extras; a rolagem é corrigida para o botão
@@ -352,6 +403,7 @@ export function Projetos({ lista, t, idioma }: { lista: Projeto[]; t: typeof pt.
           </button>
         ))}
       </div>
+      <Deslizar>
       <ol className="lista-projetos">
         {visiveis.length === 0 && <li className="vazio">{t.nenhum}</li>}
         {visiveis.map((p) => {
@@ -388,6 +440,7 @@ export function Projetos({ lista, t, idioma }: { lista: Projeto[]; t: typeof pt.
           );
         })}
       </ol>
+      </Deslizar>
       {temMais && (
         <div className="ver-mais">
           <button ref={botaoMais} type="button" className="botao vazado" aria-expanded={mais} onClick={alternarMais}>
@@ -520,6 +573,20 @@ export function Olho() {
       const cx = r.left + r.width * 0.505, cy = r.top + r.height * 0.522;
       setPos(olharPara(e.clientX - cx, e.clientY - cy)); // EST-68: também para cima e para baixo
     };
+    // EST-82: sem mouse (celular), a íris acompanha a rolagem
+    if (!matchMedia("(pointer: fine)").matches) {
+      let quadro = 0;
+      const rolar = () => {
+        cancelAnimationFrame(quadro);
+        quadro = requestAnimationFrame(() => {
+          const r = ref.current?.getBoundingClientRect();
+          if (r) setPos(olharPelaRolagem(r.top + r.height / 2, innerHeight));
+        });
+      };
+      rolar();
+      addEventListener("scroll", rolar, { passive: true });
+      return () => { removeEventListener("scroll", rolar); cancelAnimationFrame(quadro); };
+    }
     addEventListener("pointermove", mover, { passive: true });
     return () => removeEventListener("pointermove", mover);
   }, []);

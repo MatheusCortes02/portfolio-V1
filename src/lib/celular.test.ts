@@ -1,0 +1,81 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { describe, expect, it } from "vitest";
+import { indiceDoCarrossel } from "@/lib/carrossel";
+import { OLHO_ALCANCE, olharPelaRolagem } from "@/lib/olho";
+
+// Celular pensado para o celular (docs/specs/003, EST-78 a EST-85; pedido de 2026-10-27)
+const ler = (p: string) => readFileSync(join(process.cwd(), p), "utf8");
+const semComentarios = (s: string) => s.replace(/\{\/\*[\s\S]*?\*\/\}/g, "").replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+const pagina = semComentarios(ler("src/componentes/Pagina.tsx"));
+const cliente = semComentarios(ler("src/componentes/cliente.tsx"));
+const cssTodo = ler("src/app/estilos.css");
+/** o bloco do celular fica no fim do CSS, depois do marcador, e vence as regras anteriores */
+const celular = semComentarios(cssTodo.slice(cssTodo.indexOf("CELULAR PENSADO PARA O CELULAR")));
+
+describe("EST-78 cabeçalho de seção sem vinheta e sem número gigante no celular", () => {
+  it("EST-78 o Cabecalho não desenha mais gravura (nem é baixada) e nenhuma seção passa vinheta", () => {
+    const cab = pagina.slice(pagina.indexOf("function Cabecalho"), pagina.indexOf("function", pagina.indexOf("function Cabecalho") + 10));
+    expect(cab).not.toMatch(/Gravura|cab-gravura/);
+    expect(pagina).not.toMatch(/<Cabecalho[^>]*\sg="/);
+  });
+  it("EST-78 no celular o número vira uma linha \"Nº\" pequena", () => {
+    expect(cssTodo).toContain("CELULAR PENSADO PARA O CELULAR");
+    expect(celular).toMatch(/\.cab-num::before\{content:"Nº/);
+  });
+});
+
+describe("EST-79 projetos em carrossel de deslizar", () => {
+  it("EST-79 a lista desliza na horizontal com encaixe (só na horizontal)", () => {
+    expect(celular).toMatch(/\.lista-projetos\{[^}]*scroll-snap-type:x mandatory/);
+    expect(celular).not.toMatch(/scroll-snap-type:y/);
+  });
+  it("EST-79 no celular aparecem todos os projetos do filtro e o \"Ver mais\" some", () => {
+    expect(cliente).toMatch(/visiveisDe\(lista, cat, mais \|\| celular\)/);
+    expect(celular).toMatch(/\.ver-mais\{display:none\}/);
+  });
+  it("EST-79 o cartão usa a captura de celular quando existe e mostra no máximo 3 tecnologias", () => {
+    expect(celular).toMatch(/\.projeto:has\(\.cap-celular\) \.cap-principal\{display:none\}/);
+    expect(celular).toMatch(/\.projeto \.stack li:nth-child\(n\+4\)\{display:none\}/);
+  });
+  it("EST-79 o filtro é uma fileira que desliza", () => {
+    expect(celular).toMatch(/\.filtro\{[^}]*overflow-x:auto/);
+  });
+  it("EST-79 o contador acompanha o deslize: cartão mais à esquerda visível, de 1 a total", () => {
+    expect(indiceDoCarrossel(0, 300, 18)).toBe(1);
+    expect(indiceDoCarrossel(310, 300, 18)).toBe(2);
+    expect(indiceDoCarrossel(440, 300, 18)).toBe(2);
+    expect(indiceDoCarrossel(460, 300, 18)).toBe(3);
+    expect(indiceDoCarrossel(99999, 300, 18)).toBe(18);
+    expect(indiceDoCarrossel(10, 0, 18)).toBe(1);
+  });
+});
+
+describe("EST-80/EST-81 Sobre e Certificações compactos", () => {
+  it("EST-80 \"O que eu faço\" e EST-81 certificações ficam dentro de um carrossel com contador", () => {
+    expect(pagina).toMatch(/<Deslizar[^>]*>\s*<ol className="faco">/);
+    expect(pagina).toMatch(/<Deslizar[^>]*>\s*<ol className="cert-lista">/);
+    expect(celular).toMatch(/\.faco,\s*\.cert-lista\{[^}]*scroll-snap-type:x mandatory/);
+  });
+  it("EST-80 tecnologias como etiquetas pequenas em linhas corridas", () => {
+    expect(celular).toMatch(/\.tec-grade\{[^}]*display:flex[^}]*flex-wrap:wrap/);
+  });
+});
+
+describe("EST-82 o olho segue a rolagem no celular", () => {
+  it("EST-82 olho abaixo do meio da tela olha para cima; acima, para baixo; no meio, reto", () => {
+    expect(olharPelaRolagem(900, 800).y).toBeLessThan(0);
+    expect(olharPelaRolagem(-100, 800).y).toBeGreaterThan(0);
+    expect(olharPelaRolagem(400, 800)).toEqual({ x: 0, y: 0 });
+    expect(Math.abs(olharPelaRolagem(5000, 800).y)).toBeLessThanOrEqual(OLHO_ALCANCE.y);
+  });
+});
+
+describe("EST-83/EST-84 Atividade, Contato e rodapé", () => {
+  it("EST-83 a fita da Atividade é só do desktop (no celular nem é baixada)", () => {
+    expect(pagina).toMatch(/<VideoAnimado midia=\{FITA_MIDIA\}[^>]*soDesktop/);
+  });
+  it("EST-84 rodapé sem a lista de links no celular", () => {
+    expect(celular).toMatch(/\.rodape-nav\{display:none\}/);
+  });
+});

@@ -23,4 +23,8 @@ describe("EST-66 a rolagem só é liberada quando a gravação do hero termina",
     expect(travaMaximaDoHero()).toBe(SAIDA_CARREGANDO_MS + HERO_INTRO_MS + 1500);
     expect(HERO_INTRO_MS).toBe(4000);
   });
+  it("EST-66 acessibilidade: quem navega pelo teclado (Tab) solta a trava na hora, para ver o que está focado", () => {
+    const a = semComentarios(ler("src/componentes/animacoes.tsx"));
+    expect(a).toMatch(/e\.key === "Tab"\) destravar\(\)/);
+  });
 });

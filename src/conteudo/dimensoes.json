@@ -1,4 +1,52 @@
 {
+ "/midia/animacoes/ato3/autenticacao-v3-fim.webp": [
+  1086,
+  1448
+ ],
+ "/midia/animacoes/ato3/autenticacao-v3-inicio.webp": [
+  1086,
+  1448
+ ],
+ "/midia/animacoes/cofre/cofre-v3-fim.webp": [
+  1920,
+  1080
+ ],
+ "/midia/animacoes/cofre/cofre-v3-inicio.webp": [
+  1920,
+  1080
+ ],
+ "/midia/animacoes/contadora/contadora-v2-fim.webp": [
+  960,
+  540
+ ],
+ "/midia/animacoes/contadora/contadora-v2-inicio.webp": [
+  960,
+  540
+ ],
+ "/midia/animacoes/fita/fita-v2-fim.webp": [
+  960,
+  540
+ ],
+ "/midia/animacoes/fita/fita-v2-inicio.webp": [
+  960,
+  540
+ ],
+ "/midia/animacoes/hero-gravura/hero-gravura-v1-fim.webp": [
+  1536,
+  1024
+ ],
+ "/midia/animacoes/hero-gravura/hero-gravura-v1-inicio.webp": [
+  1536,
+  1024
+ ],
+ "/midia/animacoes/hero-rosaceas/hero-rosaceas-v1-fim.webp": [
+  1536,
+  1024
+ ],
+ "/midia/animacoes/hero-rosaceas/hero-rosaceas-v1-inicio.webp": [
+  1536,
+  1024
+ ],
  "/midia/capturas/arca/abertura-01.jpg": [
   2880,
   1398
@@ -20,14 +68,6 @@
   1800
  ],
  "/midia/capturas/arca/inicio-celular-01.jpg": [
-  780,
-  1688
- ],
- "/midia/capturas/bebe-tricot/inicio-01.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/bebe-tricot/inicio-celular-01.jpg": [
   780,
   1688
  ],
@@ -115,14 +155,6 @@
   2880,
   1800
  ],
- "/midia/capturas/dra-jania-links/inicio-01.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/dra-jania-links/inicio-celular-01.jpg": [
-  780,
-  1688
- ],
  "/midia/capturas/dra-jania/inicio-01.jpg": [
   2880,
   1800
@@ -175,25 +207,13 @@
   794,
   791
  ],
- "/midia/capturas/mister-cook/inicio-01.jpg": [
+ "/midia/capturas/morro-alto-chat/login-01.jpg": [
   2880,
   1800
  ],
- "/midia/capturas/mister-cook/inicio-02.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/mister-cook/inicio-celular-01.jpg": [
+ "/midia/capturas/morro-alto-chat/login-celular-01.jpg": [
   780,
   1688
- ],
- "/midia/capturas/mister-cook/secao-05.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/mister-cook/secao-09.jpg": [
-  2880,
-  1800
  ],
  "/midia/capturas/morro-alto-os/sistema-csat.jpg": [
   2880,
@@ -220,34 +240,6 @@
   1800
  ],
  "/midia/capturas/morro-alto-os/sistema-pautas.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/morro-alto-site/cases-01.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/morro-alto-site/comparativo-01.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/morro-alto-site/contato-01.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/morro-alto-site/inicio-01.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/morro-alto-site/inicio-celular-01.jpg": [
-  780,
-  1688
- ],
- "/midia/capturas/morro-alto-site/quem-somos-01.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/morro-alto-site/servicos-01.jpg": [
   2880,
   1800
  ],
@@ -315,14 +307,6 @@
   2880,
   1800
  ],
- "/midia/capturas/scardua-lab-links/inicio-01.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/scardua-lab-links/inicio-celular-01.jpg": [
-  780,
-  1688
- ],
  "/midia/capturas/solvered/feedbacks-01.jpg": [
   2880,
   1800
@@ -342,14 +326,6 @@
  "/midia/capturas/solvered/produtos-01.jpg": [
   2880,
   1800
- ],
- "/midia/capturas/sumwise-links/inicio-01.jpg": [
-  2880,
-  1800
- ],
- "/midia/capturas/sumwise-links/inicio-celular-01.jpg": [
-  780,
-  1688
  ],
  "/midia/cartucho/junta-dir-papel.webp": [
   70,
@@ -598,6 +574,14 @@
  "/midia/gravuras/06_prensa_antiga_gravura-preto.webp": [
   1983,
   792
+ ],
+ "/midia/gravuras/06_prensa_fundo-e9e6d8-1600.webp": [
+  1600,
+  1000
+ ],
+ "/midia/gravuras/06_prensa_fundo-e9e6d8-960.webp": [
+  960,
+  600
  ],
  "/midia/gravuras/07_maquina_cotacoes_bolsa-papel-1200.webp": [
   1200,

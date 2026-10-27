@@ -60,10 +60,11 @@ export const projetosProprios: Projeto[] = [
       "With aesthetic treatments, the decision to book depends on trust. Someone arriving from an ad needs to see real results and get to know the dentist before sending a WhatsApp message, and the page had to lead them to that contact."),
     solucao: T("A clínica anunciava no Google e precisava que essas visitas virassem agendamentos. Fiz uma página única em HTML, CSS e JavaScript, sem bibliotecas, com tratamentos, casos reais de antes e depois, depoimentos, perguntas frequentes e localização. Na primeira versão, o botão de agendar pedia nome e telefone e registrava de qual campanha a pessoa vinha. Depois, passou a abrir o WhatsApp direto.",
       "The clinic was running Google Ads and needed those visits to become appointments. I built a single page in plain HTML, CSS and JavaScript, with no libraries, covering treatments, real before-and-after cases, testimonials, FAQ and location. In the first version, the booking button asked for name and phone and recorded which campaign the visitor came from. Later, it opened WhatsApp directly."),
-    resultado: T("O site está no ar em janiascardua.com.br. Incluí dados estruturados de clínica odontológica, que ajudam a clínica a aparecer nas buscas locais do Google, e cuidei da acessibilidade: atalho para pular ao conteúdo, foco do teclado controlado nas janelas e animações reduzidas para quem prefere menos movimento.",
-      "The site is live at janiascardua.com.br. I added dentist structured data, which helps the clinic show up in local Google searches, and took care of accessibility: a skip link, managed keyboard focus in dialogs and reduced animation for people who prefer less motion."),
-    stack: ["HTML", "CSS", "JavaScript", "SEO local"],
-    links: [{ rotulo: ONLINE, url: "https://www.janiascardua.com.br/" }],
+    resultado: T("O site está no ar em janiascardua.com.br. Incluí dados estruturados de clínica odontológica, que ajudam a clínica a aparecer nas buscas locais do Google, e cuidei da acessibilidade: atalho para pular ao conteúdo, foco do teclado controlado nas janelas e animações reduzidas para quem prefere menos movimento. Também fiz a página de links dela, publicada num contêiner Docker só leitura e sem privilégios na VPS.",
+      "The site is live at janiascardua.com.br. I added dentist structured data, which helps the clinic show up in local Google searches, and took care of accessibility: a skip link, managed keyboard focus in dialogs and reduced animation for people who prefer less motion. I also built her link-in-bio page, deployed in a read-only, unprivileged Docker container on a VPS."),
+    stack: ["HTML", "CSS", "JavaScript", "SEO local", "Docker"],
+    // EST-88: a página de links (antes um projeto à parte) entra aqui
+    links: [{ rotulo: ONLINE, url: "https://www.janiascardua.com.br/" }, { rotulo: T("Página de links", "Link-in-bio page"), url: "https://links.janiascardua.com.br/" }],
     capturas: [
       cap("/midia/capturas/dra-jania/inicio-01.jpg", "Abertura do site da Dra. Jânia", "Dr. Jânia site hero"),
       cap("/midia/capturas/dra-jania/inicio-celular-01.jpg", "Site da Dra. Jânia no celular", "Dr. Jânia site on mobile", "celular"),
@@ -137,6 +138,45 @@ export const projetosProprios: Projeto[] = [
       cap("/midia/capturas/morro-alto-os/sistema-oly.jpg", "Oly, a assistente com IA, com alertas e sugestões do dia, com dados fictícios", "Oly, the AI assistant, with the day's alerts and suggestions, with fictitious data"),
     ],
     gravura: "18_ampulheta_versao_1",
+  },
+  // EST-86 (2026-10-27): "quero que coloque o chat.morroalto.co [...] porém sem link, e quero que o formato seja parecido
+  // com sistema morro alto". Fontes: vault 90 - Projetos/Projetos Analisados/sistema-morroalto-connect.md:348-361
+  // (avaliação, ~127 políticas num só portão, início do chat) e sistema-morroalto-dash.md:20 ("o chat é só exterior");
+  // _logs/prompts-2026-10.md:28887 (ele decidiu: "deve ficar na vps [...] postgresql, next, tailwind").
+  // Repositório Desktop/morro-alto-chat-vps (master 8baec3a, 2026-10-26): package.json:20-33 (stack);
+  // docs/decisoes-vps.md:13-14 (Docker, Caddy, RLS, nada do Connect), :22-29 (sessão revogável, sem cadastro público),
+  // :43-49 (tempo real), :55-62 (anexos no Garage); referencia/docs/PRD.md:26-32 (WhatsApp, clientes dos EUA, contas
+  // externas); docs/specs/vps-012-entrar-pelo-sys.md:1-3; commit a00dc73 (sem verificação em duas etapas em produção).
+  // Contagens por `git ls-files` sem referencia/: 22 specs, 134 arquivos de teste, 20 migrations. Capturas: só /login.
+  {
+    slug: "morro-alto-chat",
+    titulo: T("Morro Alto Chat", "Morro Alto Chat"),
+    categoria: "fullstack",
+    ano: "2026",
+    credito: T("Sistema da Morro Alto Creative Office", "System of Morro Alto Creative Office"),
+    restrito: true,
+    papel: T("Desenvolvimento durante meu período na agência · servidor próprio, Next.js e PostgreSQL foram escolhas minhas", "Built during my time at the agency · its own server, Next.js and PostgreSQL were my choices"),
+    profissional: true,
+    resumo: T("Chat da agência com os clientes do exterior, com um espaço separado para cada cliente, mensagens em tempo real e envio de arquivos.",
+      "The agency's chat with its international clients, with a separate space for each client, real-time messages and file sharing."),
+    desafio: T("A conversa com os clientes acontecia em grupos de WhatsApp. Os clientes do exterior, principalmente dos Estados Unidos, esperavam um ambiente profissional, em inglês, com histórico organizado e arquivos, sem instalar nada. Pela primeira vez, pessoas de fora da agência teriam conta e escreveriam num sistema dela, então um cliente nunca poderia ver a conversa de outro.",
+      "Client conversations happened in WhatsApp groups. International clients, mostly in the United States, expected a professional space in English, with organised history and files, without installing anything. For the first time, people outside the agency would have accounts and write in one of its systems, so no client could ever see another client's conversation."),
+    solucao: T("Decidi deixar o chat fora do sistema interno da agência, num servidor próprio, e o desenvolvi em Next.js e TypeScript com PostgreSQL. Cada cliente tem o seu espaço, e o isolamento entre eles é aplicado pelo próprio banco de dados. Fiz o login com sessões que podem ser encerradas na hora, mensagens em tempo real e anexos guardados num armazenamento próprio. A equipe entra por um botão no sistema interno.",
+      "I chose to keep the chat outside the agency's internal system, on its own server, and built it in Next.js and TypeScript with PostgreSQL. Each client has its own space, and the isolation between them is enforced by the database itself. I built login with sessions that can be revoked instantly, real-time messages and attachments kept in self-hosted storage. The team signs in through a button in the internal system."),
+    resultado: T("O chat está no ar e não tem cadastro aberto: o cliente só entra por convite. O repositório soma 22 especificações, 134 arquivos de teste e 20 migrações de banco de dados. Para proteger as conversas dos clientes, aqui aparece só a tela de entrada.",
+      "The chat is live and has no open sign-up: clients only get in by invitation. The repository holds 22 specifications, 134 test files and 20 database migrations. To protect client conversations, only the sign-in screen is shown here."),
+    extra: {
+      titulo: T("Por que fora do sistema interno", "Why outside the internal system"),
+      texto: T("A avaliação feita antes de começar mostrou o risco: no banco do sistema interno, uma única regra decide quem é da equipe e protege cerca de 127 permissões, e o chat traria contas de fora que escrevem. Um erro de permissão no chat chegaria ao financeiro e às pautas. Por isso o chat tem banco, login e servidor próprios, sem nenhuma credencial do sistema interno.",
+        "The assessment done before starting showed the risk: in the internal system's database, a single rule decides who is staff and guards about 127 permissions, and the chat would bring outside accounts that write. A permission bug in the chat could reach finance and content tasks. So the chat has its own database, login and server, with no credentials from the internal system."),
+    },
+    stack: ["Next.js", "React", "TypeScript", "PostgreSQL", "Tailwind CSS", "Docker", "Caddy", "Garage (S3)"],
+    links: [],
+    capturas: [
+      cap("/midia/capturas/morro-alto-chat/login-01.jpg", "Tela de entrada do Morro Alto Chat, a única tela pública", "Morro Alto Chat sign-in screen, the only public screen"),
+      cap("/midia/capturas/morro-alto-chat/login-celular-01.jpg", "Tela de entrada do Morro Alto Chat no celular", "Morro Alto Chat sign-in screen on mobile", "celular"),
+    ],
+    gravura: "09_carta_lacrada_pombo",
   },
   {
     slug: "robo-sumo",
@@ -218,14 +258,16 @@ export const projetosProprios: Projeto[] = [
     titulo: T("Jogo de Fundamentos da Estatística", "Statistics Fundamentals Game"),
     categoria: "jogos",
     ano: "2026",
-    credito: T("Trabalho em grupo · UVV", "Group project · UVV"),
-    papel: T("Trabalho em grupo da faculdade (UVV)", "University group project (UVV)"),
+    // EST-87 (2026-10-27, Matheus: "esse jogo eu fiz ele inteiro e fez parte de um trabalho da faculdade" e "eu fiz somente os jogos,
+    // no Wordwall e em Python"): a parte dele no trabalho foram os jogos; o de Python é todo dele
+    credito: T("Trabalho da faculdade · UVV", "University assignment · UVV"),
+    papel: T("Trabalho da faculdade (UVV) · minha parte foram os jogos: um no Wordwall e este, em Python, que fiz inteiro", "University assignment (UVV) · my part was the games: one on Wordwall and this one, in Python, which I built entirely"),
     resumo: T("Jogo educativo que ensina moda, média, mediana e desvio padrão com perguntas cronometradas.",
       "An educational game that teaches mode, mean, median and standard deviation with timed questions."),
     desafio: T("Tornar o estudo de estatística básica mais leve e interativo do que a teoria sozinha, praticando moda, média, mediana e desvio padrão.",
       "Make studying basic statistics lighter and more interactive than theory alone, by practising mode, mean, median and standard deviation."),
-    solucao: T("Num trabalho em grupo da faculdade, criamos em Python, com a biblioteca Pygame, um jogo de perguntas cronometradas sobre estatística básica, com níveis de dificuldade, pontuação e modos claro e escuro. Para que rodasse no navegador, compilamos o jogo para a web com o pygbag e o publicamos no itch.io.",
-      "As a university group project, we built a timed quiz game on basic statistics in Python with the Pygame library, with difficulty levels, scoring and light and dark modes. To make it run in the browser, we compiled it for the web with pygbag and published it on itch.io."),
+    solucao: T("Num trabalho da faculdade, minha parte foram os jogos: um no Wordwall e este, que fiz inteiro em Python, com a biblioteca Pygame: perguntas cronometradas sobre estatística básica, com níveis de dificuldade, pontuação e modos claro e escuro. Para que rodasse no navegador, compilei o jogo para a web com o pygbag e o publiquei no itch.io.",
+      "In a university assignment, my part was the games: one on Wordwall and this one, which I built entirely in Python with the Pygame library: timed questions on basic statistics, with difficulty levels, scoring and light and dark modes. To make it run in the browser, I compiled it for the web with pygbag and published it on itch.io."),
     resultado: T("O jogo está publicado no itch.io e roda direto no navegador, sem instalação. Ao fim de cada partida, mostra um ranking de desempenho.",
       "The game is live on itch.io and runs straight in the browser, with nothing to install. At the end of each round it shows a performance ranking."),
     stack: ["Python", "Pygame", "pygbag"],
@@ -239,7 +281,8 @@ export const projetosProprios: Projeto[] = [
 ];
 
 /** Destaques primeiro, na ordem de DESTAQUES (EST-30); o resto na ordem original. */
-export const DESTAQUES = ["morro-alto-os", "brasigran", "diggi-saude", "solvered", "sao-jorge", "robo-sumo"];
+// EST-88 (2026-10-27): ordem da avaliação para cibersegurança; a Diggi Saúde ocupa a vaga do Cofre de Tokens até a v2
+export const DESTAQUES = ["morro-alto-os", "brasigran", "solvered", "diggi-saude", "robo-sumo", "sao-jorge"];
 
 const todos = [...projetosProprios, ...projetosClientes];
 export const projetos: Projeto[] = [

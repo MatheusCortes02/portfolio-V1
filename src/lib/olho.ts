@@ -13,3 +13,12 @@ export function olharPara(dx: number, dy: number): { x: number; y: number } {
   const forca = Math.min(1, dist / DISTANCIA_PLENA);
   return { x: (dx / dist) * forca * OLHO_ALCANCE.x, y: (dy / dist) * forca * OLHO_ALCANCE.y };
 }
+
+/** EST-82: sem mouse (celular), a íris segue a rolagem: com o olho abaixo do meio da tela ela olha para cima (para o
+ *  texto que já passou), acima do meio olha para baixo; no meio, reto. `centroY` é o centro do olho na tela. */
+export function olharPelaRolagem(centroY: number, alturaTela: number): { x: number; y: number } {
+  const meio = alturaTela / 2;
+  if (meio <= 0) return { x: 0, y: 0 };
+  const t = Math.max(-1, Math.min(1, (centroY - meio) / meio));
+  return { x: 0, y: -t * OLHO_ALCANCE.y || 0 };
+}

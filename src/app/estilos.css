@@ -804,3 +804,88 @@ main > .secao + .secao{border-top:3px double rgba(47,93,58,.35)}
   .quadro-github figcaption{margin-top:.8rem}
 }
 /* cofre: o esmaecimento lateral mais longo (18%, para o chão hachurado não terminar numa faixa) está assado no vídeo (EST-69) */
+
+/* =====================================================================================================================
+   CELULAR PENSADO PARA O CELULAR (EST-78 a EST-85, 2026-10-27: "para mobile eu quero que faça diferente do PC e seja
+   totalmente pensado para mobile, mas mantendo a mesma estética"). Fica no fim para vencer as regras anteriores do celular.
+   ===================================================================================================================== */
+/* invólucro dos carrosséis: no desktop não existe (sem caixa nem contador) */
+.deslizar{display:contents}
+.deslizar-contador{display:none}
+@media (max-width:860px){
+  main > .secao:not(.abertura){padding:2.8rem 1rem 4.2rem}
+  /* texto corrido mais compacto (a leitura no celular é em blocos curtos) */
+  .sobre-paragrafos p{font-size:.88rem;line-height:1.62;margin-bottom:.8rem}
+  .sobre-paragrafos{margin-bottom:1.6rem}
+  .sobre-grade{gap:1.8rem}
+  .subtitulo{margin-bottom:.9rem}
+  .faco p{font-size:.86rem;line-height:1.55}
+  .faco-pontos,.lt-destaques{font-size:.8rem;gap:.3rem}
+  .linha-tempo{gap:1.1rem}
+  .linha-tempo p{font-size:.84rem}
+  .writeup p{font-size:.88rem;line-height:1.6}
+  .cert-descricao{font-size:.86rem}
+
+  /* EST-78: cabeçalho de cédula — selo "Nº 02" e sobretítulo na mesma linha, título embaixo; sem vinheta nem número vazado */
+  .cab{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .75rem;margin:0 0 1.5rem}
+  .cab > div{display:contents}
+  .cab-num{order:0;display:inline-block;margin:0;padding:.38em .62em;font:600 .6875rem/1 var(--mono);letter-spacing:.18em;color:var(--acento-forte);-webkit-text-stroke:0;border:1px solid var(--acento);outline:1px solid var(--linha);outline-offset:2px}
+  .cab-num::before{content:"Nº "}
+  .cab .sobretitulo{order:1;margin:0}
+  .cab h2{order:2;flex-basis:100%;margin-top:.15rem;font-size:clamp(2.2rem,11vw,2.8rem)}
+  .cab-lead{order:3;flex-basis:100%;margin:.2rem 0 0;font-size:.88rem;line-height:1.6}
+  .cab.revelar .cab-num{transform:none}
+
+  /* carrosséis (EST-79 a EST-81): um cartão por vez com a ponta do próximo; encaixe só na horizontal */
+  .deslizar{display:block}
+  .deslizar-contador{display:block;margin:.55rem 0 0;text-align:center;font:600 .6875rem/1 var(--mono);letter-spacing:.22em;color:var(--texto-2)}
+  .deslizar-contador span{color:var(--acento-forte)}
+  .lista-projetos,.faco,.cert-lista{scrollbar-width:none;overscroll-behavior-x:contain}
+  .lista-projetos::-webkit-scrollbar,.faco::-webkit-scrollbar,.cert-lista::-webkit-scrollbar,.filtro::-webkit-scrollbar{display:none}
+
+  /* EST-79: projetos — filtro em fileira que desliza; cartões com a captura de celular */
+  .filtro{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:.45rem;margin:0 -1rem 1.1rem;padding:0 1rem .2rem;border:0;outline:0;scrollbar-width:none}
+  .filtro button,.filtro button:nth-child(3n),.filtro button:nth-last-child(-n+3){flex:0 0 auto;min-height:44px;padding:.55em .95em;border:1px solid var(--acento)}
+  .fundos-projetos,.ver-mais{display:none}
+  .lista-projetos{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:1rem;gap:.8rem;margin:0 -1rem;padding:.3rem 1rem .5rem}
+  .projeto{flex:0 0 84%;scroll-snap-align:start;display:flex;flex-direction:column;min-height:0;padding:0;gap:0;background:var(--cartao);border:1px solid var(--acento);outline:1px solid var(--linha);outline-offset:-6px}
+  .projeto::before{display:none}
+  .projeto-visual{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:auto;aspect-ratio:auto;padding:1rem 1rem 0;border-bottom:1px solid var(--linha);
+    background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(47,93,58,.07) 6px 7px);transform:none}
+  .projeto:has(.cap-celular) .cap-principal{display:none}
+  .projeto-visual .cap-celular{position:relative;inset:auto;right:auto;bottom:auto;width:auto;height:280px;margin:0 auto -1px;transform:none}
+  .projeto-visual:not(:has(.cap-celular)) .cap-principal,.projeto-visual .cap-vazia{width:100%;height:auto;aspect-ratio:16/10;margin-bottom:1rem;padding:6px;transform:none}
+  .projeto-texto{position:static;display:flex;flex-direction:column;padding:.95rem 1.1rem 1.15rem;text-align:left;transform:none}
+  .projeto-texto .projeto-num{position:static;order:0;margin:0 0 .35rem;padding:0;font:600 .6875rem/1 var(--mono);letter-spacing:.18em;color:var(--acento);-webkit-text-stroke:0;background:none}
+  .projeto-texto .projeto-num::before{content:"Nº "}
+  .projeto-texto .sobretitulo{position:static;order:1;max-width:none;margin:0 0 .35rem;padding:0;text-align:left;font-size:.6875rem;background:none}
+  .projeto-texto h3{order:2;font-size:1.65rem;line-height:1.05;margin:0 0 .3rem;transform:none}
+  .projeto-texto .credito{order:3;font-size:.6875rem;margin:0 0 .45rem}
+  .projeto-texto > p:not([class]){order:4;font-size:.84rem;line-height:1.5;margin:0 0 .5rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .projeto-texto .stack{order:5;margin:0 0 .7rem;justify-content:flex-start}
+  .projeto .stack li:nth-child(n+4){display:none}
+  .projeto-texto .ler{order:6;margin-top:auto;font-size:.7rem}
+
+  /* EST-80/EST-81: "O que eu faço" e certificações em cartões que deslizam */
+  .faco,.cert-lista{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:1rem;gap:.8rem;margin:0 -1rem;padding:.3rem 1rem .5rem;list-style:none}
+  .sobre-faco .faco > li,.cert-lista > li{flex:0 0 84%;scroll-snap-align:start;padding:1.1rem 1.1rem 1.2rem;background:var(--cartao);border:1px solid var(--acento);outline:1px solid var(--linha);outline-offset:-6px}
+  .sobre-faco{margin-top:0}
+  /* EST-80: tecnologias como etiquetas pequenas em linhas corridas */
+  .tecnologias{gap:1.1rem}
+  .tec-bloco-nome{margin-bottom:.5rem}
+  .tec-grade{display:flex;flex-wrap:wrap;gap:.4rem}
+  .tec-cartao{flex-direction:row;align-items:center;min-height:0;gap:.4rem;padding:.38rem .6rem;outline:0}
+  .tec-cartao svg{width:15px;height:15px}
+  .tec-item{font-size:.6875rem;letter-spacing:.04em}
+  .tec-cartao.revelar{transform:none}
+
+  /* EST-82: o olho do tamanho de um medalhão */
+  .olho{width:min(68%,250px);margin:0 auto .4rem}
+
+  /* EST-83: sem a fita de cotação */
+  .fita-video{display:none}
+
+  /* EST-84: mensagem mais baixa; rodapé sem a lista de links (o medalhão do menu navega) */
+  .ficha textarea{min-height:6.5rem;height:6.5rem}
+  .rodape-nav{display:none}
+}

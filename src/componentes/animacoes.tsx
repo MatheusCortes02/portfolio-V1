@@ -168,7 +168,10 @@ export function HeroGravado() {
       if (!h.classList.contains("hero-gravando")) return;
       h.classList.remove("hero-gravando");
       dispatchEvent(new Event("rolagem:volta"));
+      removeEventListener("keydown", teclado);
     };
+    // acessibilidade: quem navega pelo teclado precisa ver o elemento focado; Tab solta a trava na hora
+    const teclado = (e: KeyboardEvent) => { if (e.key === "Tab") destravar(); };
     const pronto = (v: HTMLVideoElement) => v.readyState >= 3;
     const pedir = (v: HTMLVideoElement) => { if (v.preload !== "auto") { v.preload = "auto"; v.load(); } };
     const tocarLoop = () => {
@@ -190,6 +193,7 @@ export function HeroGravado() {
       if (inicioDoHero({ introPronta: pronto(vi), visivel }) === "intro") {
         fase = "intro";
         h.classList.add("hero-gravando");
+        addEventListener("keydown", teclado);
         seguranca = window.setTimeout(destravar, travaMaximaDoHero());
         // papel em branco (1º quadro) enquanto a tela de carregamento esmaece; a gravação começa quando ela some
         cx.dataset.ativo = "intro";
