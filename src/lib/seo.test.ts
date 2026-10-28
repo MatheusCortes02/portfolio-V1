@@ -42,7 +42,7 @@ describe("EST-39 metadata de cada idioma", () => {
       expect(og.url).toBe(idioma === "pt" ? `${BASE}/` : `${BASE}/en`);
       const [img] = og.images as { url: string; width: number; height: number; alt: string }[];
       expect(img).toMatchObject({ width: 1200, height: 630 });
-      expect(img.url).toMatch(/^\/midia\/og\/og-(pt|en)\.jpg$/);
+      expect(img.url).toMatch(/^\/midia\/og\/og-(pt|en)-v2\.jpg$/);
       expect(img.alt.length).toBeGreaterThan(10);
     }
   });

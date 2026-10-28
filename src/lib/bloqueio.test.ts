@@ -99,7 +99,7 @@ describe("EST-43 deveBloquear: caminhos sempre liberados", () => {
     "/robots.txt", "/sitemap.xml", "/llms.txt", "/llms-full.txt",
     "/favicon.ico", "/icon.png", "/apple-icon.png", "/manifest.webmanifest",
     "/_next/static/chunks/app.js", "/_next/image?url=%2Fmidia%2Fa.jpg&w=640&q=75",
-    "/midia/og/og-pt.jpg", "/midia/gravuras/04_cofre_bancario-papel.webp",
+    "/midia/og/og-pt-v2.jpg", "/midia/gravuras/04_cofre_bancario-papel.webp",
     "/curriculo/curriculo-pt.pdf", "/.well-known/security.txt",
   ];
   it.each(LIVRES)("EST-43: %s fica livre até para curl e User-Agent vazio", (caminho) => {

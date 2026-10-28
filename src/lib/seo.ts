@@ -16,14 +16,14 @@ const PALAVRAS = {
 };
 
 const ALT_OG = {
-  pt: "Cédula em gravura verde com o nome Matheus Cortes e a função Engenheiro de software em formação",
-  en: "Green engraved banknote with the name Matheus Cortes and the role Software engineer in training",
+  pt: "Cédula em gravura verde com o nome Matheus Cortes, a função Engenheiro de software em formação e o foco em desenvolvimento web e cibersegurança",
+  en: "Green engraved banknote with the name Matheus Cortes, the role Software engineer in training and a focus on web development and cybersecurity",
 };
 
 export function montarMetadata(idioma: Idioma): Metadata {
   const t = DIC[idioma].meta;
   const url = urlAbsoluta(ROTAS[idioma]);
-  const imagem = { url: `/midia/og/og-${idioma}.jpg`, width: 1200, height: 630, alt: ALT_OG[idioma], type: "image/jpeg" };
+  const imagem = { url: `/midia/og/og-${idioma}-v2.jpg`, width: 1200, height: 630, alt: ALT_OG[idioma], type: "image/jpeg" };
   return {
     metadataBase: new URL(SITE_URL),
     title: { default: t.titulo, template: `%s · ${NOME}` },
@@ -75,7 +75,7 @@ export function dadosEstruturados(idioma: Idioma) {
       givenName: "Matheus",
       familyName: "Cortes",
       url: urlAbsoluta("/"),
-      image: urlAbsoluta(`/midia/og/og-${idioma}.jpg`),
+      image: urlAbsoluta(`/midia/og/og-${idioma}-v2.jpg`),
       jobTitle: t.hero.funcao,
       description: t.hero.apresentacao,
       email: `mailto:${EMAIL}`,
