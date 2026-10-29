@@ -1,4 +1,6 @@
 export const pt = {
+  // EST-99: botão de pausar as animações em loop (WCAG 2.2.2)
+  animacao: { pausar: "Pausar animação", retomar: "Retomar animação" },
   carregando: { texto: "Imprimindo a nota" },
   meta: {
     titulo: "Matheus Cortes — Engenheiro de software em formação e estudante de cibersegurança",

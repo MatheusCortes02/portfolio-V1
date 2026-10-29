@@ -325,7 +325,7 @@ main:focus,main > section:focus{outline:none}
 .quadro-github{margin:0;padding:1.3rem 1.4rem;background:#F8F7F0;color:#121411;border:1px solid #2F5D3A;outline:1px solid rgba(47,93,58,.3);outline-offset:-6px;min-width:0;--c:12px}
 .grafico{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.5rem}
 .g-semana{display:grid;grid-template-rows:repeat(7,var(--c));gap:3px;padding-top:1.3rem;font:500 .6rem/var(--c) var(--mono);color:#4A4D45}
-.g-rolagem{overflow-x:auto;scrollbar-width:thin;direction:rtl}
+.g-rolagem{overflow-x:auto;scrollbar-width:thin}
 .g-rolagem > *{direction:ltr}
 .g-meses{display:grid;grid-template-columns:repeat(var(--colunas),var(--c));column-gap:3px;height:1.3rem;font:500 .62rem/1 var(--mono);color:#4A4D45}
 .g-dias{display:grid;grid-template-rows:repeat(7,var(--c));grid-auto-flow:column;grid-auto-columns:var(--c);gap:3px;width:max-content}
@@ -949,4 +949,37 @@ main > .secao + .secao{border-top:3px double rgba(47,93,58,.35)}
     background-repeat:no-repeat}
   /* a contadora sem a máscara de bordas no celular (o Safari a desenhava mal; o papel do vídeo já é o da tela) */
   .ato1-video{-webkit-mask-image:none;mask-image:none}
+
+  /* EST-97 (avaliação final, 2026-10-29: "o modal mostra o trabalho em miniatura", botões de 32–34 px e abas de 25 px):
+     no celular o estudo de caso rola como uma folha; foto em largura total; alvos de 44 px; texto de leitura */
+  .modal-nota{display:block;height:100%;overflow-y:auto;overscroll-behavior:contain}
+  .modal-topo{position:sticky;top:0;z-index:3;background:#F1EFE4}
+  .modal-grade{display:block}
+  .modal-galeria{padding:.9rem 1rem 1rem}
+  .modal-foto{flex:none;width:100%;height:auto;aspect-ratio:16/10}
+  .modal-nav button,.foto-seta{width:44px;height:44px}
+  .modal-texto{display:block;padding:1.3rem 1.2rem 2.2rem}
+  .modal-meta,.modal-papel{font-size:.6875rem}
+  .modal-abas{gap:.5rem;margin-bottom:1rem}
+  .modal-abas button{min-height:44px;padding:.6em .9em;font-size:.6875rem;letter-spacing:.08em}
+  .modal-aba{font-size:.94rem;line-height:1.7;overflow:visible}
+  .modal-texto .stack li{font-size:.6875rem}
+  /* EST-101: a função e o sobretítulo da abertura com pelo menos 11 px */
+  .funcao,.moldura-texto .sobretitulo{font-size:.6875rem}
+}
+
+/* EST-99: botão de pausar as animações em loop (rosáceas do hero e fita da Atividade) */
+.pausar-animacao{position:absolute;right:.7rem;bottom:.7rem;z-index:6;min-height:36px;padding:.45em .75em;font:600 .6875rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--acento-forte);background:var(--fundo);border:1px solid var(--acento);cursor:pointer;opacity:.86;transition:opacity .2s}
+.pausar-animacao:hover,.pausar-animacao:focus-visible{opacity:1}
+.fita-video{position:relative}
+/* EST-100 (avaliação final: "a grade de Tecnologias continua com cara de modelo pronto", 31 cartões e mais de duas telas):
+   no desktop, as mesmas etiquetas do celular, em três colunas de blocos */
+@media (min-width:861px){
+  .tecnologias{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.2rem 2.8rem;max-width:1240px}
+  .tec-grade{display:flex;flex-wrap:wrap;gap:.45rem}
+  .tec-cartao{flex-direction:row;align-items:center;justify-content:flex-start;min-height:0;gap:.45rem;padding:.45rem .7rem;outline:0}
+  .tec-cartao svg{width:16px;height:16px}
+  .tec-item{font-size:.72rem;letter-spacing:.06em;text-align:left}
+  .tec-cartao:hover{transform:none}
 }

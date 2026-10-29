@@ -1,6 +1,7 @@
 import type { Dicionario } from "./pt";
 
 export const en: Dicionario = {
+  animacao: { pausar: "Pause animation", retomar: "Resume animation" },
   carregando: { texto: "Printing the note" },
   meta: {
     titulo: "Matheus Cortes — Software engineer in training and cybersecurity student",

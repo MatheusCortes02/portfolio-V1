@@ -299,6 +299,13 @@ export function Registro({ t, idioma }: { t: typeof pt.registro; idioma: Idioma 
 }
 
 /* ------------------------------------------------ projetos: filtro, linhas e estudo de caso (EST-04, EST-05) */
+/* ------------------------------------------------ EST-102: o quadro do GitHub abre nos meses recentes (rola até o fim) */
+export function FimDaRolagem({ children, className }: { children: ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => { const el = ref.current; if (el) el.scrollLeft = el.scrollWidth; }, []);
+  return <div ref={ref} className={className}>{children}</div>;
+}
+
 /* ------------------------------------------------ celular: carrosséis de deslizar (EST-79 a EST-81) */
 const CELULAR = "(max-width: 860px)";
 /** true no celular (depois da hidratação; no servidor e no primeiro desenho, false, como o desktop) */
@@ -316,31 +323,42 @@ function useCelular(): boolean {
 
 /** Envolve uma lista que, no celular, vira carrossel de deslizar (CSS) e mostra "01 / 18" acompanhando o deslize.
  *  No desktop o invólucro some (display: contents) e o contador fica escondido. */
-export function Deslizar({ children }: { children: ReactNode }) {
+export function Deslizar({ children, rotulo }: { children: ReactNode; rotulo: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ i: 1, n: 0 });
   useEffect(() => {
     const lista = ref.current?.querySelector<HTMLElement>(":scope > ol, :scope > ul");
     if (!lista) return;
     let quadro = 0;
+    // EST-98: no desktop a grade pode medir mais que o trilho (cartões vazam), mas não rola de lado; vale o overflow-x
+    const rolavel = () => getComputedStyle(lista).overflowX !== "visible" && lista.scrollWidth > lista.clientWidth + 2;
     const medir = () => {
       cancelAnimationFrame(quadro);
       quadro = requestAnimationFrame(() => {
         const itens = [...lista.children].filter((x) => !x.classList.contains("vazio")) as HTMLElement[];
         const passo = itens.length > 1 ? itens[1].offsetLeft - itens[0].offsetLeft : 0;
+        // EST-98: o trilho só entra na ordem do Tab quando de fato rola (no celular); assim o teclado consegue rolá-lo
+        lista.tabIndex = rolavel() ? 0 : -1;
         setPos({ i: indiceDoCarrossel(lista.scrollLeft, passo, itens.length), n: itens.length });
       });
     };
     medir();
+    // EST-98: o cartão que recebe o foco vem inteiro para a tela (antes ficava só uma ponta visível)
+    const foco = (e: FocusEvent) => {
+      let el = e.target as HTMLElement | null;
+      while (el && el.parentElement !== lista) el = el.parentElement;
+      if (el && rolavel()) el.scrollIntoView({ inline: "start", block: "nearest" });
+    };
+    lista.addEventListener("focusin", foco);
     lista.addEventListener("scroll", medir, { passive: true });
     addEventListener("resize", medir);
     const mo = new MutationObserver(medir);
     mo.observe(lista, { childList: true });
-    return () => { lista.removeEventListener("scroll", medir); removeEventListener("resize", medir); mo.disconnect(); cancelAnimationFrame(quadro); };
+    return () => { lista.removeEventListener("focusin", foco); lista.removeEventListener("scroll", medir); removeEventListener("resize", medir); mo.disconnect(); cancelAnimationFrame(quadro); };
   }, []);
   const dois = (x: number) => String(x).padStart(2, "0");
   return (
-    <div className="deslizar" ref={ref}>
+    <div className="deslizar" ref={ref} role="region" aria-label={rotulo}>
       {children}
       {pos.n > 1 && <p className="deslizar-contador" aria-hidden="true"><span>{dois(pos.i)}</span> / {dois(pos.n)}</p>}
     </div>
@@ -402,7 +420,7 @@ export function Projetos({ lista, t, idioma }: { lista: Projeto[]; t: typeof pt.
           </button>
         ))}
       </div>
-      <Deslizar>
+      <Deslizar rotulo={t.titulo}>
       <ol className="lista-projetos">
         {visiveis.length === 0 && <li className="vazio">{t.nenhum}</li>}
         {visiveis.map((p) => {

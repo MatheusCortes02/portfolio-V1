@@ -116,3 +116,42 @@ describe("EST-93 Safari do iPhone: moldura da abertura e do menu sem border-imag
     }
   });
 });
+
+describe("EST-97 a EST-102 correções da avaliação final (2026-10-29)", () => {
+  const anim = semComentarios(ler("src/componentes/animacoes.tsx"));
+  it("EST-97 modal no celular: rola, foto em largura total e alvos de 44 px", () => {
+    expect(celular).toMatch(/\.modal-nota\{[^}]*overflow-y:auto/);
+    expect(celular).toMatch(/\.modal-nav button,\s*\.foto-seta\{[^}]*width:44px;height:44px/);
+    expect(celular).toMatch(/\.modal-abas button\{[^}]*min-height:44px/);
+    expect(celular).toMatch(/\.modal-aba\{[^}]*font-size:\.94rem/);
+  });
+  it("EST-98 carrosséis acessíveis: região com nome, trilho focável e cartão focado trazido para a tela", () => {
+    expect(cliente).toMatch(/role="region" aria-label=\{rotulo\}/);
+    expect(cliente).toMatch(/lista\.tabIndex = rolavel\(\) \? 0 : -1/);
+    expect(cliente).toMatch(/scrollIntoView\(\{ inline: "start", block: "nearest" \}\)/);
+    expect(pagina).toMatch(/<Deslizar rotulo=\{t\.sobre\.oQueFaco\.titulo\}>/);
+    expect(pagina).toMatch(/<Deslizar rotulo=\{t\.certificacoes\.titulo\}>/);
+  });
+  it("EST-98 (bug de 2026-10-29) no desktop a lista não rola de lado: não entra no Tab nem puxa a página ao focar um cartão", () => {
+    // a grade do desktop mede 1310 px num trilho de 1240 (cartões vazam), mas overflow-x é visible: medir só a largura enganava
+    expect(cliente).toMatch(/const rolavel = \(\) => getComputedStyle\(lista\)\.overflowX !== "visible" && lista\.scrollWidth > lista\.clientWidth \+ 2/);
+    expect(cliente).toMatch(/if \(el && rolavel\(\)\) el\.scrollIntoView/);
+  });
+  it("EST-99 animações em loop com botão de pausar (WCAG 2.2.2)", () => {
+    expect(anim).toMatch(/className="pausar-animacao"/);
+    expect(anim).toMatch(/aria-pressed=\{pausado\}/);
+    expect(anim).toMatch(/!pausadoRef\.current/);
+  });
+  it("EST-100 tecnologias no desktop em etiquetas, em três colunas", () => {
+    const desktop = semComentarios(cssTodo.slice(cssTodo.indexOf("EST-100")));
+    expect(desktop).toMatch(/\.tecnologias\{display:grid;grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+    expect(desktop).toMatch(/\.tec-grade\{display:flex;flex-wrap:wrap/);
+  });
+  it("EST-101 textos da abertura no celular com pelo menos 11 px", () => {
+    expect(celular).toMatch(/\.funcao,\s*\.moldura-texto \.sobretitulo\{font-size:\.6875rem/);
+  });
+  it("EST-102 o quadro do GitHub abre nos meses recentes (rola até o fim ao montar)", () => {
+    expect(pagina).toMatch(/<FimDaRolagem className="g-rolagem">/);
+    expect(cliente).toMatch(/el\.scrollLeft = el\.scrollWidth/);
+  });
+});

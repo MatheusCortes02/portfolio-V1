@@ -4,7 +4,7 @@
 // O Ato I e o Ato II saíram do site em 2026-10-23. Abaixo, o componente genérico dos vídeos da 2ª leva do Blender
 // (EST-57 e EST-58) e o hero gravado da abertura (EST-65, no lugar da chuva do EST-56); a tela de carregamento com a
 // contadora (EST-59) é o Carregando, em cliente.tsx.
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { acaoAoRegistrar, aoFimDaIntro, ATO3_MIDIA, CARREGANDO_FIM, HERO_INTRO_MIDIA, HERO_LOOP_MIDIA, inicioDoHero, SAIDA_CARREGANDO_MS, travaMaximaDoHero, passoDoLoop, REGISTRO_EVENTO, passoDoSelo, posterReduzido, type EstadoDoSelo, type MidiaVideo, type ModoVideo } from "@/lib/animacoes";
 
 const DESKTOP = "(min-width: 861px)";
@@ -49,6 +49,33 @@ export function Autenticacao() {
   );
 }
 
+/* ------------------------------------------------ EST-99: pausa das animações em loop (WCAG 2.2.2) */
+type Rotulos = { pausar: string; retomar: string };
+/** Estado de pausa pedido pelo visitante; o ref é lido pelos observadores, que não voltam a tocar enquanto pausado. */
+function usePausa(videos: () => (HTMLVideoElement | null)[]) {
+  const [pausado, setPausado] = useState(false);
+  const pausadoRef = useRef(false);
+  const alternar = () => {
+    const novo = !pausadoRef.current;
+    pausadoRef.current = novo;
+    setPausado(novo);
+    for (const v of videos()) {
+      if (!v || v.loop === false) continue;
+      if (novo) { v.pause(); continue; }
+      const r = v.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < innerHeight) v.play().catch(() => {}); // fora da tela, o observador retoma quando voltar
+    }
+  };
+  return { pausado, pausadoRef, alternar };
+}
+function BotaoPausa({ pausado, alternar, rotulos }: { pausado: boolean; alternar: () => void; rotulos: Rotulos }) {
+  return (
+    <button type="button" className="pausar-animacao" aria-pressed={pausado} onClick={alternar}>
+      {pausado ? `▶ ${rotulos.retomar}` : `❚❚ ${rotulos.pausar}`}
+    </button>
+  );
+}
+
 /* ------------------------------------------------ vídeos da 2ª leva do Blender (EST-56 a EST-58) */
 /** Depois do `load` e com o navegador livre: não disputa banda nem CPU com o LCP (EST-56). */
 function depoisDaCarga(fn: () => void): () => void {
@@ -70,13 +97,17 @@ function depoisDaCarga(fn: () => void): () => void {
 
 /** Vídeo decorativo em loop (toca só enquanto visível) ou que toca uma vez a cada passagem (regra do selo, EST-49).
  *  `preload="none"` e pôster posto só pelo script: nada é baixado antes da hora (nem no celular, com `soDesktop`). */
-export function VideoAnimado({ midia, modo, className = "", largura, altura, soDesktop = false, aposCarga = false, semPosterReduzido = false, abertoAoRegistrar = false }: {
+export function VideoAnimado({ midia, modo, className = "", largura, altura, soDesktop = false, aposCarga = false, semPosterReduzido = false, abertoAoRegistrar = false, rotulos }: {
   midia: MidiaVideo; modo: ModoVideo; className?: string; largura: number; altura: number;
+  /** EST-99: nos vídeos em loop, rótulos do botão de pausa */
+  rotulos?: Rotulos;
   soDesktop?: boolean; aposCarga?: boolean; semPosterReduzido?: boolean;
   /** EST-57/EST-89: ao registrar a entrada nesta visita, termina aberto e fica aberto até recarregar (nada é guardado) */
   abertoAoRegistrar?: boolean;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const { pausado, pausadoRef, alternar } = usePausa(() => [ref.current]);
+  const [emLoop, setEmLoop] = useState(false);
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
@@ -89,7 +120,7 @@ export function VideoAnimado({ midia, modo, className = "", largura, altura, soD
     }
     if (typeof IntersectionObserver === "undefined") { v.poster = posterReduzido(modo, midia) ?? ""; return; }
     let obs: IntersectionObserver | undefined;
-    const tocando = () => { v.dataset.tocando = "1"; };
+    const tocando = () => { v.dataset.tocando = "1"; if (modo === "loop") setEmLoop(true); };
     v.addEventListener("playing", tocando);
     const iniciar = () => {
       if (modo === "loop") {
@@ -97,7 +128,7 @@ export function VideoAnimado({ midia, modo, className = "", largura, altura, soD
         if (!semPosterReduzido) v.poster = midia.inicio;
         obs = new IntersectionObserver((es) => {
           const e = es[es.length - 1];
-          if (passoDoLoop(e.isIntersecting) === "tocar") v.play().catch(() => {});
+          if (passoDoLoop(e.isIntersecting) === "tocar") { if (!pausadoRef.current) v.play().catch(() => {}); }
           else v.pause();
         }, { threshold: 0 });
       } else {
@@ -129,13 +160,14 @@ export function VideoAnimado({ midia, modo, className = "", largura, altura, soD
     };
     if (abertoAoRegistrar) addEventListener(REGISTRO_EVENTO, aoRegistrar);
     return () => { cancelar(); obs?.disconnect(); v.removeEventListener("playing", tocando); removeEventListener(REGISTRO_EVENTO, aoRegistrar); v.pause(); };
-  }, [midia, modo, soDesktop, aposCarga, semPosterReduzido, abertoAoRegistrar]);
+  }, [midia, modo, soDesktop, aposCarga, semPosterReduzido, abertoAoRegistrar, pausadoRef]);
   return (
-    <span className={`video-animado ${className}`.trim()} aria-hidden="true">
-      <video ref={ref} muted playsInline preload="none" disablePictureInPicture tabIndex={-1} width={largura} height={altura}>
+    <span className={`video-animado ${className}`.trim()}>
+      <video ref={ref} aria-hidden="true" muted playsInline preload="none" disablePictureInPicture tabIndex={-1} width={largura} height={altura}>
         <source src={midia.mp4} type="video/mp4" />
         <source src={midia.webm} type="video/webm" />
       </video>
+      {modo === "loop" && rotulos && emLoop && <BotaoPausa pausado={pausado} alternar={alternar} rotulos={rotulos} />}
     </span>
   );
 }
@@ -145,10 +177,12 @@ export function VideoAnimado({ midia, modo, className = "", largura, altura, soD
  *  buril (uma vez) e as rosáceas passam a oscilar em ciclo. Só no desktop e sem movimento reduzido; a gravação é pedida
  *  depois do `load`. Se ela não estiver pronta (ou a abertura não estiver na tela), vai direto ao ciclo; o ciclo toca só
  *  enquanto a abertura está visível. Nada aparece antes de um vídeo estar tocando (a moldura parada fica por baixo). */
-export function HeroGravado() {
+export function HeroGravado({ rotulos }: { rotulos: Rotulos }) {
   const caixa = useRef<HTMLSpanElement>(null);
   const intro = useRef<HTMLVideoElement>(null);
   const loop = useRef<HTMLVideoElement>(null);
+  const { pausado, pausadoRef, alternar } = usePausa(() => [loop.current]);
+  const [emLoop, setEmLoop] = useState(false);
   useEffect(() => {
     const cx = caixa.current, vi = intro.current, vl = loop.current;
     if (!cx || !vi || !vl) return;
@@ -172,8 +206,9 @@ export function HeroGravado() {
     const tocarLoop = () => {
       fase = "loop";
       cx.dataset.ativo = "loop";
+      setEmLoop(true);
       vi.pause();
-      if (visivel) vl.play().catch(() => {});
+      if (visivel && !pausadoRef.current) vl.play().catch(() => {});
     };
     const esperarLoop = () => {
       destravar();
@@ -198,7 +233,7 @@ export function HeroGravado() {
     };
     const obs = new IntersectionObserver((es) => {
       visivel = es[es.length - 1].isIntersecting;
-      if (fase === "loop") { if (passoDoLoop(visivel) === "tocar") vl.play().catch(() => {}); else vl.pause(); }
+      if (fase === "loop") { if (passoDoLoop(visivel) === "tocar") { if (!pausadoRef.current) vl.play().catch(() => {}); } else vl.pause(); }
     }, { threshold: 0 });
     obs.observe(cx);
     const comLoader = document.documentElement.classList.contains("cofre-ativo");
@@ -211,8 +246,9 @@ export function HeroGravado() {
       cancelar(); clearTimeout(espera); destravar(); obs.disconnect(); removeEventListener(CARREGANDO_FIM, comecar);
       vi.removeEventListener("ended", esperarLoop); vl.removeEventListener("canplay", tocarLoop); vi.pause(); vl.pause();
     };
-  }, []);
+  }, [pausadoRef]);
   return (
+    <>
     <span ref={caixa} className="hero-gravado" aria-hidden="true">
       <video ref={intro} className="hero-intro" muted playsInline preload="none" disablePictureInPicture tabIndex={-1} width={1536} height={1024}>
         <source src={HERO_INTRO_MIDIA.mp4} type="video/mp4" />
@@ -223,5 +259,7 @@ export function HeroGravado() {
         <source src={HERO_LOOP_MIDIA.webm} type="video/webm" />
       </video>
     </span>
+    {emLoop && <BotaoPausa pausado={pausado} alternar={alternar} rotulos={rotulos} />}
+    </>
   );
 }

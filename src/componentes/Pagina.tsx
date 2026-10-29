@@ -11,7 +11,7 @@ import { soIdioma } from "@/lib/so-idioma";
 import { Autenticacao, HeroGravado, VideoAnimado } from "./animacoes";
 import { COFRE_MIDIA, FITA_MIDIA } from "@/lib/animacoes";
 import { Gravura } from "./Gravura";
-import { Carregando, Contato, Decifra, Deslizar, Movimento, Navegacao, Olho, Projetos, Registro } from "./cliente";
+import { Carregando, Contato, Decifra, Deslizar, FimDaRolagem, Movimento, Navegacao, Olho, Projetos, Registro } from "./cliente";
 
 import { EMAIL, PERFIS, urlDoPerfil } from "@/conteudo/perfis";
 import { CURRICULO } from "@/lib/curriculo";
@@ -53,13 +53,13 @@ function Grafico({ dias, t, idioma }: { dias: Dia[]; t: typeof pt; idioma: Idiom
   return (
     <div className="grafico" style={{ ["--colunas" as string]: colunas }}>
       <div className="g-semana" aria-hidden="true">{t.atividade.semana.map((s, i) => <span key={i}>{s}</span>)}</div>
-      <div className="g-rolagem">
+      <FimDaRolagem className="g-rolagem">
         <div className="g-meses" aria-hidden="true">{meses.map((m) => <span key={m.col} style={{ gridColumn: `${m.col + 1} / span 3` }}>{m.nome}</span>)}</div>
         <div className="g-dias" role="img" aria-label={`${estatisticas(dias).total} ${t.numeros.contribuicoes}`}>
           {Array.from({ length: desloc }, (_, i) => <i key={`v${i}`} className="v" />)}
           {dias.map((d) => <i key={d.data} className={`n${d.nivel}`} title={`${d.qtd} ${d.qtd === 1 ? t.atividade.contribuicao : t.atividade.contribuicoesEm} ${fmt(d.data)}`} />)}
         </div>
-      </div>
+      </FimDaRolagem>
     </div>
   );
 }
@@ -83,7 +83,7 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
             <Gravura g="01_moldura_horizontal_ornamental" className="moldura-h" prioridade ocultaEm="(max-width: 860px)" />
             <Gravura g="02_moldura_vertical_certificado" className="moldura-v" />
             {/* EST-65: a moldura gravada a buril e as rosáceas em ciclo, sobre a moldura parada (só desktop) */}
-            <HeroGravado />
+            <HeroGravado rotulos={t.animacao} />
             <div className="moldura-texto">
               {/* EST-32: etiqueta de disponibilidade como carimbo de cédula */}
               <h1>Matheus Cortes</h1>
@@ -150,7 +150,7 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
             <div className="sobre-faco">
               <h3 className="subtitulo">{t.sobre.oQueFaco.titulo}</h3>
               {/* EST-80: no celular, carrossel de 3 cartões */}
-              <Deslizar>
+              <Deslizar rotulo={t.sobre.oQueFaco.titulo}>
               <ol className="faco">
                 {t.sobre.oQueFaco.itens.map((it, i) => <li key={it.titulo}><span className="faco-num">0{i + 1}</span><strong>{it.titulo}</strong><p>{it.texto}</p>
                   <ul className="faco-pontos">{it.pontos.map((p) => <li key={p}>{p}</li>)}</ul></li>)}
@@ -189,7 +189,7 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
         <section className="secao lado-papel certificacoes" id="certificacoes">
           <Cabecalho num="04" sobre={t.certificacoes.sobretitulo} titulo={t.certificacoes.titulo} lead={t.certificacoes.lead} />
           {/* EST-81: no celular, carrossel de cartões */}
-          <Deslizar>
+          <Deslizar rotulo={t.certificacoes.titulo}>
           <ol className="cert-lista">
             {certificacoes.map((c) => (
               <li key={c.titulo.pt} className="cert-item">
@@ -233,7 +233,7 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
         <section className="secao lado-papel atividade" id="atividade">
           <Cabecalho num="06" sobre={t.atividade.sobretitulo} titulo={t.atividade.titulo} lead={t.atividade.lead}>
             {/* EST-58: fita de cotação alinhada ao título "Atividade", decorativa, em loop enquanto visível */}
-            <VideoAnimado midia={FITA_MIDIA} modo="loop" className="fita-video" largura={960} altura={540} soDesktop />
+            <VideoAnimado midia={FITA_MIDIA} modo="loop" className="fita-video" largura={960} altura={540} soDesktop rotulos={t.animacao} />
           </Cabecalho>
           <div className="ativ-grade">
             <figure className="quadro-github">
