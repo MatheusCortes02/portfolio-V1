@@ -107,6 +107,8 @@ export function montarSitemap(pdfs: string[]): MetadataRoute.Sitemap {
     { url: urlAbsoluta(ROTAS.pt), changeFrequency: "monthly", priority: 1, alternates: { languages } },
     { url: urlAbsoluta(ROTAS.en), changeFrequency: "monthly", priority: 0.9, alternates: { languages } },
   ];
+  // EST-96: write-up W-02 publicado no próprio site
+  paginas.push({ url: urlAbsoluta("/writeups/incidente-wordpress"), changeFrequency: "yearly", priority: 0.7 });
   const curriculos: MetadataRoute.Sitemap = pdfs.map((f) => ({ url: urlAbsoluta(`/curriculo/${f}`), changeFrequency: "monthly", priority: 0.6 }));
   return [...paginas, ...curriculos];
 }

@@ -57,8 +57,10 @@ describe("EST-39 metadata de cada idioma", () => {
 describe("EST-39 sitemap", () => {
   it("EST-39: / e /en com alternativos de idioma", () => {
     const s = montarSitemap([]);
-    expect(s.map((x) => x.url)).toEqual([`${BASE}/`, `${BASE}/en`]);
-    for (const x of s) expect(x.alternates?.languages).toEqual({ "pt-BR": `${BASE}/`, en: `${BASE}/en`, "x-default": `${BASE}/` });
+    expect(s.slice(0, 2).map((x) => x.url)).toEqual([`${BASE}/`, `${BASE}/en`]);
+    for (const x of s.slice(0, 2)) expect(x.alternates?.languages).toEqual({ "pt-BR": `${BASE}/`, en: `${BASE}/en`, "x-default": `${BASE}/` });
+    // EST-96: e a página do write-up W-02
+    expect(s.map((x) => x.url)).toContain(`${BASE}/writeups/incidente-wordpress`);
   });
 
   it("EST-39: inclui os PDFs de currículo quando existem", () => {

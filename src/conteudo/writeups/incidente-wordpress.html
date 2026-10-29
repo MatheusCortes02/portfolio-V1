@@ -1,0 +1,217 @@
+<h1>Resposta a incidente: WordPress comprometido com SEO spam e cloaking</h1>
+<p><strong>W-02 · outubro de 2026 · anonimizado</strong></p>
+<blockquote>
+<p><strong>Resumo.</strong> Um site WordPress passou a abrir em branco para as pessoas e em japonês para o Google. Era uma campanha de <strong>SEO spam com cloaking</strong>, e o invasor tinha deixado várias formas de voltar. O site foi reinfectado duas vezes até que todas fossem encontradas e removidas de uma vez.</p>
+</blockquote>
+<h2>Contexto e o meu papel</h2>
+<p>O site era de um cliente da agência onde trabalho, uma pequena empresa de serviços. <strong>Não fui eu que fiz o site</strong>, e ele não era responsabilidade minha. Fui chamado, pelo trabalho, quando ele caiu.</p>
+<p>Conduzi a investigação e a limpeza com apoio de um assistente de IA, que fez os primeiros testes externos e escreveu comigo os scripts de decodificação. O trabalho no painel e no banco foi meu. A <strong>hospedagem</strong> fez uma varredura e pôs arquivos em quarentena. O <strong>dono da conta</strong> autorizou essa remoção e ficou com a troca das próprias senhas.</p>
+<p>Plataforma: WordPress 7.1.3 em hospedagem compartilhada com cPanel, sete plugins legítimos e uma cópia <strong>pirata</strong> do Elementor Pro.</p>
+<h2>O que o invasor queria</h2>
+<p>Usar a reputação do domínio no Google para fazer páginas de leilões japoneses aparecerem nas buscas. Para o robô, o site tinha milhares de páginas em japonês. Para as pessoas, nada disso aparecia.</p>
+<p><strong>Cloaking</strong> é isso: mostrar uma coisa ao buscador e outra ao visitante, olhando o <em>user-agent</em> (a "identidade" que o navegador ou o robô informa em cada pedido).</p>
+<h2>Linha do tempo (horário de Brasília)</h2>
+<table>
+<thead>
+<tr>
+<th>Quando</th>
+<th>O que aconteceu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>06/10, pouco antes das 14h12</td>
+<td>O dono troca a senha da hospedagem por um <strong>link recebido por e-mail</strong></td>
+</tr>
+<tr>
+<td>06/10, 14h12</td>
+<td>Primeira alteração no site (<code>readme.html</code>)</td>
+</tr>
+<tr>
+<td>06/10, 22h20</td>
+<td>O invasor copia o site inteiro com um plugin gerenciador de arquivos</td>
+</tr>
+<tr>
+<td>06/10, 23h55</td>
+<td>Instala 3 arquivos em <code>mu-plugins</code>, um plugin falso e um arquivo de verificação do Google</td>
+</tr>
+<tr>
+<td>07/10, 01h20–09h02</td>
+<td>Administradores falsos criados</td>
+</tr>
+<tr>
+<td>07/10, 11h28</td>
+<td>Toda página PHP responde <strong>200 com 0 bytes</strong> (tela branca), inclusive o login</td>
+</tr>
+<tr>
+<td>07/10, 13h–13h40</td>
+<td>1ª limpeza: <code>index.php</code> restaurado, login destravado, site volta sem visual</td>
+</tr>
+<tr>
+<td>07/10, tarde</td>
+<td>Plugins reativados, inclusive o pirata. O site cai de novo</td>
+</tr>
+<tr>
+<td>07/10, 23h09–23h19</td>
+<td><strong>Reinfecção</strong> pelas peças que sobraram</td>
+</tr>
+<tr>
+<td>08/10, madrugada</td>
+<td>A hospedagem acha 17 arquivos infectados e bloqueia o site</td>
+</tr>
+<tr>
+<td>08/10, tarde</td>
+<td>Com autorização do dono, os 17 arquivos vão para quarentena</td>
+</tr>
+<tr>
+<td>09/10, manhã</td>
+<td>Pessoas veem erro 500. O Google vê spam e um sitemap com 1.902 URLs</td>
+</tr>
+<tr>
+<td>09/10, 10h–11h35</td>
+<td>Limpeza completa. Site no ar, igual para pessoas e para o Google</td>
+</tr>
+</tbody>
+</table>
+<h2>Como foi detectado</h2>
+<p>Quatro sinais, todos observáveis sem rodar o malware:</p>
+<ol>
+<li><strong>Tela branca com resposta 200 e 0 bytes</strong> em toda página PHP, com imagens e CSS normais. O PHP morria antes do WordPress: o arquivo de entrada tinha sido trocado.</li>
+<li><strong>A mesma URL com dois user-agents.</strong> Com a identidade de navegador, página vazia. Com a do Googlebot, anúncios em japonês. O teste é simples:</li>
+</ol>
+<p><code>bash
+   # mesma URL, duas identidades; o parâmetro aleatório fura o cache
+   curl -A "Googlebot/2.1 (+http://www.google.com/bot.html)" "https://site.exemplo/?nc=$RANDOM"
+   curl "https://site.exemplo/?nc=$RANDOM"</code></p>
+<ol start="3">
+<li><strong><code>sitemap.xml</code> e <code>robots.txt</code> falsos</strong>, com centenas de URLs no padrão <code>?j=&lt;número&gt;</code> e datas no futuro.</li>
+<li><strong>Datas dos arquivos.</strong> Tudo o que tinha 06/10 23h55 ou 07/10 23h19 era do invasor. Foi isso que ligou arquivos, plugins e usuários.</li>
+</ol>
+<p>Depois, li cada arquivo suspeito <strong>como texto</strong> e decodifiquei as strings em Python, num ambiente isolado. Nada foi executado: o computador da análise nem tem PHP instalado.</p>
+<h2>Como o ataque funcionava</h2>
+<p>Toda visita a um WordPress executa uma cadeia fixa de arquivos. O invasor pôs uma peça em quase todos os elos:</p>
+<pre><code class="language-text">visita
+└─ index.php ◀ trocado (v1: cloaking; v2: proxy)
+   └─ wp-blog-header.php ◀ 1 linha a mais no topo
+      └─ wp-load.php ◀ 1 linha a mais no topo
+         └─ wp-config.php → wp-settings.php
+            ├─ mu-plugins/ ◀ 3 arquivos do invasor
+            └─ plugins/   ◀ plugins com nome falso
+wp-login.php ◀ trava por cookie
+pastas duplicadas (images/images ...) ◀ .htaccess que roda &quot;imagem&quot; como PHP
+</code></pre>
+<h3>Onda 1: cloaking com strings cifradas</h3>
+<p>O <code>index.php</code> original, de uns 400 bytes, virou um arquivo de 9,6 KB. Ele identificava os robôs de busca pelo user-agent e buscava o spam num servidor externo. Para pessoas, não carregava o WordPress: daí a tela branca. As strings estavam cifradas com <strong>XOR</strong> (cada caractere combinado com uma chave repetida), para escapar de busca por texto.</p>
+<p>Havia também uma porta dos fundos (<em>backdoor</em>) que guardava o código num array de 8.128 números. Cada número, decifrado com XOR, virava uma letra, e o texto montado ia para <code>eval</code>. O padrão, sem o conteúdo:</p>
+<pre><code class="language-php">$factory = [88, 10, 18, /* ... milhares de números ... */];
+// ...cada número vira um caractere via XOR com uma chave...
+eval('?&gt;' . $router);   // executa o código remontado
+</code></pre>
+<p><strong><code>eval</code> com conteúdo montado na hora é o sinal mais forte de backdoor em PHP.</strong></p>
+<p>O <code>wp-login.php</code> ganhou uma linha que matava a página para quem não tivesse um cookie específico. O dono perdia o painel; o invasor continuava entrando:</p>
+<pre><code class="language-php">while (md5(md5($_COOKIE[&quot;...&quot;])) != &quot;...&quot;) { die(); }  // nome e hash omitidos
+</code></pre>
+<p>Um plugin falso de "compatibilidade" desativou todos os plugins legítimos.</p>
+<h3>Onda 2: a que sobreviveu à primeira limpeza</h3>
+<p>O novo <code>index.php</code> tinha 24 KB, embaralhado com dezenas de saltos <code>goto</code>. Ele repassava IP, user-agent, idioma e URL do visitante a um servidor do invasor e devolvia o que viesse. <strong>A decisão ficava no servidor dele</strong>, que podia mudar o comportamento sem tocar no site.</p>
+<p>A peça mais bem escondida estava na primeira linha de dois arquivos do núcleo:</p>
+<pre><code class="language-php">&lt;?php @include base64_decode(&quot;...&quot;); ?&gt;
+// decodificado: wp-includes/.../&lt;nome-aleatório&gt;.ttf  (PHP com extensão de fonte)
+</code></pre>
+<p>O <code>include</code> do PHP executa qualquer arquivo, seja qual for a extensão. O <code>@</code> silencia erros. Assim, uma "fonte" <code>.ttf</code> e uma "imagem" <code>.png</code> rodavam em toda visita, <strong>mesmo com o <code>index.php</code> restaurado</strong>.</p>
+<h2>Persistência: por que o site voltava a cair</h2>
+<p><em>Persistência</em> é o conjunto de formas que o invasor deixa para voltar depois de uma limpeza. Aqui eram seis:</p>
+<ol>
+<li><strong><code>mu-plugins</code></strong>: plugins "obrigatórios" que rodam em toda requisição, não aparecem na lista de plugins e não podem ser desativados pelo painel.</li>
+<li><strong>Administradores falsos.</strong> Um deles tinha data de criação idêntica, ao segundo, à do administrador legítimo: data forjada.</li>
+<li><strong>Plugins com nome técnico falso</strong>, instalados nas mesmas madrugadas.</li>
+<li><strong><code>@include</code> no núcleo</strong>, chamando PHP disfarçado de <code>.png</code>, <code>.gif</code>, <code>.ttf</code>, <code>.css</code> e <code>.mp4</code>.</li>
+<li><strong>Permissão <code>0444</code></strong> (só leitura) nos arquivos do invasor, para o gerenciador de arquivos não conseguir apagar.</li>
+<li><strong>Google Search Console.</strong> O invasor pôs um arquivo de verificação na raiz, virou proprietário do domínio e enviou os sitemaps de spam.</li>
+</ol>
+<p>Qualquer uma dessas peças bastava para reinstalar as outras. Por isso trocar só o <code>index.php</code> não resolveu.</p>
+<blockquote>
+<p>Os três arquivos de <code>mu-plugins</code> e os plugins falsos não foram guardados. O papel de "reinstalar o resto" é deduzido pelas datas e pela reinfecção, não pela leitura do código.</p>
+</blockquote>
+<h3>Mapeamento MITRE ATT&amp;CK</h3>
+<table>
+<thead>
+<tr>
+<th>Técnica</th>
+<th>Onde apareceu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1608.006 · SEO Poisoning</td>
+<td>spam com cloaking e sitemaps falsos</td>
+</tr>
+<tr>
+<td>T1505.003 · Web Shell</td>
+<td><code>index.php</code> v2, backdoor com <code>eval</code>, <code>@include</code> no núcleo</td>
+</tr>
+<tr>
+<td>T1027 · Obfuscated Files or Information</td>
+<td>XOR, base64, <code>goto</code></td>
+</tr>
+<tr>
+<td>T1036.008 · Masquerade File Type</td>
+<td>PHP com extensão de imagem, fonte e vídeo</td>
+</tr>
+<tr>
+<td>T1136 · Create Account</td>
+<td>administradores falsos</td>
+</tr>
+</tbody>
+</table>
+<h3>Indicadores (sem dados do cliente)</h3>
+<ul>
+<li><strong>Assinaturas (varredura da hospedagem, 17 arquivos):</strong> <code>SL-PHP-FILEHACKER-iqt</code>, <code>-msh</code>, <code>SL-PHP-INJECTOR-1-iwk</code>, <code>-iwq</code>, <code>SL-PHP-FILEMANAGER-md5-fxp</code>, <code>SL-PHP-BACKDOOR-GENERIC-fnj</code>, <code>SL-HTACCESS-GENERIC-afh</code>.</li>
+<li><strong>Nomes e pastas falsos:</strong> <code>wpspin-1x.gif</code> e <code>xit-3x.gif</code> (imitam <code>wpspin.gif</code> e <code>xit.gif</code>); <code>images/images/</code>, <code>cgi-bin/cgi-bin/</code>, <code>plugins/plugins/</code>.</li>
+<li><strong>Padrões de código:</strong> prefixo <code>Fbc9e89_</code>; <code>$factory = [</code> com milhares de números; <code>@include base64_decode(</code> na linha 1 do núcleo.</li>
+<li><strong>Servidores do invasor:</strong> subdomínios <code>3819-rank213</code> em <code>.xyz</code> e <code>.top</code> (onda 1) e um em <code>.wiki</code> (onda 2). Nomes completos omitidos.</li>
+</ul>
+<h2>Impacto</h2>
+<ul>
+<li><strong>Disponibilidade:</strong> o site ficou fora do ar ou quebrado, com intervalos, de 07/10 de manhã a 09/10 às 11h35.</li>
+<li><strong>Reputação no buscador:</strong> o Google recebia páginas de spam e sitemaps com até 1.902 URLs falsas, enviados por uma conta do invasor no Search Console.</li>
+<li><strong>Confidencialidade:</strong> o invasor copiou o site inteiro na primeira noite. A cópia inclui o arquivo de configuração com a senha do banco, que por isso foi trocada.</li>
+<li><strong>Controle:</strong> o dono perdeu o acesso ao login enquanto a trava por cookie esteve ativa.</li>
+</ul>
+<h2>Contenção e limpeza</h2>
+<p>A primeira tentativa, em 07/10, restaurou o <code>index.php</code> e destravou o login. Ao reativar os plugins, eu reativei também o Elementor Pro pirata, seguindo uma orientação que se mostrou errada. O site caiu de novo na mesma tarde e foi reinfectado à noite.</p>
+<p>Na limpeza de 09/10, removi tudo de uma vez:</p>
+<ol>
+<li><strong>Raiz:</strong> <code>index.php</code> original, primeira linha tirada de <code>wp-blog-header.php</code> e <code>wp-load.php</code>, conferência dos outros arquivos de entrada. Os arquivos <code>0444</code> passaram a <code>644</code> antes de editar.</li>
+<li><strong>Lixo do invasor:</strong> arquivo de verificação do Google, <code>robots.txt</code> falso e pastas duplicadas.</li>
+<li><strong><code>mu-plugins</code>:</strong> os 3 arquivos maliciosos apagados; os 2 legítimos da hospedagem mantidos.</li>
+<li><strong>Plugins:</strong> apagados os falsos, a pasta duplicada, o Elementor Pro pirata e o gerenciador de arquivos usado pelo invasor.</li>
+<li><strong>Banco:</strong> usuários conferidos pelo papel no banco, não pelo painel. Os administradores falsos já tinham sido removidos, provavelmente pela hospedagem. Conferi também o registro aberto, o papel padrão e as URLs do site.</li>
+<li><strong>Credenciais do servidor:</strong> senha do banco trocada no painel e no <code>wp-config.php</code> no mesmo minuto, e as 8 chaves secretas do WordPress geradas de novo.</li>
+<li><strong>Núcleo reinstalado:</strong> o WordPress oficial foi extraído e as pastas <code>wp-admin</code> e <code>wp-includes</code> foram <strong>substituídas inteiras</strong>, mantendo só o <code>wp-content</code>. "Reinstalar" pelo painel não apaga arquivos estranhos dentro dessas pastas.</li>
+</ol>
+<p>Resultado: site no ar, sete plugins legítimos atualizados e a mesma página para pessoas e para o Google.</p>
+<h2>Causa provável</h2>
+<p><strong>Não confirmada.</strong> A hipótese mais forte é <strong>phishing</strong>: a primeira alteração apareceu pouco depois de o dono trocar a senha da hospedagem por um link recebido por e-mail. Ainda falta saber se ele pediu a troca e conferir o remetente e o link desse e-mail.</p>
+<p>Também são candidatos o Elementor Pro pirata, instalado havia quase dois anos, e seis plugins desatualizados. Só os logs de acesso de 01 a 08/10, pedidos à hospedagem, podem confirmar. O plugin pirata foi apagado sem análise.</p>
+<h2>O que corrigir para não repetir</h2>
+<ul>
+<li><strong>Senhas</strong> trocadas num computador limpo, depois da limpeza; senhas de aplicativo revogadas; <strong>2FA</strong> no painel e no WordPress.</li>
+<li><strong>Nenhum plugin pirata.</strong> Licença oficial ou ficar sem.</li>
+<li><strong>Atualizações automáticas</strong> e permissões corretas (arquivos 644, pastas 755, <code>wp-config.php</code> 640).</li>
+<li><strong>Backup semanal fora do servidor.</strong> Não havia nenhuma cópia anterior à invasão.</li>
+<li><strong>Search Console:</strong> remover o proprietário do invasor e as URLs de spam; reenviar o sitemap verdadeiro.</li>
+<li><strong>Apagar backups antigos</strong>, que ainda contêm o malware.</li>
+</ul>
+<h2>Lições</h2>
+<ol>
+<li><strong>Trocar senha não remove porta dos fundos.</strong> Primeiro sai o código e os usuários do invasor, depois trocam-se as credenciais.</li>
+<li><strong>Antes de declarar limpo</strong>, procurar em <code>mu-plugins</code>, nos administradores do banco e na primeira linha dos arquivos do núcleo.</li>
+<li><strong>Plugin pirata sai junto com o malware.</strong> Nunca é reativado durante a limpeza.</li>
+<li><strong>Datas de arquivo contam a história.</strong> Dois horários ligaram arquivos, plugins e usuários.</li>
+<li><strong>Quarentena da hospedagem apaga arquivos do núcleo alterados.</strong> O site fica em erro 500 até a reinstalação.</li>
+<li><strong>Conferir antes de apagar.</strong> Na reinstalação, a pasta nova foi apagada antes de eu confirmar que os arquivos tinham chegado ao destino, e tive de refazer a etapa.</li>
+<li><strong>Decodificar, nunca executar.</strong> Ler o PHP como texto e decifrar em Python basta para entender o ataque.</li>
+</ol>
+<h2>Anonimização</h2>
+<p>O que foi retirado ou mascarado: nome do cliente e da agência, domínio, hospedagem, IPs e nomes do servidor, conta e caminhos do painel, nomes e e-mails dos administradores (legítimos e falsos), endereços completos dos servidores do invasor, o token do arquivo de verificação do Google, as chaves XOR e o hash da trava do login. Nenhum arquivo malicioso foi publicado. Os trechos de código acima estão cortados e servem só para mostrar o padrão. Nenhuma senha, chave ou dado pessoal aparece aqui.</p>

@@ -119,8 +119,8 @@ export const projetosProprios: Projeto[] = [
       "Operations were split across spreadsheets, chat groups and separate tools. Content tasks moved between social media, the content manager and the creative team, and each role needs to see and do different things. Since the system holds client data and financial figures, access control had to be strict."),
     solucao: T("Para reunir a operação da agência num só lugar, desenvolvi um sistema em React e TypeScript sobre Supabase, com permissões por cargo aplicadas no próprio banco de dados. Nele ficam pautas com prazos, financeiro com importação de extratos, reuniões em vídeo com gravação e ata, pesquisa de satisfação e a Oly, assistente com IA que sugere as prioridades do dia. Cada mudança partiu de uma especificação com testes.",
       "To bring the agency's operations into one place, I built a system in React and TypeScript on Supabase, with role-based permissions enforced in the database itself. It holds content tasks with deadlines, finance with statement import, video meetings with recording and minutes, a satisfaction survey and Oly, an AI assistant that suggests the day's priorities. Every change started from a specification with tests."),
-    resultado: T("O sistema está em uso diário pela equipe, com acesso restrito. O repositório soma 103 especificações, 182 arquivos de teste e 267 migrações de banco de dados. As telas foram capturadas com uma conta de teste, e nomes de clientes, títulos de pautas e reuniões e valores aparecem desfocados de propósito.",
-      "The system is in daily use by the team, with restricted access. The repository holds 103 specifications, 182 test files and 267 database migrations. The screens were captured with a test account, and client names, task and meeting titles and amounts are deliberately blurred."),
+    resultado: T("O sistema está em uso diário pela equipe, com acesso restrito. As telas foram capturadas com uma conta de teste, e nomes de clientes, títulos de pautas e reuniões e valores aparecem desfocados de propósito.",
+      "The system is in daily use by the team, with restricted access. The screens were captured with a test account, and client names, task and meeting titles and amounts are deliberately blurred."),
     extra: {
       titulo: T("O que eu faria diferente", "What I would do differently"),
       texto: T("Usar o Supabase e hospedar o sistema na Lovable não foram decisões minhas: as duas escolhas vieram da agência. Eu não hospedaria na Lovable. Ela publica sozinha cada alteração do ramo principal e não aplica as migrações do repositório, então cada mudança no banco precisava ser colada à mão. Eu usaria uma hospedagem com publicação controlada e migrações aplicadas automaticamente.",
@@ -147,7 +147,7 @@ export const projetosProprios: Projeto[] = [
   // docs/decisoes-vps.md:13-14 (Docker, Caddy, RLS, nada do Connect), :22-29 (sessão revogável, sem cadastro público),
   // :43-49 (tempo real), :55-62 (anexos no Garage); referencia/docs/PRD.md:26-32 (WhatsApp, clientes dos EUA, contas
   // externas); docs/specs/vps-012-entrar-pelo-sys.md:1-3; commit a00dc73 (sem verificação em duas etapas em produção).
-  // Contagens por `git ls-files` sem referencia/: 22 specs, 134 arquivos de teste, 20 migrations. Capturas: só /login.
+  // EST-95: sem contagens de specs/testes/migrações no texto (o Matheus não pediu esses números). Capturas: só /login.
   {
     slug: "morro-alto-chat",
     titulo: T("Morro Alto Chat", "Morro Alto Chat"),
@@ -163,8 +163,8 @@ export const projetosProprios: Projeto[] = [
       "Client conversations happened in WhatsApp groups. International clients, mostly in the United States, expected a professional space in English, with organised history and files, without installing anything. For the first time, people outside the agency would have accounts and write in one of its systems, so no client could ever see another client's conversation."),
     solucao: T("Decidi deixar o chat fora do sistema interno da agência, num servidor próprio, e o desenvolvi em Next.js e TypeScript com PostgreSQL. Cada cliente tem o seu espaço, e o isolamento entre eles é aplicado pelo próprio banco de dados. Fiz o login com sessões que podem ser encerradas na hora, mensagens em tempo real e anexos guardados num armazenamento próprio. A equipe entra por um botão no sistema interno.",
       "I chose to keep the chat outside the agency's internal system, on its own server, and built it in Next.js and TypeScript with PostgreSQL. Each client has its own space, and the isolation between them is enforced by the database itself. I built login with sessions that can be revoked instantly, real-time messages and attachments kept in self-hosted storage. The team signs in through a button in the internal system."),
-    resultado: T("O chat está no ar e não tem cadastro aberto: o cliente só entra por convite. O repositório soma 22 especificações, 134 arquivos de teste e 20 migrações de banco de dados. Para proteger as conversas dos clientes, aqui aparece só a tela de entrada.",
-      "The chat is live and has no open sign-up: clients only get in by invitation. The repository holds 22 specifications, 134 test files and 20 database migrations. To protect client conversations, only the sign-in screen is shown here."),
+    resultado: T("O chat está no ar e não tem cadastro aberto: o cliente só entra por convite. Para proteger as conversas dos clientes, aqui aparece só a tela de entrada.",
+      "The chat is live and has no open sign-up: clients only get in by invitation. To protect client conversations, only the sign-in screen is shown here."),
     extra: {
       titulo: T("Por que fora do sistema interno", "Why outside the internal system"),
       texto: T("A avaliação feita antes de começar mostrou o risco: no banco do sistema interno, uma única regra decide quem é da equipe e protege cerca de 127 permissões, e o chat traria contas de fora que escrevem. Um erro de permissão no chat chegaria ao financeiro e às pautas. Por isso o chat tem banco, login e servidor próprios, sem nenhuma credencial do sistema interno.",
@@ -252,6 +252,28 @@ export const projetosProprios: Projeto[] = [
     links: [{ rotulo: T("Ler no GitHub", "Read on GitHub"), url: "https://github.com/MatheusCortes02/hls-iframe-access-writeup" }],
     capturas: [],
     gravura: "12_camera_seguranca",
+  },
+  // EST-96 (2026-10-29): W-02 publicado a pedido do Matheus ("com o W-02 publicado e o W-01 limpo, vira 'chama'. Faça
+  // isso"); texto completo em docs/writeups/W-02-incidente-wordpress.md, cliente e agência anonimizados
+  {
+    slug: "incidente-wordpress",
+    titulo: T("Resposta a incidente em WordPress invadido", "Incident response on a compromised WordPress site"),
+    categoria: "seguranca",
+    ano: "2026",
+    profissional: true,
+    credito: T("Write-up · resposta a incidente", "Write-up · incident response"),
+    papel: T("Investigação e limpeza feitas por mim", "Investigation and clean-up done by me"),
+    resumo: T("Investigação e limpeza de um WordPress invadido que mostrava spam em japonês ao Google e uma tela branca às pessoas.",
+      "Investigation and clean-up of a compromised WordPress site that showed Japanese spam to Google and a blank page to people."),
+    desafio: T("O site de um cliente da agência foi reinfectado duas vezes. Era preciso descobrir onde o invasor se escondia antes de limpar de novo.",
+      "A client's site was reinfected twice. I had to find where the attacker was hiding before cleaning it again."),
+    solucao: T("Com apoio de IA, confirmei o cloaking comparando respostas para navegador e para o Googlebot, reconstruí a linha do tempo pelas datas dos arquivos e decodifiquei o código ofuscado em Python, sem executá-lo. Achei seis formas de persistência e removi todas de uma vez, substituindo o núcleo do WordPress por uma cópia oficial.",
+      "With the help of AI, I confirmed the cloaking by comparing responses for a browser and for Googlebot, rebuilt the timeline from file dates and decoded the obfuscated code in Python without running it. I found six persistence mechanisms and removed them all at once, replacing the WordPress core with an official copy."),
+    resultado: T("O site voltou ao ar limpo, igual para pessoas e para o Google. O write-up traz a linha do tempo, as técnicas mapeadas no MITRE ATT&CK e o que corrigir. Cliente, agência e endereços reais foram omitidos.",
+      "The site came back clean, identical for people and for Google. The write-up covers the timeline, the techniques mapped to MITRE ATT&CK and what to fix. Client, agency and real addresses were left out."),
+    stack: ["Resposta a incidente", "WordPress", "PHP", "Análise de malware", "Python", "MITRE ATT&CK"],
+    links: [{ rotulo: T("Ler o write-up completo", "Read the full write-up (Portuguese)"), url: "/writeups/incidente-wordpress" }],
+    capturas: [],
   },
   {
     slug: "jogo-estatistica",

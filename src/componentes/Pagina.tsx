@@ -68,7 +68,8 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
   const t = idioma === "pt" ? pt : en;
   const { dias, lidoEm } = await buscarContribuicoes();
   const est = estatisticas(dias);
-  const writeup = projetos.find((p) => p.slug === "controle-de-acesso-video")!;
+  // EST-96: os dois write-ups publicados, na ordem
+  const writeups = ["controle-de-acesso-video", "incidente-wordpress"].map((s) => projetos.find((p) => p.slug === s)!);
 
   return (
     <>
@@ -207,16 +208,24 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
           <Cabecalho num="05" sobre={t.writeups.sobretitulo} titulo={t.writeups.titulo} lead={t.writeups.lead} />
           <div className="writeups-grade">
             <Olho />
-            <article className="writeup">
-              <p className="sobretitulo">W-01 · {writeup.ano} · {writeup.credito?.[idioma]}</p>
-              <h3>{writeup.titulo[idioma]}</h3>
-              <p>{writeup.resumo[idioma]} {writeup.solucao[idioma]}</p>
-              <ul className="stack">{writeup.stack.map((s) => <li key={s}>{s}</li>)}</ul>
-              <div className="acoes esquerda">
-                <a className="botao" href="#projetos" data-abrir-projeto={writeup.slug}>{t.writeups.abrir}</a>
-                <a className="botao vazado" href={writeup.links[0].url} target="_blank" rel="noopener noreferrer">{t.writeups.github}</a>
-              </div>
-            </article>
+            <div className="writeups-lista">
+              {writeups.map((w, i) => {
+                const link = w.links[0];
+                const externo = link.url.startsWith("http");
+                return (
+                  <article key={w.slug} className="writeup">
+                    <p className="sobretitulo">W-0{i + 1} · {w.ano} · {w.credito?.[idioma]}</p>
+                    <h3>{w.titulo[idioma]}</h3>
+                    <p>{w.resumo[idioma]} {w.solucao[idioma]}</p>
+                    <ul className="stack">{w.stack.map((s) => <li key={s}>{s}</li>)}</ul>
+                    <div className="acoes esquerda">
+                      <a className="botao" href="#projetos" data-abrir-projeto={w.slug}>{t.writeups.abrir}</a>
+                      <a className="botao vazado" href={link.url} {...(externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{link.rotulo[idioma]}</a>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
           </div>
         </section>
 

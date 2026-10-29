@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { CATEGORIAS, contagens, DESTAQUES, filtrar, projetos, separar, visiveis } from "@/conteudo/projetos";
@@ -162,8 +162,8 @@ describe("EST-88 portfólio enxuto para quem busca cibersegurança", () => {
     expect(p.resultado.pt).toMatch(/página de links/);
     expect(p.resultado.en).toMatch(/link-in-bio page/);
   });
-  it("EST-88 ficam 13 projetos, com o write-up, o chat e o jogo", () => {
-    expect(projetos).toHaveLength(13);
+  it("EST-88/EST-96 ficam 14 projetos (13 + o W-02), com os write-ups, o chat e o jogo", () => {
+    expect(projetos).toHaveLength(14);
     for (const s of ["controle-de-acesso-video", "morro-alto-chat", "jogo-estatistica", "cofre-de-tokens"]) expect(projetos.some((p) => p.slug === s), s).toBe(true);
   });
 });
@@ -229,5 +229,35 @@ describe("EST-87 Jogo de Estatística: o jogo é todo dele", () => {
   it("EST-87 nenhum texto fala em trabalho em grupo nem em \"criamos\"", () => {
     const tudo = [p.credito?.pt, p.papel!.pt, p.solucao.pt, p.credito?.en, p.papel!.en, p.solucao.en].join(" ");
     expect(tudo).not.toMatch(/grupo|criamos|compilamos|publicamos|group|we built|we compiled|we published/i);
+  });
+});
+
+describe("EST-95 sem contagens de especificações, testes e migrações nos estudos de caso", () => {
+  // Matheus, 2026-10-29: "eu nunca mandei colocar isso no site, então pode tirar" (103 especificações, 182 arquivos de teste…)
+  it("EST-95 nenhum texto de projeto cita quantidade de especificações, arquivos de teste ou migrações", () => {
+    for (const p of projetos) {
+      const tudo = [p.resumo, p.desafio, p.solucao, p.resultado, p.extra?.texto].flatMap((c) => (c ? [c.pt, c.en] : [])).join(" ");
+      expect(tudo, p.slug).not.toMatch(/\d+\s+(especificações|arquivos de teste|migrações|specifications|test files|database migrations)/i);
+    }
+  });
+});
+
+describe("EST-96 W-02 publicado: resposta a incidente em WordPress (anonimizado)", () => {
+  // Matheus, 2026-10-29: "com o W-02 publicado e o W-01 limpo, vira 'chama'. Faça isso"
+  const p = () => projetos.find((x) => x.slug === "incidente-wordpress")!;
+  const html = () => readFileSync(join(process.cwd(), "src/conteudo/writeups/incidente-wordpress.html"), "utf8");
+  it("EST-96 o write-up é um projeto de segurança com página própria no site", () => {
+    expect(p().categoria).toBe("seguranca");
+    expect(p().links.map((l) => l.url)).toContain("/writeups/incidente-wordpress");
+    expect(existsSync(join(process.cwd(), "src/app/(pt)/writeups/incidente-wordpress/page.tsx"))).toBe(true);
+  });
+  it("EST-96 nada identifica o cliente, a agência ou a hospedagem (cartão e página)", () => {
+    const cartao = [p().titulo, p().resumo, p().desafio, p().solucao, p().resultado, p().credito!, p().papel!].flatMap((c) => [c.pt, c.en]).join(" ");
+    for (const texto of [cartao, html()]) expect(texto).not.toMatch(/sumwise|hostgator|morro\s*alto|cpanel\.|@gmail|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/i);
+    expect(html()).not.toMatch(/Rascunho|só será publicado|Cartão para o site/);
+  });
+  it("EST-96 a seção Write-ups mostra o W-01 e o W-02", () => {
+    const pagina = readFileSync(join(process.cwd(), "src/componentes/Pagina.tsx"), "utf8");
+    expect(pagina).toMatch(/\["controle-de-acesso-video", "incidente-wordpress"\]/);
   });
 });

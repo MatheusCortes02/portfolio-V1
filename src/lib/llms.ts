@@ -4,10 +4,14 @@ import { projetos } from "@/conteudo/projetos";
 import { pt } from "@/conteudo/pt";
 import { EMAIL, NOME, PERFIS, urlAbsoluta } from "./site";
 
+/** EST-96: links internos do site (ex.: o write-up W-02) saem absolutos no llms.txt */
+const absoluto = (url: string) => (url.startsWith("/") ? urlAbsoluta(url) : url);
+
 const CATEGORIA = pt.projetos.categorias;
 
 function linkProjeto(p: (typeof projetos)[number]): string | undefined {
-  return p.restrito ? undefined : p.links[0]?.url;
+  const url = p.links[0]?.url;
+  return p.restrito || !url ? undefined : absoluto(url);
 }
 
 function perfis(): string[] {
@@ -95,7 +99,7 @@ export function gerarLlmsFull(pdfs: string[]): string {
       `- ${pt.projetos.resultado}: ${p.resultado.pt}`,
       ...(p.extra ? [`- ${p.extra.titulo.pt}: ${p.extra.texto.pt}`] : []),
       `- ${pt.projetos.tecnologias}: ${p.stack.join(", ")}`,
-      ...(p.restrito ? [] : p.links.map((k) => `- [${k.rotulo.pt}](${k.url})`)),
+      ...(p.restrito ? [] : p.links.map((k) => `- [${k.rotulo.pt}](${absoluto(k.url)})`)),
       "",
     ]),
     "## Certificações",

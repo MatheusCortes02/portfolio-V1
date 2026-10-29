@@ -299,6 +299,19 @@ main:focus,main > section:focus{outline:none}
 /* ------------------------------------------------ 05 · write-ups e o olho */
 .writeups-grade{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(2rem,5vw,4rem);max-width:1240px;margin:0 auto;align-items:center}
 .olho{position:relative;aspect-ratio:1000/572}
+/* EST-96: mais de um write-up na seção; página de leitura do write-up completo */
+.writeups-lista{display:grid;gap:1.6rem}
+.writeup-pagina{max-width:46rem;margin:0 auto;padding:3rem 1.25rem 5rem;background:var(--fundo);color:var(--texto)}
+.writeup-voltar{display:inline-block;margin:.5rem 0;font:600 .75rem/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acento)}
+.writeup-texto h1{font:600 clamp(2rem,6vw,3rem)/1.05 var(--titulo);color:var(--acento-forte);margin:1.5rem 0 .6rem}
+.writeup-texto h2{font:600 1.7rem/1.1 var(--titulo);color:var(--acento-forte);margin:2.4rem 0 .7rem;padding-top:1rem;border-top:3px double var(--linha)}
+.writeup-texto h3{font:700 .85rem/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;margin:1.6rem 0 .5rem}
+.writeup-texto p,.writeup-texto li{font-size:.98rem;line-height:1.75;color:var(--texto-2)}
+.writeup-texto table{display:block;overflow-x:auto;width:100%;border-collapse:collapse;font-size:.85rem;margin:1rem 0}
+.writeup-texto th,.writeup-texto td{border:1px solid var(--linha);padding:.5rem .6rem;text-align:left;vertical-align:top}
+.writeup-texto pre{overflow-x:auto;padding:1rem;background:var(--cartao);border:1px solid var(--linha);font:400 .8rem/1.6 var(--mono)}
+.writeup-texto code{font-family:var(--mono);font-size:.88em}
+.writeup-texto blockquote{margin:1.2rem 0;padding:.6rem 1rem;border-left:3px solid var(--acento);background:var(--cartao)}
 .olho-abertura{position:absolute;inset:0;background:#F1EFE4;-webkit-mask:url(/midia/gravuras/10_olho_abertura.webp) center/100% 100% no-repeat;mask:url(/midia/gravuras/10_olho_abertura.webp) center/100% 100% no-repeat}
 .olho-iris{position:absolute;width:22.3%;height:auto;aspect-ratio:1;left:39.35%;top:32.7%;transition:transform .18s ease-out}
 .olho-palpebra{position:relative;z-index:1}
