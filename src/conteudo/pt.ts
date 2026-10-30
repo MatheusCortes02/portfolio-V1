@@ -35,7 +35,7 @@ export const pt = {
     todos: "Todos",
     categorias: { fullstack: "Full-stack", frontend: "Front-end", seguranca: "Segurança", hardware: "Hardware", jogos: "Jogos" },
     abrir: "Abrir estudo de caso", desafio: "O desafio", solucao: "O que eu fiz", resultado: "O resultado", tecnologias: "Tecnologias",
-    fechar: "Fechar", anterior: "Projeto anterior", proximo: "Próximo projeto", fotoAnterior: "Foto anterior", fotoProxima: "Próxima foto", restrito: "Acesso restrito", semCaptura: "Estudo de caso escrito; sem telas públicas.",
+    fechar: "Fechar", anterior: "Projeto anterior", proximo: "Próximo projeto", fotoAnterior: "Foto anterior", fotoProxima: "Próxima foto", restrito: "Acesso restrito",
     profissional: "Trabalho profissional", proprio: "Projeto próprio",
     nenhum: "Nenhum projeto neste tipo.", verMais: "Ver mais projetos", verMenos: "Ver menos",
   },

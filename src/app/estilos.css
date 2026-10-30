@@ -465,11 +465,6 @@ html.lenis,html.lenis body{height:auto}
 .miniaturas button:hover{opacity:.85}
 .miniaturas button[aria-pressed="true"]{opacity:1;border-color:#C9DCC4;outline-color:#C9DCC4}
 .miniaturas img{display:block;width:100%;height:48px;object-fit:cover;object-position:top}
-.cap-vazia.grande{flex:1;aspect-ratio:auto;display:grid;place-content:center;justify-items:center;gap:1.2rem;text-align:center;background:none;border:0;font:500 .8rem/1.4 var(--mono);color:#A9B3A6}
-/* EST-62: no modal do write-up (sem captura), a gravura ocupa a coluna da foto, limitada pela altura do modal */
-.cap-vazia.grande .gravura{width:min(760px,94%)}
-.cap-vazia.grande img{width:100%;height:auto;max-height:58svh;object-fit:contain}
-.cap-vazia.grande .g-papel{display:none!important}.cap-vazia.grande .g-preto{display:block!important}
 .modal-texto{display:flex;flex-direction:column;min-height:0;padding:clamp(1.6rem,2.8vw,2.6rem);background:#F1EFE4;color:#121411}
 .modal-texto h2{font:600 clamp(2.2rem,3.2vw,3rem)/1 var(--titulo);color:#24442C;margin-bottom:.5rem}
 .modal-meta{margin:0 0 1.6rem;font:500 .66rem/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#2F5D3A}
@@ -541,8 +536,6 @@ html{scrollbar-gutter:stable}
   box-shadow:0 0 0 3px #F1EFE4,0 0 0 4px rgba(47,93,58,.55),0 6px 14px -6px rgba(18,20,17,.45)}
 .foto-seta:hover{transform:none;background:#24442C;color:#F1EFE4}
 .foto-conta{position:static;min-width:4.5em;text-align:center;font:600 .64rem/1 var(--mono);letter-spacing:.2em;color:#4A4D45;background:none;padding:0}
-.cap-vazia.grande{color:#4A4D45}
-.cap-vazia.grande .g-preto{display:none!important}.cap-vazia.grande .g-papel{display:block!important}
 .modal-texto{background:transparent}
 /* quatro abas e a linha extra do modal: abas numa linha só e título um pouco menor, para tudo caber sem rolar (EST-17) */
 /* abas como botões separados, com respiro ("isso continua tudo muito junto e pouco espaço ainda se quiser diminua a foto");
@@ -983,3 +976,15 @@ main > .secao + .secao{border-top:3px double rgba(47,93,58,.35)}
   .tec-item{font-size:.72rem;letter-spacing:.06em;text-align:left}
   .tec-cartao:hover{transform:none}
 }
+/* EST-103 (Matheus, 2026-10-30: "muito feio, quero que deixe normal no computador"): projeto sem capturas não tem coluna
+   de foto; no computador o modal é uma caixa centrada sobre a página, em vez da tela inteira com metade vazia */
+.modal.sem-fotos .modal-grade{grid-template-columns:minmax(0,1fr)}
+@media (min-width:861px){
+  .secao > .modal.sem-fotos{inset:0;margin:auto}
+  .modal.sem-fotos{width:min(720px,92vw);height:fit-content;max-height:88svh}
+  .modal.sem-fotos .modal-nota{height:auto;max-height:88svh}
+  .modal.sem-fotos .modal-texto{padding:clamp(1.6rem,3vw,2.4rem)}
+  .modal.sem-fotos .modal-aba{min-height:7.5em}
+  .modal.sem-fotos .modal-texto .stack{margin:.4rem 0 1.2rem}
+}
+.modal.sem-fotos::backdrop{background:rgba(11,12,11,.6)}

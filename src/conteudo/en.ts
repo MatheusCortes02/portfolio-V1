@@ -36,7 +36,7 @@ export const en: Dicionario = {
     todos: "All",
     categorias: { fullstack: "Full-stack", frontend: "Front-end", seguranca: "Security", hardware: "Hardware", jogos: "Games" },
     abrir: "Open case study", desafio: "The challenge", solucao: "What I did", resultado: "The outcome", tecnologias: "Technologies",
-    fechar: "Close", anterior: "Previous project", proximo: "Next project", fotoAnterior: "Previous photo", fotoProxima: "Next photo", restrito: "Restricted access", semCaptura: "Written case study; no public screens.",
+    fechar: "Close", anterior: "Previous project", proximo: "Next project", fotoAnterior: "Previous photo", fotoProxima: "Next photo", restrito: "Restricted access",
     profissional: "Professional work", proprio: "Personal project",
     nenhum: "No projects of this type.", verMais: "See more projects", verMenos: "See less",
   },

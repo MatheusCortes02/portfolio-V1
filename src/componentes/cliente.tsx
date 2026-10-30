@@ -512,7 +512,7 @@ function ModalProjeto({ lista, i, t, idioma, vai }: { lista: Projeto[]; i: numbe
   const atual = p.capturas[foto];
   const passo = (k: number) => vai((i + k + lista.length) % lista.length);
   return (
-    <dialog ref={ref} className="modal" aria-labelledby="mp-titulo" data-lenis-prevent
+    <dialog ref={ref} className={`modal${nFotos ? "" : " sem-fotos"}`} aria-labelledby="mp-titulo" data-lenis-prevent
       onClose={() => { const y = posicao.current; vai(null); document.documentElement.classList.remove("modal-aberto"); requestAnimationFrame(() => { scrollTo({ top: y, behavior: "instant" }); dispatchEvent(new Event("rolagem:volta")); }); }}
       onClick={(e) => { if (e.target === ref.current) ref.current?.close(); }}>
       <article className="modal-nota">
@@ -525,8 +525,9 @@ function ModalProjeto({ lista, i, t, idioma, vai }: { lista: Projeto[]; i: numbe
           </nav>
         </header>
         <div className="modal-grade">
+          {/* EST-103: sem capturas não há coluna de foto; o modal fica só com o texto */}
+          {atual && (
           <div className="modal-galeria">
-            {atual ? (
               <figure>
                 <div className="modal-foto"
                   onPointerDown={(e) => { toque.current = e.clientX; }}
@@ -544,8 +545,8 @@ function ModalProjeto({ lista, i, t, idioma, vai }: { lista: Projeto[]; i: numbe
                   </div>
                 )}
               </figure>
-            ) : <div className="cap-vazia grande"><Gravura g="08_olhos_lupas_medalhoes" /><p>{t.semCaptura}</p></div>}
           </div>
+          )}
           <div className="modal-texto">
             <h2 id="mp-titulo">{p.titulo[idioma]}</h2>
             <p className="modal-meta">{t.categorias[p.categoria]} · {p.ano}{p.credito ? ` · ${p.credito[idioma]}` : ""}</p>

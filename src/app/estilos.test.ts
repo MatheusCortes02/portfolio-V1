@@ -78,13 +78,3 @@ describe("EST-60 → EST-67 Projetos com a gravura da prensa ao longo da seção
     expect(regras(".projetos-secao > .fundos-projetos").join(";")).toMatch(/position:\s*absolute/);
   });
 });
-
-describe("EST-62 gravura maior no modal do write-up (sem captura)", () => {
-  // pedido de 2026-10-23: "a foto do controle de acesso em player deixe ela maior também pois assim ficou pequeno"
-  it("a gravura ocupa quase toda a largura da coluna da foto, sem passar da altura do modal", () => {
-    const c = regras(".cap-vazia.grande .gravura").join(";");
-    expect(c).toMatch(/width:\s*min\(\s*(\d+)px\s*,\s*9\d%\s*\)/);
-    expect(Number(c.match(/width:\s*min\(\s*(\d+)px/)![1])).toBeGreaterThanOrEqual(700);
-    expect(regras(".cap-vazia.grande img").join(";")).toMatch(/max-height:/);
-  });
-});

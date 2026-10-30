@@ -216,7 +216,7 @@ export async function Pagina({ idioma }: { idioma: Idioma }) {
                   <article key={w.slug} className="writeup">
                     <p className="sobretitulo">W-0{i + 1} · {w.ano} · {w.credito?.[idioma]}</p>
                     <h3>{w.titulo[idioma]}</h3>
-                    <p>{w.resumo[idioma]} {w.solucao[idioma]}</p>
+                    <p>{w.resumo[idioma]}</p>
                     <ul className="stack">{w.stack.map((s) => <li key={s}>{s}</li>)}</ul>
                     <div className="acoes esquerda">
                       <a className="botao" href="#projetos" data-abrir-projeto={w.slug}>{t.writeups.abrir}</a>

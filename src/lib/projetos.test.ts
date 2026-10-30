@@ -261,3 +261,39 @@ describe("EST-96 W-02 publicado: resposta a incidente em WordPress (anonimizado)
     expect(pagina).toMatch(/\["controle-de-acesso-video", "incidente-wordpress"\]/);
   });
 });
+
+describe("EST-103 write-ups resumidos e modal normal no computador", () => {
+  // Matheus, 2026-10-30: "o write up 2 ao clicar no modal esta muito feio quero que deixe normal no computador e quero que resuma pois tem muita muita coisa escrita"
+  const fonte = (c: string) => readFileSync(join(process.cwd(), c), "utf8");
+  const w02 = () => projetos.find((x) => x.slug === "incidente-wordpress")!;
+  it("EST-103 projeto sem capturas não tem coluna vazia: nem gravura nem aviso de 'sem telas'", () => {
+    const cliente = fonte("src/componentes/cliente.tsx");
+    expect(cliente).not.toMatch(/cap-vazia grande/);
+    expect(cliente).not.toMatch(/semCaptura/);
+    expect(cliente).toMatch(/className=\{`modal\$\{nFotos \? "" : " sem-fotos"\}`\}/);
+    expect(cliente).toMatch(/\{atual && \(\s*<div className="modal-galeria">/);
+  });
+  it("EST-103 no computador o modal sem capturas é uma caixa centrada, não a tela inteira", () => {
+    const css = fonte("src/app/estilos.css").replace(/\s+/g, " ");
+    expect(css).toMatch(/@media \(min-width:861px\)\{[^@]*\.secao > \.modal\.sem-fotos\{[^}]*margin:auto/);
+    expect(css).toMatch(/\.modal\.sem-fotos\{[^}]*width:min\(720px/);
+    expect(css).toMatch(/\.modal\.sem-fotos::backdrop\{/);
+  });
+  it("EST-103 o cartão da seção Write-ups mostra só o resumo", () => {
+    expect(fonte("src/componentes/Pagina.tsx")).not.toMatch(/w\.solucao\[idioma\]/);
+  });
+  it("EST-103 os textos do W-02 no modal são curtos", () => {
+    for (const c of [w02().desafio, w02().solucao, w02().resultado]) {
+      expect(c.pt.length).toBeLessThanOrEqual(240);
+      expect(c.en.length).toBeLessThanOrEqual(240);
+    }
+  });
+  it("EST-103 a página do W-02 traz o essencial (até 4.500 caracteres de texto) e mantém o crédito à IA e a causa não confirmada", () => {
+    const html = fonte("src/conteudo/writeups/incidente-wordpress.html");
+    const texto = html.replace(/<[^>]+>/g, "");
+    expect(texto.length).toBeLessThanOrEqual(4500);
+    expect(texto).toMatch(/apoio de IA/);
+    expect(texto).toMatch(/Não confirmada/);
+    expect(texto).toMatch(/MITRE ATT&amp;CK/);
+  });
+});
